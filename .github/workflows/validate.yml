@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate JSON syntax
         run: |
-          for file in $(find . -name "*.json" -type f); do
+          find . -name "*.json" -type f -print0 | while IFS= read -r -d '' file; do
             echo "Validating $file"
             python3 -m json.tool "$file" > /dev/null || exit 1
           done
