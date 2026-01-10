@@ -28,3 +28,6 @@ logs/
 # Build
 dist/
 build/
+
+# Claude Code
+.claude/
