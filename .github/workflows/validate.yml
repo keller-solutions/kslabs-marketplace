@@ -1,0 +1,92 @@
+name: Validate
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - '**.json'
+      - '**.md'
+  pull_request:
+    paths:
+      - '**.json'
+      - '**.md'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-json:
+    name: Validate JSON
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Validate JSON syntax
+        run: |
+          for file in $(find . -name "*.json" -type f); do
+            echo "Validating $file"
+            python3 -m json.tool "$file" > /dev/null || exit 1
+          done
+
+  validate-skills:
+    name: Validate Skills
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Check SKILL.md frontmatter
+        run: |
+          for skill_dir in plugins/*/skills/*/; do
+            skill_md="${skill_dir}SKILL.md"
+            if [ -f "$skill_md" ]; then
+              echo "Checking $skill_md"
+              # Check frontmatter exists
+              if ! head -1 "$skill_md" | grep -q "^---$"; then
+                echo "ERROR: Missing frontmatter in $skill_md"
+                exit 1
+              fi
+              # Check required fields
+              if ! grep -q "^name:" "$skill_md"; then
+                echo "ERROR: Missing name field in $skill_md"
+                exit 1
+              fi
+              if ! grep -q "^description:" "$skill_md"; then
+                echo "ERROR: Missing description field in $skill_md"
+                exit 1
+              fi
+              # Check line count
+              lines=$(wc -l < "$skill_md")
+              if [ "$lines" -gt 500 ]; then
+                echo "ERROR: $skill_md exceeds 500 lines ($lines lines)"
+                exit 1
+              fi
+            fi
+          done
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Check for secrets
+        run: |
+          # Check for common secret patterns
+          if grep -rE "(AKIA[0-9A-Z]{16}|sk-[a-zA-Z0-9]{48}|ghp_[a-zA-Z0-9]{36})" .; then
+            echo "ERROR: Potential secrets detected"
+            exit 1
+          fi
+          # Check for password/api_key assignments
+          if grep -rE "[pP]assword\s*[:=]\s*[\"'][^\"']+[\"']" --include="*.md" --include="*.json" .; then
+            echo "WARNING: Potential hardcoded password detected"
+          fi

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "keller-solutions-marketplace",
+  "version": "0.1.0",
+  "description": "Curated Claude Code skills and plugins from Keller Solutions",
+  "owner": {
+    "name": "Keller Solutions",
+    "email": "hello@kellersolutions.com",
+    "url": "https://github.com/keller-solutions"
+  },
+  "homepage": "https://github.com/keller-solutions/keller-solutions-marketplace",
+  "repository": "https://github.com/keller-solutions/keller-solutions-marketplace",
+  "plugins": [
+    {
+      "name": "keller-solutions-core",
+      "source": "./plugins/keller-solutions-core",
+      "category": "development"
+    }
+  ]
+}
