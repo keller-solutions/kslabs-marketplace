@@ -8,8 +8,8 @@
     "email": "hello@kellersolutions.com",
     "url": "https://github.com/keller-solutions"
   },
-  "homepage": "https://github.com/keller-solutions/keller-solutions-marketplace",
-  "repository": "https://github.com/keller-solutions/keller-solutions-marketplace",
+  "homepage": "https://github.com/keller-solutions/marketplace",
+  "repository": "https://github.com/keller-solutions/marketplace",
   "plugins": [
     {
       "name": "keller-solutions-core",

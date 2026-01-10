@@ -1,6 +1,6 @@
 # Keller Solutions Marketplace
 
-[![Validate](https://github.com/keller-solutions/keller-solutions-marketplace/actions/workflows/validate.yml/badge.svg)](https://github.com/keller-solutions/keller-solutions-marketplace/actions/workflows/validate.yml)
+[![Validate](https://github.com/keller-solutions/marketplace/actions/workflows/validate.yml/badge.svg)](https://github.com/keller-solutions/marketplace/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Curated Claude Code skills and plugins from Keller Solutions.
@@ -10,13 +10,13 @@ Curated Claude Code skills and plugins from Keller Solutions.
 Add this marketplace to Claude Code:
 
 ```bash
-/plugin marketplace add keller-solutions/keller-solutions-marketplace
+/plugin marketplace add keller-solutions/marketplace
 ```
 
 Then install a plugin:
 
 ```bash
-/plugin install keller-solutions-core@keller-solutions-marketplace
+/plugin install keller-solutions-core@marketplace
 ```
 
 ## Available Plugins
