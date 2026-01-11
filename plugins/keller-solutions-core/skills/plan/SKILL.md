@@ -410,40 +410,13 @@ Title: Update dependencies
 
 ## CRUD Stories
 
-Admin and management features often follow Create, Read, Update, Delete patterns. Write these as separate stories with intentional ordering.
+Admin features often follow Create, Read, Update, Delete patterns. Write these as separate stories with **intentional ordering**—each story should be deliverable and acceptable using only a browser.
 
-**Why order matters**: Each story should be deliverable and acceptable using only a browser. You can't test "edit" if nothing exists to edit. Order stories so each builds on the previous:
+You can't test "edit" if nothing exists to edit. Order stories so each builds on the previous:
 
-```markdown
-# Ordered for browser-testable acceptance
-Story 1: Admin views list of projects        # Read (empty state)
-Story 2: Admin creates a project             # Create
-Story 3: Admin edits a project               # Update (requires created item)
-Story 4: Admin deletes a project             # Delete (requires existing item)
-```
+1. **Read** (list/empty state) → 2. **Create** → 3. **Update** (requires item) → 4. **Delete** (requires item)
 
-**Standard CRUD criteria patterns**:
-
-```markdown
-# Create story criteria
-- [ ] "Add [item]" button is visible
-- [ ] Clicking button shows the add form
-- [ ] Form fields for [field1], [field2] are visible
-- [ ] "Save" button creates the item and returns to list
-- [ ] "[Item name] was created" confirmation is shown
-
-# Update story criteria
-- [ ] Edit icon is visible for each item
-- [ ] Clicking edit shows the form with current values
-- [ ] "Save" button updates the item and returns to list
-- [ ] "[Item name] was updated" confirmation is shown
-
-# Delete story criteria
-- [ ] Delete icon is visible for each item
-- [ ] Clicking delete shows confirmation dialog
-- [ ] Confirming removes the item and returns to list
-- [ ] "[Item name] was deleted" confirmation is shown
-```
+Each CRUD story should include confirmation feedback: "[Item name] was created/updated/deleted."
 
 ---
 
@@ -478,39 +451,15 @@ Title: [Who] [action] [where]
 
 ### Developer Notes
 
-Use this section for technical context that helps implementation but shouldn't pollute acceptance criteria. Keep acceptance criteria browser-verifiable; put everything else here.
+Technical context that helps implementation but shouldn't pollute acceptance criteria. Keep criteria browser-verifiable; put implementation hints here.
 
-**Good Developer Notes**:
+**Good**: "Standard OneTrust implementation", "Card is sticky on scroll", "See patterns in `app/views/dashboard/`"
 
-- "This is a standard OneTrust cookie consent implementation"
-- "Breadcrumb hierarchy should match URL hierarchy"
-- "See existing dashboard patterns in `app/views/dashboard/`"
-- "Card will be sticky on scroll"
-- "Filter values with zero results should be disabled"
-
-**Not Developer Notes** (belongs in acceptance criteria):
-
-- "Button is visible" → This is observable, put in criteria
-- "Form validates on submit" → This is testable, put in criteria
+**Not Developer Notes**: Observable behavior like "Button is visible" belongs in criteria.
 
 ### References
 
-Include links to design assets when available. This keeps stories self-contained and reduces back-and-forth.
-
-**Include when practical**:
-
-- Figma/Sketch design links
-- Prototype URLs
-- Spreadsheets with calculation logic
-- External documentation
-
-```markdown
-## References
-
-- Design: https://figma.com/file/abc123/feature-design
-- Prototype: https://staging.example.com/prototype/feature
-- Calculation logic: [attached spreadsheet]
-```
+Include links to design assets when available—Figma, prototypes, spreadsheets with calculation logic. This keeps stories self-contained and reduces back-and-forth.
 
 ---
 
