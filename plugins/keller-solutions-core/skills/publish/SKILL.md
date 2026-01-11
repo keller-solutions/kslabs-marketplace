@@ -35,7 +35,7 @@ git pull origin develop
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
 
 # List commits since last release
-git log $LAST_TAG..HEAD --oneline
+git log "${LAST_TAG}..HEAD" --oneline
 ```
 
 ### Step 1.3: Determine Version Bump
@@ -60,13 +60,13 @@ Extract from conventional commits:
 
 ```bash
 # Features
-git log $LAST_TAG..HEAD --oneline | grep -E "^[a-f0-9]+ feat"
+git log "${LAST_TAG}..HEAD" --oneline | grep -E "^[a-f0-9]+ feat"
 
 # Fixes
-git log $LAST_TAG..HEAD --oneline | grep -E "^[a-f0-9]+ fix"
+git log "${LAST_TAG}..HEAD" --oneline | grep -E "^[a-f0-9]+ fix"
 
 # Breaking changes
-git log $LAST_TAG..HEAD --oneline | grep -E "BREAKING|!"
+git log "${LAST_TAG}..HEAD" --oneline | grep -E "BREAKING|!"
 ```
 
 Format as release notes:

@@ -114,28 +114,30 @@ git push --force origin feature-branch
 
 **The truth**: You made a typo. You fixed it. Two commits. That's what happened.
 
-### 4. Selective Retroactive Commits are a Lie
+### 4. Selective Retroactive Commits *Can* Be a Lie
 
 ```bash
-# DON'T DO THIS
+# PROBLEMATIC EXAMPLE
 git add foo.rb
 git commit -m "Refactor foo"
 git add bar.rb
 git commit -m "Refactor bar"
-# When you actually changed both files together
+# When foo.rb depends on bar.rb and won't compile alone
 ```
 
-**What it does**: Artificially splits work into "logical" commits after the fact.
+**When it's a lie**: Creating commits that don't compile or pass tests individually. If `foo.rb` depends on changes in `bar.rb`, separating them creates broken intermediate states that break `git bisect` and cherry-picking.
 
-**The lie**: "I worked on these separately and methodically."
+**When it's acceptable**: Separating unrelated changes into their own commits using `git add -p` is **encouraged**. If you fixed a typo while working on a feature, pulling that typo fix into its own commit is good practice—it keeps commits focused and makes the history clearer.
 
-**What breaks**:
+```bash
+# GOOD: Separating unrelated changes
+git add -p  # Stage only the typo fix
+git commit -m "fix: correct typo in README"
+git add .   # Stage the feature work
+git commit -m "feat: add user dashboard"
+```
 
-- If `foo.rb` depends on `bar.rb`, the first commit won't compile
-- `git bisect` fails because intermediate commits are broken
-- Cherry-picking the first commit breaks things
-
-**The truth**: You changed both files together because they're related. Commit them together.
+**The rule**: Each commit must compile and pass tests independently. If you can split changes cleanly without breaking this rule, do so.
 
 ---
 
@@ -291,7 +293,7 @@ git config --global push.default simple
 | `git commit --amend` (after push) | Never | Forces push --force |
 | `git commit --amend` (local only) | OK | Just don't push then amend |
 | `git push --force` | Never (on shared branches) | Overwrites others' work |
-| Selective retroactive commits | Avoid | Creates broken intermediate states |
+| Selective retroactive commits | OK if clean | Each commit must compile and pass tests |
 
 ---
 

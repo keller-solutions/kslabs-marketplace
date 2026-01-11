@@ -60,9 +60,11 @@ View code should contain structure, not strings. Content changes shouldn't requi
 
 Build what you need now, not what you might need later. Wait for the pattern to emerge before abstracting it.
 
-**Half, not half-assed** (via Obie Fernandez): It's better to build half a product really well than to build a whole product poorly. Cut scope ruthlessly, but execute the remaining scope with full attention to quality.
+**Half, not half-assed** (hat tip to Obie Fernandez): It's better to build half a product really well than to build a whole product poorly. Cut scope ruthlessly, but execute the remaining scope with full attention to quality.
 
-**Key guideline**: Never add placeholder UI for features that don't exist yet.
+**Key guideline**: Never add placeholder UI for features that don't exist yet. Don't add anything to the project until you're ready to add it in completed form.
+
+**Cautionary tale**: A developer once added a placeholder link in a site's footer pointing to "#" with the intention of implementing the feature later. The site launched. Weeks passed. A client clicked the dead link and reported it as a bug. The embarrassing oversight damaged credibility—all because incomplete work was committed to the codebase.
 
 ```erb
 <!-- Bad: link to feature that doesn't exist yet -->
@@ -172,3 +174,9 @@ Refs #147
 Code quality isn't about cleverness—it's about kindness to future maintainers. Every line you write is a gift (or burden) to someone who will read it later.
 
 Write code that explains itself. Keep it simple. Keep it consistent. Future you will thank present you.
+
+---
+
+## Further Reading
+
+- [Guiding Principles for Reviewing Pull Requests](https://share.evernote.com/note/6c61d8cc-efe0-486c-9842-8ad669162343) - The original document that inspired these principles

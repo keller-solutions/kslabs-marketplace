@@ -36,6 +36,18 @@ Install the required marketplaces and plugins:
 
 ## Prerequisites
 
+### Development Tools
+
+| Tool | Purpose |
+|------|---------|
+| [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) | Markdown linting |
+
+Install with: `npm install -g markdownlint-cli`
+
+Run linting: `markdownlint '**/*.md' --ignore node_modules`
+
+### Required Plugins
+
 This plugin depends on capabilities from other plugins:
 
 | Plugin | Marketplace | Purpose |
@@ -174,7 +186,7 @@ keller-solutions-core/
 3. **Avoid Pre-Optimization**: Build only what's needed now
 4. **Keep Code Tidy**: No debug code, no commented-out code
 5. **Maintain Consistency**: One codebase, one style
-6. **Make It Understandable**: Spell out names
+6. **Make It Understandable**: Code should explain itself
 
 ### Git Integrity
 
@@ -197,7 +209,7 @@ I want [user-facing capability]
 
 ## Contributing
 
-See the [main repository README](../../README.md) for contribution guidelines.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and guidelines.
 
 ## License
 

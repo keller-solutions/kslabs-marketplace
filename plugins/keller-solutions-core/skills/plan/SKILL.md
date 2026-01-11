@@ -216,8 +216,11 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 # Check for Linear
 ls .linear 2>/dev/null && echo "Linear"
 
-# Check for Jira
-ls .jira 2>/dev/null && echo "Jira"
+# Check for Jira config
+ls .jira 2>/dev/null || grep -q "jira" .env 2>/dev/null && echo "Jira"
+
+# Check for ClickUp config
+ls .clickup 2>/dev/null || grep -q "clickup" .env 2>/dev/null && echo "ClickUp"
 ```
 
 ### Create GitHub Issue
@@ -243,6 +246,50 @@ gh issue create \
 See existing dashboard patterns in `app/views/dashboard/`.
 EOF
 )"
+```
+
+### Create Jira Issue
+
+```bash
+# Using Jira CLI (https://github.com/ankitpokhrel/jira-cli)
+jira issue create \
+  --type Story \
+  --summary "User sees project list on dashboard" \
+  --body "$(cat <<'EOF'
+*In order to* quickly resume work on recent audits
+*As a* returning user on the dashboard
+*I want* to see my projects listed by last activity
+
+h2. Acceptance Criteria
+
+* Projects section header is visible
+* Each project shows name and last scan date
+* Projects are sorted by last activity (most recent first)
+* Clicking a project navigates to the project detail page
+* Empty state shown when no projects exist
+EOF
+)"
+```
+
+### Create ClickUp Task
+
+```bash
+# Using ClickUp API or CLI
+# Task creation varies by workspace setup
+# Ensure the story format is preserved in the task description:
+
+# Title: User sees project list on dashboard
+# Description:
+# **In order to** quickly resume work on recent audits
+# **As a** returning user on the dashboard
+# **I want** to see my projects listed by last activity
+#
+# ## Acceptance Criteria
+# - [ ] Projects section header is visible
+# - [ ] Each project shows name and last scan date
+# - [ ] Projects are sorted by last activity
+# - [ ] Clicking a project navigates to detail page
+# - [ ] Empty state shown when no projects exist
 ```
 
 ### Link to Epic (if applicable)

@@ -1,6 +1,6 @@
 {
   "name": "keller-solutions-core",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "The Keller Solutions Way—30 years of development methodology. Features the 5 P's workflow: Prepare, Plan, Produce, Present, Publish. Requires compound-engineering, ralph-loop, and frontend-design plugins.",
   "author": {
     "name": "Keller Solutions",

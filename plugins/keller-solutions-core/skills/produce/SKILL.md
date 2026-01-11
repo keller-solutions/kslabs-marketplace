@@ -44,14 +44,44 @@ gh issue view [TICKET_NUMBER] --json title,body,labels
 # Or ask user for ticket number
 ```
 
-### Step 1.3: Determine AI Visibility
+### Step 1.3: Update Ticket Status
+
+Move the ticket to "In Progress" to signal work has started:
+
+**GitHub Projects:**
+
+```bash
+# Move issue to In Progress status (requires GitHub Projects)
+gh issue edit [TICKET_NUMBER] --add-label "status:in-progress"
+```
+
+**Jira:**
+
+```bash
+jira issue move [TICKET_KEY] "In Progress"
+```
+
+**ClickUp:**
+
+```bash
+# Update task status via ClickUp API or UI
+# Move to "In Progress" status
+```
+
+**Note**: Update the ticket status at each major milestone:
+
+- **In Progress**: When starting work
+- **In Review**: When PR is created (see `/ks-present`)
+- **Done**: When merged (product owner typically handles this)
+
+### Step 1.4: Determine AI Visibility
 
 Check project preference (detected during prep):
 
 - **Visible**: Include `Co-Authored-By` in commits
 - **Invisible**: Standard commits without AI attribution
 
-### Step 1.4: Create/Verify Feature Branch
+### Step 1.5: Create/Verify Feature Branch
 
 If not already on a feature branch:
 
