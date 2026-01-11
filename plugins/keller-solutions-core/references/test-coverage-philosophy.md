@@ -308,6 +308,45 @@ Once you achieve 100% accounted-for coverage:
 
 ---
 
+## Quality Dashboard: qlty.sh
+
+We use [qlty.sh](https://qlty.sh) (formerly CodeClimate) as our quality dashboard for all projects.
+
+### What qlty.sh Tracks
+
+| Metric | Purpose |
+|--------|---------|
+| **Test Coverage** | Displays coverage percentage with line-by-line detail |
+| **Technical Debt** | Identifies code smells, complexity, and maintainability issues |
+| **Security Issues** | Flags vulnerabilities and insecure patterns |
+| **Duplication** | Detects copy-paste code that violates DRY |
+
+### Why qlty.sh
+
+- **Single source of truth**: One dashboard for coverage, quality, and security
+- **CI integration**: Blocks PRs that decrease coverage or introduce issues
+- **Dynamic badges**: Auto-updating README badges from actual metrics
+- **Historical trends**: Track quality over time, not just snapshots
+
+### Setup
+
+1. Connect your repository at [qlty.sh](https://qlty.sh)
+2. Configure CI to upload coverage reports
+3. Add badges to your README (see README template)
+4. Set quality gates for PR checks
+
+### Badge Integration
+
+Use qlty.sh for your README coverage badge:
+
+```markdown
+[![Coverage](https://qlty.sh/badges/your-org/your-repo/coverage.svg)](https://qlty.sh/orgs/your-org/projects/your-repo)
+```
+
+This ensures the badge reflects actual CI-verified coverage, not local runs.
+
+---
+
 ## The Bottom Line
 
 **100% coverage means 100% accountability.**

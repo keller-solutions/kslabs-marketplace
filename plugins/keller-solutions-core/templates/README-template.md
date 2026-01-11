@@ -263,8 +263,9 @@ Not just a list of variable names.
 
 - **Limit to 2-4 badges** - More dilutes their impact
 - **Prioritize**: Build status, coverage, license
-- **Use Shields.io** for consistent styling
-- **Dynamic over static** - Use badges that auto-update
+- **Use [qlty.sh](https://qlty.sh) for coverage** - Dynamic badges from CI-verified metrics
+- **Use Shields.io** for other badges (build status, license)
+- **Dynamic over static** - Use badges that auto-update from actual data
 
 ## What NOT to Include
 
