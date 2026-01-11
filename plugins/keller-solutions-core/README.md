@@ -100,13 +100,6 @@ Note: Some skills leverage compound-engineering workflows and will have reduced 
 | `/ks-ticket <number>` | Work on existing ticket: Prep → Produce → Present |
 | `/lg` | Legacy alias for `/ks-feature` |
 
-### Utility Skills
-
-| Skill | Description |
-|-------|-------------|
-| skill-template | Template demonstrating proper SKILL.md structure |
-| marketplace-ops | Programmatic marketplace operations |
-
 ## Usage
 
 ### Starting a New Feature
@@ -159,9 +152,7 @@ keller-solutions-core/
 │   ├── plan/             # Story writing
 │   ├── produce/          # TDD implementation
 │   ├── present/          # PR and feedback
-│   ├── publish/          # Release workflow
-│   ├── skill-template/   # Example skill
-│   └── marketplace-ops/  # Marketplace utilities
+│   └── publish/          # Release workflow
 ├── commands/
 │   └── lg.md             # Legacy command alias
 ├── references/
