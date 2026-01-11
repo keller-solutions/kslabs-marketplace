@@ -6,9 +6,9 @@ A comprehensive template for project READMEs, synthesized from analysis of 75+ p
 
 # [Project Name]
 
-[![Tests](https://shields.io/badge/tests-passing-green)][ci-link]
-[![Coverage](https://shields.io/badge/coverage-98%25-brightgreen)][coverage-link]
-[![License](https://shields.io/badge/license-MIT-blue)][license-link]
+[![Tests](https://img.shields.io/badge/tests-passing-green)][ci-link]
+[![Coverage](https://img.shields.io/badge/coverage-98%25-brightgreen)][coverage-link]
+[![License](https://img.shields.io/badge/license-MIT-blue)][license-link]
 
 [One sentence explaining what this project does and why it exists.]
 

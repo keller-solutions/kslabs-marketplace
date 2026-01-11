@@ -14,7 +14,7 @@ Architecture Decision Records (ADRs) document consequential technical decisions.
 
 ## Date
 
-YYYY-MM-DD
+YYYY-MM-DD (e.g., 2024-01-15)
 
 ## Context
 

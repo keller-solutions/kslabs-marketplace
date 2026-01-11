@@ -27,7 +27,7 @@ Confirm the environment is ready:
 # Check we're on a feature branch (not main/develop)
 CURRENT_BRANCH=$(git branch --show-current)
 if [[ "$CURRENT_BRANCH" == "main" || "$CURRENT_BRANCH" == "develop" ]]; then
-  echo "ERROR: Not on a feature branch. Run /ks-prep first."
+  echo "ERROR: On '$CURRENT_BRANCH' (not a feature branch). Run /ks-prep first."
   exit 1
 fi
 ```

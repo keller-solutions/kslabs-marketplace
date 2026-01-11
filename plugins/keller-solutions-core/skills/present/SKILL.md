@@ -238,7 +238,7 @@ For each piece of feedback, determine the appropriate response.
 5. **Reply to the comment**
 
    ```bash
-   gh api -X POST repos/{owner}/{repo}/pulls/$PR_NUMBER/comments/{comment_id}/replies \
+   gh api -X POST repos/{owner}/{repo}/pulls/comments/{comment_id}/replies \
      -f body="Addressed with the help of Claude Code in $COMMIT_SHA. [1-2 sentence summary]."
    ```
 
@@ -248,7 +248,7 @@ For each piece of feedback, determine the appropriate response.
 2. **Reply with clear rationale**
 
    ```bash
-   gh api -X POST repos/{owner}/{repo}/pulls/$PR_NUMBER/comments/{comment_id}/replies \
+   gh api -X POST repos/{owner}/{repo}/pulls/comments/{comment_id}/replies \
      -f body="This follows [specific guideline/pattern]. [Clear explanation]. See [reference if applicable]."
    ```
 
@@ -402,7 +402,7 @@ Clarification requests - reply with explanation (no code change needed).
 **Reply to a review comment:**
 
 ```bash
-gh api -X POST repos/{owner}/{repo}/pulls/{pr_number}/comments/{comment_id}/replies \
+gh api -X POST repos/{owner}/{repo}/pulls/comments/{comment_id}/replies \
   -f body="Your reply here"
 ```
 

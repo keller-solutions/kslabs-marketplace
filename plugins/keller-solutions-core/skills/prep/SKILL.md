@@ -109,8 +109,8 @@ Ready to proceed with environment preparation.
 # Switch to develop (or main if no develop)
 git checkout develop 2>/dev/null || git checkout main
 
-# Pull latest changes
-git pull origin $(git branch --show-current)
+# Pull latest changes (fast-forward only)
+git pull --ff-only
 ```
 
 ### Step 2.2: Clean Up Stale Branches
@@ -122,7 +122,7 @@ Remove local branches that no longer exist on origin:
 git fetch --prune
 
 # Delete merged local branches (except main/develop)
-git branch --merged | grep -v -E '^\*|main|develop|master' | xargs -r git branch -d
+git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; do git branch -d "$branch" 2>/dev/null || true; done
 ```
 
 ### Step 2.3: Check Dependency Freshness
