@@ -12,6 +12,7 @@ This template demonstrates the proper structure for SKILL.md files.
 ## Quick Start
 
 Copy this directory to create a new skill:
+
 ```bash
 cp -r skills/skill-template skills/your-skill-name
 ```
@@ -32,6 +33,7 @@ When creating a skill, follow these steps:
 **Example 1: Good Description**
 Input: User wants to understand what makes a good skill description
 Output:
+
 ```yaml
 description: This skill extracts text from PDF files. Use when working with PDFs, extracting content, or processing documents.
 ```
@@ -39,13 +41,14 @@ description: This skill extracts text from PDF files. Use when working with PDFs
 **Example 2: Bad Description (avoid)**
 Input: User sees a vague description
 Output:
+
 ```yaml
 description: Helps with documents
 ```
 
 ## Directory Structure
 
-```
+```text
 your-skill-name/
 ├── SKILL.md              # Required: Entry point (<500 lines)
 ├── references/           # Optional: Detailed docs (loaded when needed)

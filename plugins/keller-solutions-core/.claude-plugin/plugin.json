@@ -1,7 +1,7 @@
 {
   "name": "keller-solutions-core",
-  "version": "0.1.0",
-  "description": "Core skills and utilities from Keller Solutions. Includes marketplace operations and skill templates.",
+  "version": "1.0.0",
+  "description": "The Keller Solutions Way—30 years of development methodology. Features the 5 P's workflow: Prepare, Plan, Produce, Present, Publish. Requires compound-engineering, ralph-loop, and frontend-design plugins.",
   "author": {
     "name": "Keller Solutions",
     "email": "hello@kellersolutions.com",
@@ -10,5 +10,14 @@
   "homepage": "https://github.com/keller-solutions/keller-solutions-marketplace",
   "repository": "https://github.com/keller-solutions/keller-solutions-marketplace",
   "license": "MIT",
-  "keywords": ["claude-code", "skills", "development", "keller-solutions", "core", "utilities"]
+  "keywords": [
+    "claude-code",
+    "skills",
+    "development",
+    "keller-solutions",
+    "tdd",
+    "gitflow",
+    "workflow",
+    "methodology"
+  ]
 }
