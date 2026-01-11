@@ -155,7 +155,7 @@ Refs #123
 
 - Write tests first (TDD when possible)
 - Each acceptance criterion maps to at least one test
-- Target 90%+ code coverage
+- Target 100% code coverage
 - Use fixtures for stable test data
 
 ## Reporting Issues

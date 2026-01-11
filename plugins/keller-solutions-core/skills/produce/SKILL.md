@@ -316,7 +316,7 @@ Fix any issues immediately.
 
 ### Step 4.3: Check Coverage
 
-Verify test coverage meets standards (typically 90%+):
+Verify test coverage meets standards (100%):
 
 ```bash
 # Coverage report is typically generated with test run
