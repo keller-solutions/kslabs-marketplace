@@ -60,6 +60,8 @@ View code should contain structure, not strings. Content changes shouldn't requi
 
 Build what you need now, not what you might need later. Wait for the pattern to emerge before abstracting it.
 
+**Half, not half-assed** (via Obie Fernandez): It's better to build half a product really well than to build a whole product poorly. Cut scope ruthlessly, but execute the remaining scope with full attention to quality.
+
 **Key guideline**: Never add placeholder UI for features that don't exist yet.
 
 ```erb
