@@ -1,19 +1,11 @@
 ---
 name: lg
-description: Full autonomous engineering workflow
-argument-hint: "[feature description]"
+description: Legacy alias for /ks-feature. Full feature workflow from idea to PR-ready.
+argument-hint: "<feature description>"
 ---
 
-Run these slash commands in order. Do not do anything else.
+# Legacy Command
 
-1. `/ralph-wiggum:ralph-loop "finish all slash commands" --completion-promise "DONE"`
-2. `/workflows:plan $ARGUMENTS`
-3. `/compound-engineering:deepen-plan`
-4. `/workflows:work`
-5. `/workflows:review`
-6. `/compound-engineering:resolve_todo_parallel`
-7. `/compound-engineering:playwright-test`
-8. `/compound-engineering:feature-video`
-9. Output `<promise>DONE</promise>` when video is in PR
+This is an alias for `/ks-feature`. Run the full feature workflow:
 
-Start with step 1 now.
+`/ks-feature $ARGUMENTS`
