@@ -46,6 +46,7 @@ For each changed file, verify:
 - [ ] Comments explain WHY (not WHAT)
 - [ ] Tests cover the changes
 - [ ] DRY opportunities identified
+- [ ] F5 Principle preserved (new dependencies in package manager, env vars documented)
 
 ### Step 1.3: Run Quality Checks
 
@@ -435,3 +436,11 @@ This skill integrates with compound-engineering commands:
 - `/compound-engineering:playwright-test` - Run browser tests
 - `/compound-engineering:resolve_todo_parallel` - Address multiple findings
 - `/compound-engineering:resolve_pr_parallel` - Parallel PR comment resolution
+
+---
+
+## More Information
+
+- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../references/guiding-principles.md) - The six principles
+- [Git Integrity](../references/git-integrity.md) - "Thou Shalt Not Lie"

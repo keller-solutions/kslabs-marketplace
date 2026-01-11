@@ -10,9 +10,12 @@ Thank you for considering a contribution! This document outlines the development
 
 ## Getting Started
 
-1. Read the [README.md](README.md) for setup instructions
-2. Review [CLAUDE.md](CLAUDE.md) for AI-assisted development guidance (if applicable)
-3. Check [existing issues](link-to-issues) before creating new ones
+1. Clone and run `bin/setup` (following the F5 Principle: clone, setup, run)
+2. Read the [README.md](README.md) for architecture overview
+3. Review [CLAUDE.md](CLAUDE.md) for AI-assisted development guidance (if applicable)
+4. Check [existing issues](link-to-issues) before creating new ones
+
+**The F5 Principle**: After cloning and running setup, the application should just work. If it doesn't, that's a bug in the setup process.
 
 ## Development Workflow
 

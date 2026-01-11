@@ -220,13 +220,15 @@ Not:
 This repository contains the source code for...
 ```
 
-### The One-Command Ideal
+### The One-Command Ideal (The F5 Principle)
 
 ```markdown
 Run `bin/setup` to install dependencies, configure the database, and start the server.
 ```
 
-If your project can't do this, work toward it.
+This is the F5 Principle in action: clone, setup, run. If your project can't do this, work toward it. See [references/f5-manifesto.md] for the full philosophy.
+
+**The test**: Can a new developer go from `git clone` to working application in under 5 minutes with only the README?
 
 ### Show Expected Output
 

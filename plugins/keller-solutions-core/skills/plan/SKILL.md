@@ -447,3 +447,10 @@ Before creating the ticket, verify:
 - [ ] Content/copy specified for externalization
 - [ ] Existing patterns referenced where applicable
 - [ ] Title is unique and searchable
+
+---
+
+## More Information
+
+- [Guiding Principles](../references/guiding-principles.md) - The six principles
+- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"

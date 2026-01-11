@@ -11,6 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Quick Reference
 
 ```bash
+# Setup (F5 Principle: clone, setup, run)
+bin/setup                         # First-time setup: dependencies, database, seeds
+
 # Development
 bin/dev                           # Start development server
 bin/rails console                 # Interactive console

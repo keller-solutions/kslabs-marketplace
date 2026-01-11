@@ -11,7 +11,9 @@ Orient yourself to the project and prepare the development environment for produ
 
 ## Core Principle
 
-**Never start coding without understanding where you are and ensuring the environment is ready.**
+**After cloning and running setup, the application should just work.**
+
+This skill embodies the F5 Principle: clone, setup, run. No magic incantations, no tribal knowledge, no hunting down a senior developer for secret steps.
 
 Preparation prevents wasted effort, ensures you're working from the latest code, and helps you understand the context before making changes.
 
@@ -103,7 +105,28 @@ Ready to proceed with environment preparation.
 
 ## Phase 2: Environment Preparation
 
-### Step 2.1: Switch to Default Branch
+### Step 2.1: Run Setup Script (The F5 Principle)
+
+Check for and run the project's setup script. A well-maintained project should have one command that handles everything:
+
+```bash
+# Check for setup script
+ls bin/setup script/setup package.json composer.json 2>/dev/null
+```
+
+**Run the appropriate setup command**:
+
+| Project Type | Setup Command | What It Does |
+|--------------|---------------|--------------|
+| Rails | `bin/setup` | Bundle, database, seeds, assets |
+| Node.js | `npm run setup` or `npm install` | Install dependencies, setup |
+| Laravel | `composer install && php artisan migrate:fresh --seed` | Dependencies, database |
+| .NET | `dotnet restore && dotnet build` | NuGet restore, build |
+| WordPress | `wp-env start` or equivalent | Docker, database |
+
+**If setup fails**: This is a signal. Either dependencies are missing, or the project doesn't follow the F5 principle. Document what was needed and consider adding a proper setup script.
+
+### Step 2.2: Switch to Default Branch
 
 ```bash
 # Switch to develop (or main if no develop)
@@ -113,7 +136,7 @@ git checkout develop 2>/dev/null || git checkout main
 git pull --ff-only
 ```
 
-### Step 2.2: Clean Up Stale Branches
+### Step 2.3: Clean Up Stale Branches
 
 Remove local branches that no longer exist on origin:
 
@@ -125,7 +148,7 @@ git fetch --prune
 git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; do git branch -d "$branch" 2>/dev/null || true; done
 ```
 
-### Step 2.3: Check Dependency Freshness
+### Step 2.4: Check Dependency Freshness
 
 **The 24-Hour Rule**: Dependencies should be updated at least daily or at the start of each feature branch.
 
@@ -143,7 +166,7 @@ For **JavaScript/Node**:
 stat -f "%Sm" package-lock.json 2>/dev/null || stat -f "%Sm" yarn.lock 2>/dev/null
 ```
 
-### Step 2.4: Update Dependencies (if needed)
+### Step 2.5: Update Dependencies (if needed)
 
 **Ruby/Rails:**
 
@@ -175,7 +198,7 @@ composer update
 dotnet restore
 ```
 
-### Step 2.5: Verify Database (if applicable)
+### Step 2.6: Verify Database (if applicable)
 
 For database-backed applications:
 
@@ -193,7 +216,7 @@ bin/rails db:migrate
 php artisan migrate:status
 ```
 
-### Step 2.6: Run Test Suite
+### Step 2.7: Run Test Suite
 
 Verify the codebase is in a known-good state:
 
@@ -223,7 +246,7 @@ dotnet test
 
 If tests fail, **stop and fix before proceeding**.
 
-### Step 2.7: Determine AI Visibility Preference
+### Step 2.8: Determine AI Visibility Preference
 
 Check if AI attribution should be visible or invisible in this project:
 
@@ -310,26 +333,82 @@ If dependency installation fails:
 
 ## Framework-Specific Notes
 
-### Rails Projects
+### Rails Projects (The Gold Standard)
 
-- Use `bin/setup` if available for one-command setup
-- Check for `bin/dev` vs `bin/rails server`
-- Look for Solid Queue/Cable/Cache configuration
+Rails projects should follow the `bin/setup` + `bin/dev` pattern:
+
+```bash
+bin/setup   # First-time setup: bundle, database, seed
+bin/dev     # Start development: Rails server + CSS watcher + etc.
+```
+
+- `bin/setup` should handle everything from clone to ready
+- `bin/dev` should start all processes needed for development
+- Check for Solid Queue/Cable/Cache configuration
+- If these don't exist, the project needs them
 
 ### Next.js/React Projects
 
-- Check for `.env.local` requirements
-- Verify Node version matches `.nvmrc` or `package.json`
-- Run `npm run build` to catch build errors early
+```bash
+npm install     # Install dependencies
+npm run dev     # Start development server
+```
+
+- Check for `.env.local` requirements (should be documented or have `.env.example`)
+- Verify Node version matches `.nvmrc` or `package.json` engines field
+- Consider adding a `setup` script to `package.json` if more steps are needed
 
 ### Laravel Projects
 
-- Check for `.env` file (copy from `.env.example`)
-- Run `php artisan key:generate` if needed
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate:fresh --seed
+php artisan serve
+```
+
+- The above should be scriptable—consider a `composer setup` command
 - Check for queue worker requirements
+- Ensure `.env.example` has all required variables documented
+
+### .NET Projects
+
+```bash
+dotnet restore
+dotnet build
+dotnet run
+```
+
+- This is the original home of the F5 Manifesto
+- Setup should be minimal if NuGet packages are properly configured
+- Database migrations should run automatically or have a clear script
 
 ### WordPress Projects
 
 - Check for local environment (Local, DDEV, wp-env)
-- Verify database connection
+- `wp-env start` should handle everything for block theme development
+- Verify database connection and import process is scripted
 - Check for WP-CLI availability
+
+---
+
+## Diagnosing F5 Violations
+
+When preparation fails, diagnose the root cause:
+
+| Symptom | Likely Cause | Fix |
+|---------|--------------|-----|
+| "It works on my machine" | Undocumented dependencies | Add to setup script |
+| "Ask [person] for the database" | No seed data | Create `db:seed` task |
+| "You need to install X manually" | Missing from setup | Add to `bin/setup` |
+| "Run these 5 commands first" | No setup script | Create one |
+| "Check the wiki" | Setup not scripted | Script it |
+
+---
+
+## More Information
+
+- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../references/guiding-principles.md) - The six principles
+- [AI Visibility](../references/ai-visibility.md) - Attribution preferences

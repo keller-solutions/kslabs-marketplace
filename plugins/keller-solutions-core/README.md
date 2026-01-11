@@ -166,6 +166,7 @@ keller-solutions-core/
 │   └── lg.md             # Legacy command alias
 ├── references/
 │   ├── guiding-principles.md    # The six principles
+│   ├── f5-manifesto.md          # "Clone, setup, run"
 │   ├── test-coverage-philosophy.md
 │   ├── git-integrity.md         # "Thou Shalt Not Lie"
 │   └── ai-visibility.md         # Attribution preferences
@@ -187,6 +188,14 @@ keller-solutions-core/
 4. **Keep Code Tidy**: No debug code, no commented-out code
 5. **Maintain Consistency**: One codebase, one style
 6. **Make It Understandable**: Code should explain itself
+
+### The F5 Principle
+
+> "After cloning and running setup, the application should just work."
+
+- Setup scripts handle everything (dependencies, database, seeds)
+- No manual steps required beyond `bin/setup && bin/dev`
+- If it isn't scripted, it's magic—bad magic
 
 ### Git Integrity
 

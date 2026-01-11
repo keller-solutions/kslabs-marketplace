@@ -510,6 +510,55 @@ If you need to fix something, make a new commit.
 
 ---
 
+## Maintaining the F5 Principle
+
+Every feature you add should preserve the F5 principle: after cloning and running setup, the application should just work.
+
+### When Adding Dependencies
+
+If your feature requires new dependencies:
+
+```bash
+# Add to package manager, not manual installation
+bundle add new_gem          # Ruby
+npm install new-package     # Node.js
+composer require new/pkg    # PHP
+```
+
+Never require developers to manually download or install tools outside the package manager.
+
+### When Adding Configuration
+
+If your feature requires new environment variables:
+
+1. Add to `.env.example` with documentation
+2. Provide sensible defaults where possible
+3. Ensure `bin/setup` handles missing configuration gracefully
+
+### When Adding Database Changes
+
+If your feature requires database changes:
+
+1. Create migrations that run automatically
+2. Update seed data if needed for development
+3. Ensure `bin/setup` handles schema updates
+
+### When Adding External Services
+
+If your feature depends on external services:
+
+1. Provide mock/stub options for development
+2. Document the dependency in README
+3. Consider if the app can start without the service (graceful degradation)
+
+### The Test
+
+After implementing a feature, ask: **Can a new developer clone the repo and run `bin/setup && bin/dev` without any additional steps?**
+
+If the answer is no, you've violated the F5 principle. Fix the setup process before considering the feature complete.
+
+---
+
 ## Leveraging Dependent Plugins
 
 This skill integrates with commands from dependent plugins:
@@ -528,3 +577,12 @@ This skill integrates with commands from dependent plugins:
 - `/frontend-design` - Create distinctive, production-grade UI components
 
 Use frontend-design whenever implementing visual interfaces. It prevents generic "AI slop" aesthetics and produces memorable, polished designs with intentional typography, color, and motion.
+
+---
+
+## More Information
+
+- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../references/guiding-principles.md) - The six principles
+- [Git Integrity](../references/git-integrity.md) - "Thou Shalt Not Lie"
+- [Test Coverage Philosophy](../references/test-coverage-philosophy.md) - Why 100% coverage matters
