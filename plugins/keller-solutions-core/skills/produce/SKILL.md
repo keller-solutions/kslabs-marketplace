@@ -430,132 +430,37 @@ When invoked as part of `/ks-feature` or `/ks-ticket`:
 
 ---
 
-## The Six Principles (Applied)
+## The Six Principles (Quick Reference)
 
-### 1. DRY (Don't Repeat Yourself)
+Apply these principles with every commit. See [Guiding Principles](../references/guiding-principles.md) for details.
 
-Extract to a method/function the *second* time code is needed:
-
-```ruby
-# First use: inline is fine
-projects.where(status: 'active')
-
-# Second use: extract
-scope :active, -> { where(status: 'active') }
-```
-
-### 2. Separate Code From Content
-
-No literal strings in views:
-
-```erb
-<!-- Bad -->
-<h1>Projects</h1>
-
-<!-- Good -->
-<h1><%= t('projects.index.title') %></h1>
-```
-
-### 3. Avoid Pre-Optimization
-
-Build only what the story requires:
-
-- No "while I'm in here" additions
-- No "we'll probably need this later" abstractions
-- No placeholder UI for future features
-
-### 4. Keep the Code Tidy
-
-Every commit leaves the codebase clean:
-
-- No commented-out code
-- No debug traces
-- No orphaned assets
-
-### 5. Maintain Consistency
-
-Follow established patterns:
-
-- When renaming, rename everywhere
-- If adjusting a pattern, adjust it everywhere in a refactor commit
-
-### 6. Make It Understandable
-
-Spell out names. Code is read more than written:
-
-```ruby
-# Bad
-def proc_scn(s)
-  r = s.res
-end
-
-# Good
-def process_scan(scan)
-  results = scan.results
-end
-```
+1. **DRY**: Extract on the second use, not the first
+2. **Separate Code From Content**: No literal strings in views, use i18n
+3. **Avoid Pre-Optimization**: Build only what the story requires
+4. **Keep Code Tidy**: No commented-out code, no debug traces
+5. **Maintain Consistency**: Follow established patterns everywhere
+6. **Make It Understandable**: Spell out names, code is read more than written
 
 ---
 
 ## Git Integrity
 
-**Never put yourself in a position where you have to force push.**
-
-- Push after each commit
-- No rebasing pushed commits
-- No amending pushed commits
-- No squash merges (preserve history)
-
-If you need to fix something, make a new commit.
+**Never put yourself in a position where you have to force push.** Push after each commit. No rebasing, amending, or squashing pushed commits. See [Git Integrity](../references/git-integrity.md) for details.
 
 ---
 
 ## Maintaining the F5 Principle
 
-Every feature you add should preserve the F5 principle: after cloning and running setup, the application should just work.
+Every feature should preserve the F5 principle: clone, setup, run. See [The F5 Principle](../references/f5-manifesto.md) for full details.
 
-### When Adding Dependencies
+**Before completing a feature, verify:**
 
-If your feature requires new dependencies:
+- New dependencies added via package manager (not manual install)
+- New env vars documented in `.env.example`
+- Database changes handled by migrations
+- External services have mock/stub options for development
 
-```bash
-# Add to package manager, not manual installation
-bundle add new_gem          # Ruby
-npm install new-package     # Node.js
-composer require new/pkg    # PHP
-```
-
-Never require developers to manually download or install tools outside the package manager.
-
-### When Adding Configuration
-
-If your feature requires new environment variables:
-
-1. Add to `.env.example` with documentation
-2. Provide sensible defaults where possible
-3. Ensure `bin/setup` handles missing configuration gracefully
-
-### When Adding Database Changes
-
-If your feature requires database changes:
-
-1. Create migrations that run automatically
-2. Update seed data if needed for development
-3. Ensure `bin/setup` handles schema updates
-
-### When Adding External Services
-
-If your feature depends on external services:
-
-1. Provide mock/stub options for development
-2. Document the dependency in README
-3. Consider if the app can start without the service (graceful degradation)
-
-### The Test
-
-After implementing a feature, ask: **Can a new developer clone the repo and run `bin/setup && bin/dev` without any additional steps?**
-
-If the answer is no, you've violated the F5 principle. Fix the setup process before considering the feature complete.
+**The test**: Can a new developer run `bin/setup && bin/dev` without additional steps?
 
 ---
 
