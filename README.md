@@ -10,13 +10,13 @@ Curated Claude Code skills and plugins from Keller Solutions.
 Add this marketplace to Claude Code:
 
 ```bash
-/plugin marketplace add keller-solutions/marketplace
+/plugin marketplace add keller-solutions/kslabs-marketplace
 ```
 
 Then install a plugin:
 
 ```bash
-/plugin install keller-solutions-core@marketplace
+/plugin install keller-solutions-core@kslabs-marketplace
 ```
 
 ## Available Plugins
