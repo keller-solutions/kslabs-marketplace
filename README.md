@@ -27,29 +27,32 @@ Then install a plugin:
 
 ## Contributing
 
-We welcome contributions! To add a new skill:
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete guide, including:
 
-1. **Fork this repository**
-2. **Create your skill directory**: `plugins/keller-solutions-core/skills/your-skill-name/`
-3. **Copy the template**: Use `skill-template` as a starting point
-4. **Write your SKILL.md** with:
-   - Valid YAML frontmatter (name, description)
-   - Description with trigger keywords
-   - Quick Start section
-   - Clear instructions
-   - Concrete examples
-5. **Validate**: Ensure frontmatter is valid and content is under 500 lines
-6. **Submit a PR**
+- Development setup
+- How to create skills and plugins
+- Version management and release process
+- Pull request guidelines
+- CI/CD pipeline details
 
-### Skill Requirements
+### Quick Start for Contributors
 
-- [ ] Name: lowercase with hyphens, max 64 characters
-- [ ] Description: includes what it does AND when to use it
-- [ ] Body: under 500 lines
-- [ ] Examples: concrete input/output pairs
-- [ ] License: MIT or compatible
+1. Fork and clone the repository
+2. Create a feature branch from `main`
+3. Make your changes (bump version if adding features)
+4. Submit a PR targeting `main`
 
-See `plugins/keller-solutions-core/skills/skill-template/SKILL.md` for a complete example.
+### Version Requirements
+
+PRs to `main` must include a version bump. Update these three files:
+
+| File | What to update |
+|------|----------------|
+| `.claude-plugin/marketplace.json` | `.version` and `.plugins[].version` |
+| `plugins/{name}/.claude-plugin/plugin.json` | `.version` |
+| `plugins/{name}/CHANGELOG.md` | Add new `## [x.y.z]` section |
+
+When merged, a GitHub Release is created automatically.
 
 ## License
 
