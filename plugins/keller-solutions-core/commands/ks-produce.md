@@ -12,7 +12,7 @@ Run the produce skill standalone:
 
 This will:
 
-1. Verify environment is prepared
+1. Verify environment is prepared as described in the /ks-prep command
 2. Retrieve the ticket and parse acceptance criteria
 3. For each criterion:
    - Write a failing test (Red)
