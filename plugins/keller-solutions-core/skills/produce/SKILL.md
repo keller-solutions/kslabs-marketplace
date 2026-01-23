@@ -65,10 +65,11 @@ jira issue move [TICKET_KEY] "In Progress"
 
 ```bash
 # Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
 
+# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
 # Update task status (status ID varies by workspace - check your statuses)
-curl -X PUT "https://api.clickup.com/api/v2/task/${TASK_ID}" \
+curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"status": "in progress"}'

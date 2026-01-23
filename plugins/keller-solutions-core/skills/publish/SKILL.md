@@ -274,10 +274,10 @@ gh issue comment [ISSUE_NUMBER] --body "Released in v1.1.0"
 
 ```bash
 # Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
 
-# Add release comment to task
-curl -X POST "https://api.clickup.com/api/v2/task/${TASK_ID}/comment" \
+# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
+curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"comment_text": "Released in v1.1.0"}'

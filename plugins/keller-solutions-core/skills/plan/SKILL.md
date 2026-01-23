@@ -279,7 +279,7 @@ EOF
 
 ```bash
 # Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
 CLICKUP_LIST_ID="your_list_id"  # Find in ClickUp URL or via API
 
 curl -X POST "https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task" \
