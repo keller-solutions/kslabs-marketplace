@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for 1Password CLI token retrieval (Private vault)
 - Environment variable detection for ClickUp (`CLICKUP_API_TOKEN`)
 - CHANGELOG.md for version tracking
+- CI/CD version sync validation (marketplace.json, plugin.json, CHANGELOG.md)
+- CI/CD version bump enforcement on PRs to main
+- Automatic GitHub Release creation on merge to main
 
 ### Changed
 

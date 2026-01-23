@@ -63,6 +63,53 @@ jobs:
 
           echo "All versions in sync: $MARKETPLACE_VERSION"
 
+  version-bump-check:
+    name: Version Bump Required
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Get PR version
+        id: pr_version
+        run: |
+          PR_VERSION=$(jq -r '.version' .claude-plugin/marketplace.json)
+          echo "version=$PR_VERSION" >> $GITHUB_OUTPUT
+          echo "PR version: $PR_VERSION"
+
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Compare versions
+        run: |
+          MAIN_VERSION=$(jq -r '.version' .claude-plugin/marketplace.json)
+          PR_VERSION="${{ steps.pr_version.outputs.version }}"
+
+          echo "Main version: $MAIN_VERSION"
+          echo "PR version: $PR_VERSION"
+
+          if [ "$MAIN_VERSION" = "$PR_VERSION" ]; then
+            echo "ERROR: Version must be bumped for PRs to main"
+            echo "Current version on main: $MAIN_VERSION"
+            echo "Please update version in marketplace.json, plugin.json, and CHANGELOG.md"
+            exit 1
+          fi
+
+          # Verify PR version is greater than main version using sort -V
+          HIGHER=$(printf '%s\n%s' "$MAIN_VERSION" "$PR_VERSION" | sort -V | tail -1)
+          if [ "$HIGHER" != "$PR_VERSION" ]; then
+            echo "ERROR: PR version ($PR_VERSION) must be greater than main version ($MAIN_VERSION)"
+            exit 1
+          fi
+
+          echo "Version bump verified: $MAIN_VERSION → $PR_VERSION"
+
   validate-skills:
     name: Validate Skills
     runs-on: ubuntu-latest
