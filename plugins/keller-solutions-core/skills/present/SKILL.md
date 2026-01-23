@@ -153,6 +153,24 @@ PR_URL=$(gh pr view --json url -q '.url')
 echo "PR created: $PR_URL"
 ```
 
+### Step 3.4: Link PR to ClickUp Task (if applicable)
+
+```bash
+# Token from env var or 1Password CLI (Private vault)
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+
+# Add comment with PR link and update status to "In Review"
+curl -X POST "https://api.clickup.com/api/v2/task/${TASK_ID}/comment" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d "{\"comment_text\": \"PR created: ${PR_URL}\"}"
+
+curl -X PUT "https://api.clickup.com/api/v2/task/${TASK_ID}" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "in review"}'
+```
+
 ---
 
 ## Phase 4: Review Environment (if applicable)
