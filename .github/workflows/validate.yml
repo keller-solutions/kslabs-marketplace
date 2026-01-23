@@ -32,6 +32,37 @@ jobs:
             python3 -m json.tool "$file" > /dev/null || exit 1
           done
 
+  version-sync:
+    name: Version Sync Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Check version sync
+        run: |
+          MARKETPLACE_VERSION=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          PLUGIN_VERSION=$(jq -r '.version' plugins/keller-solutions-core/.claude-plugin/plugin.json)
+          CHANGELOG_VERSION=$(grep -m1 "^## \[" plugins/keller-solutions-core/CHANGELOG.md | sed 's/## \[\(.*\)\].*/\1/')
+
+          echo "Marketplace version: $MARKETPLACE_VERSION"
+          echo "Plugin version: $PLUGIN_VERSION"
+          echo "Changelog version: $CHANGELOG_VERSION"
+
+          if [ "$MARKETPLACE_VERSION" != "$PLUGIN_VERSION" ]; then
+            echo "ERROR: Version mismatch between marketplace.json ($MARKETPLACE_VERSION) and plugin.json ($PLUGIN_VERSION)"
+            exit 1
+          fi
+
+          if [ "$MARKETPLACE_VERSION" != "$CHANGELOG_VERSION" ]; then
+            echo "ERROR: Version mismatch between marketplace.json ($MARKETPLACE_VERSION) and CHANGELOG.md ($CHANGELOG_VERSION)"
+            exit 1
+          fi
+
+          echo "All versions in sync: $MARKETPLACE_VERSION"
+
   validate-skills:
     name: Validate Skills
     runs-on: ubuntu-latest
