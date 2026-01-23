@@ -43,13 +43,28 @@ jobs:
 
       - name: Check version sync
         run: |
-          MARKETPLACE_VERSION=$(jq -r '.plugins[0].version' .claude-plugin/marketplace.json)
+          # Get top-level marketplace version
+          MARKETPLACE_VERSION=$(jq -r '.version' .claude-plugin/marketplace.json)
+
+          # Get plugin version from marketplace.json by name (not index)
+          MARKETPLACE_PLUGIN_VERSION=$(jq -r '.plugins[] | select(.name=="keller-solutions-core") | .version' .claude-plugin/marketplace.json)
+
+          # Get plugin version from plugin.json
           PLUGIN_VERSION=$(jq -r '.version' plugins/keller-solutions-core/.claude-plugin/plugin.json)
-          CHANGELOG_VERSION=$(grep -m1 "^## \[" plugins/keller-solutions-core/CHANGELOG.md | sed 's/## \[\(.*\)\].*/\1/')
+
+          # Get version from CHANGELOG (handles "## [x.y.z] - date" format)
+          CHANGELOG_VERSION=$(grep -m1 "^## \[" plugins/keller-solutions-core/CHANGELOG.md | sed 's/## \[\([^]]*\)\].*/\1/')
 
           echo "Marketplace version: $MARKETPLACE_VERSION"
+          echo "Marketplace plugin entry version: $MARKETPLACE_PLUGIN_VERSION"
           echo "Plugin version: $PLUGIN_VERSION"
           echo "Changelog version: $CHANGELOG_VERSION"
+
+          # Verify all four versions match
+          if [ "$MARKETPLACE_VERSION" != "$MARKETPLACE_PLUGIN_VERSION" ]; then
+            echo "ERROR: Version mismatch between marketplace.json .version ($MARKETPLACE_VERSION) and .plugins[].version ($MARKETPLACE_PLUGIN_VERSION)"
+            exit 1
+          fi
 
           if [ "$MARKETPLACE_VERSION" != "$PLUGIN_VERSION" ]; then
             echo "ERROR: Version mismatch between marketplace.json ($MARKETPLACE_VERSION) and plugin.json ($PLUGIN_VERSION)"

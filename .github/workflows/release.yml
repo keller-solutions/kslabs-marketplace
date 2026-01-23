@@ -44,13 +44,15 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
 
           # Extract the section for this version from CHANGELOG.md
-          # Matches from "## [VERSION]" to the next "## [" or end of file
+          # Handles "## [x.y.z] - date" format, matches until next "## [" or EOF
           NOTES=$(awk -v ver="$VERSION" '
+            BEGIN { found = 0 }
             /^## \[/ {
               if (found) exit
-              if ($0 ~ "## \\[" ver "\\]") found=1
+              # Match "## [version]" at start of line (may have date suffix)
+              if (index($0, "## [" ver "]") == 1) { found = 1; next }
             }
-            found && !/^## \['"$VERSION"'\]/ { print }
+            found { print }
           ' plugins/keller-solutions-core/CHANGELOG.md)
 
           # If no notes found, use a default message
