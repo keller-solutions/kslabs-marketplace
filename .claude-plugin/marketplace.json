@@ -1,20 +1,29 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "keller-solutions-marketplace",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Curated Claude Code skills and plugins from Keller Solutions",
   "owner": {
     "name": "Keller Solutions",
     "email": "hello@kellersolutions.com",
     "url": "https://github.com/keller-solutions"
   },
-  "homepage": "https://github.com/keller-solutions/marketplace",
-  "repository": "https://github.com/keller-solutions/marketplace",
+  "homepage": "https://github.com/keller-solutions/kslabs-marketplace",
+  "repository": "https://github.com/keller-solutions/kslabs-marketplace",
   "plugins": [
     {
       "name": "keller-solutions-core",
+      "description": "The Keller Solutions Way—30 years of development methodology. 5 skills, 8 commands for TDD workflow: Prepare, Plan, Produce, Present, Publish.",
+      "version": "1.0.0",
       "source": "./plugins/keller-solutions-core",
-      "category": "development"
+      "category": "development",
+      "tags": ["tdd", "gitflow", "workflow", "methodology", "story-writing", "code-review"],
+      "author": {
+        "name": "Keller Solutions",
+        "email": "hello@kellersolutions.com",
+        "url": "https://github.com/keller-solutions"
+      },
+      "homepage": "https://github.com/keller-solutions/kslabs-marketplace/tree/main/plugins/keller-solutions-core"
     }
   ]
 }

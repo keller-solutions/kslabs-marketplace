@@ -5,6 +5,22 @@
 
 Curated Claude Code skills and plugins from Keller Solutions.
 
+## About Keller Solutions
+
+Keller Solutions brings 30 years of software development methodology to AI-assisted coding. Our approach emphasizes:
+
+- **Test-Driven Development** — Tests before code, every time
+- **Git Integrity** — No squash, no rebase, no lies in your history
+- **Story-Driven Work** — Well-structured stories produce well-scoped PRs
+- **The F5 Principle** — After clone and setup, the app should just work
+- **Complete Feedback Loops** — Every PR comment gets addressed or explained
+
+The [keller-solutions-core](plugins/keller-solutions-core) plugin encapsulates this methodology into the **5 P's workflow**: Prepare, Plan, Produce, Present, and Publish.
+
+Keller Solutions is a digital solutions consultancy based in Birmingham, Alabama. Founded by Evan Keller and Matthew McCay, we bring nearly 50 years of combined expertise in full-stack web development, specializing in Ruby on Rails, React, and AI-assisted development. We emphasize craftsmanship, process, and customer focus—partners in solving problems, not just shipping code.
+
+Learn more at [keller-solutions.com](https://keller-solutions.com).
+
 ## Installation
 
 Add this marketplace to Claude Code:
@@ -27,29 +43,32 @@ Then install a plugin:
 
 ## Contributing
 
-We welcome contributions! To add a new skill:
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete guide, including:
 
-1. **Fork this repository**
-2. **Create your skill directory**: `plugins/keller-solutions-core/skills/your-skill-name/`
-3. **Copy the template**: Use `skill-template` as a starting point
-4. **Write your SKILL.md** with:
-   - Valid YAML frontmatter (name, description)
-   - Description with trigger keywords
-   - Quick Start section
-   - Clear instructions
-   - Concrete examples
-5. **Validate**: Ensure frontmatter is valid and content is under 500 lines
-6. **Submit a PR**
+- Development setup
+- How to create skills and plugins
+- Version management and release process
+- Pull request guidelines
+- CI/CD pipeline details
 
-### Skill Requirements
+### Quick Start for Contributors
 
-- [ ] Name: lowercase with hyphens, max 64 characters
-- [ ] Description: includes what it does AND when to use it
-- [ ] Body: under 500 lines
-- [ ] Examples: concrete input/output pairs
-- [ ] License: MIT or compatible
+1. Fork and clone the repository
+2. Create a feature branch from `main`
+3. Make your changes (bump version if adding features)
+4. Submit a PR targeting `main`
 
-See `plugins/keller-solutions-core/skills/skill-template/SKILL.md` for a complete example.
+### Version Requirements
+
+PRs to `main` must include a version bump. Update these three files:
+
+| File | What to update |
+|------|----------------|
+| `.claude-plugin/marketplace.json` | `.version` and `.plugins[].version` |
+| `plugins/{name}/.claude-plugin/plugin.json` | `.version` |
+| `plugins/{name}/CHANGELOG.md` | Add new `## [x.y.z]` section |
+
+When merged, a GitHub Release is created automatically.
 
 ## License
 
