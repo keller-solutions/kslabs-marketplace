@@ -6,9 +6,8 @@ argument-hint: "<ticket number>"
 
 # Ticket Workflow
 
-1. `/ralph-loop:ralph-loop "complete all workflow steps" --completion-promise "DONE"`
-2. `/ks-prep`
-3. `/ks-produce $ARGUMENTS`
-4. `/compound-engineering:lint`
-5. `/ks-present`
-6. Output `<promise>DONE</promise>`
+Do each of these steps in order and summarize the results at the end:
+
+1. `/ks-prep`
+2. `/ks-produce $ARGUMENTS`
+3. `/ks-present`

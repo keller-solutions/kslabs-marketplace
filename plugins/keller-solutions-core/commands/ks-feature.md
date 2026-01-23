@@ -6,10 +6,9 @@ argument-hint: "<feature description>"
 
 # Feature Workflow
 
-1. `/ralph-loop:ralph-loop "complete all workflow steps" --completion-promise "DONE"`
-2. `/ks-prep`
-3. `/ks-plan $ARGUMENTS`
-4. `/ks-produce`
-5. `/compound-engineering:lint`
-6. `/ks-present`
-7. Output `<promise>DONE</promise>`
+Do each of these steps in order and summarize the results at the end:
+
+1. `/ks-prep`
+2. `/ks-plan $ARGUMENTS`
+3. `/ks-produce`
+4. `/ks-present`
