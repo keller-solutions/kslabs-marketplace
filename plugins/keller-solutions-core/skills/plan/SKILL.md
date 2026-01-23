@@ -221,8 +221,10 @@ ls .linear 2>/dev/null && echo "Linear"
 # Check for Jira config
 ls .jira 2>/dev/null || grep -q "jira" .env 2>/dev/null && echo "Jira"
 
-# Check for ClickUp config
-ls .clickup 2>/dev/null || grep -q "clickup" .env 2>/dev/null && echo "ClickUp"
+# Check for ClickUp config (file, .env, or environment variable)
+ls .clickup 2>/dev/null && echo "ClickUp"
+grep -q "clickup" .env 2>/dev/null && echo "ClickUp"
+[ -n "$CLICKUP_API_TOKEN" ] && echo "ClickUp (env var)"
 ```
 
 ### Create GitHub Issue
@@ -276,22 +278,22 @@ EOF
 ### Create ClickUp Task
 
 ```bash
-# Using ClickUp API or CLI
-# Task creation varies by workspace setup
-# Ensure the story format is preserved in the task description:
+# Token from env var or 1Password CLI (Private vault)
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+CLICKUP_LIST_ID="your_list_id"  # Find in ClickUp URL or via API
 
-# Title: User sees project list on dashboard
-# Description:
-# **In order to** quickly resume work on recent audits
-# **As a** returning user on the dashboard
-# **I want** to see my projects listed by last activity
-#
-# ## Acceptance Criteria
-# - [ ] Projects section header is visible
-# - [ ] Each project shows name and last scan date
-# - [ ] Projects are sorted by last activity
-# - [ ] Clicking a project navigates to detail page
-# - [ ] Empty state shown when no projects exist
+curl -X POST "https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d "$(cat <<'EOF'
+{
+  "name": "User sees project list on dashboard",
+  "markdown_description": "**In order to** quickly resume work on recent audits\n**As a** returning user on the dashboard\n**I want** to see my projects listed by last activity\n\n## Acceptance Criteria\n\n- [ ] Projects section header is visible\n- [ ] Each project shows name and last scan date\n- [ ] Projects are sorted by last activity\n- [ ] Clicking a project navigates to detail page\n- [ ] Empty state shown when no projects exist"
+}
+EOF
+)"
+
+# Response includes task ID: {"id": "abc123", ...}
 ```
 
 ### Link to Epic (if applicable)
