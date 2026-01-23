@@ -264,9 +264,23 @@ If using error monitoring (Sentry, Honeybadger, etc.):
 
 Update tickets that were released:
 
+**GitHub Issues:**
+
 ```bash
-# Add comment to each issue
 gh issue comment [ISSUE_NUMBER] --body "Released in v1.1.0"
+```
+
+**ClickUp:**
+
+```bash
+# Token from env var or 1Password CLI (Private vault)
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/ClickUp API Token/credential")}"
+
+# Add release comment to task
+curl -X POST "https://api.clickup.com/api/v2/task/${TASK_ID}/comment" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"comment_text": "Released in v1.1.0"}'
 ```
 
 Note: The product owner typically closes issues after acceptance testing.
