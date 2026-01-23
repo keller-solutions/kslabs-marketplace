@@ -17,9 +17,9 @@ Keller Solutions brings 30 years of software development methodology to AI-assis
 
 The [keller-solutions-core](plugins/keller-solutions-core) plugin encapsulates this methodology into the **5 P's workflow**: Prepare, Plan, Produce, Present, and Publish.
 
-Keller Solutions is a software consultancy based in Austin, Texas, specializing in Ruby on Rails, AI-assisted development, and helping teams ship high-quality software faster.
+Keller Solutions is a digital solutions consultancy based in Birmingham, Alabama. Founded by Evan Keller and Matthew McCay, we bring nearly 50 years of combined expertise in full-stack web development, specializing in Ruby on Rails, React, and AI-assisted development. We emphasize craftsmanship, process, and customer focus—partners in solving problems, not just shipping code.
 
-Learn more at [kellersolutions.com](https://kellersolutions.com).
+Learn more at [keller-solutions.com](https://keller-solutions.com).
 
 ## Installation
 
