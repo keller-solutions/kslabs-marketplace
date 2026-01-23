@@ -5,6 +5,20 @@
 
 Curated Claude Code skills and plugins from Keller Solutions.
 
+## About Keller Solutions
+
+Keller Solutions brings 30 years of software development methodology to AI-assisted coding. Our approach emphasizes:
+
+- **Test-Driven Development** — Tests before code, every time
+- **Git Integrity** — No squash, no rebase, no lies in your history
+- **Story-Driven Work** — Well-structured stories produce well-scoped PRs
+- **The F5 Principle** — After clone and setup, the app should just work
+- **Complete Feedback Loops** — Every PR comment gets addressed or explained
+
+The [keller-solutions-core](plugins/keller-solutions-core) plugin encapsulates this methodology into the **5 P's workflow**: Prepare, Plan, Produce, Present, and Publish.
+
+Learn more at [kellersolutions.com](https://kellersolutions.com).
+
 ## Installation
 
 Add this marketplace to Claude Code:
