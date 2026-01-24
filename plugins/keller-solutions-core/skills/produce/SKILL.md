@@ -274,38 +274,9 @@ Continue the Red-Green-Refactor cycle until all acceptance criteria are implemen
 
 ## UI Implementation: Frontend Design
 
-When implementing user-facing UI components, invoke the frontend-design skill:
+When implementing user-facing UI components, invoke `/frontend-design`. Use it for new pages, components, or any work where aesthetics matter.
 
-```bash
-/frontend-design
-```
-
-**When to use frontend-design:**
-
-- New pages or views
-- Component creation (cards, modals, forms, navigation)
-- Significant visual changes
-- Any work where aesthetics matter
-
-**Why**: The frontend-design skill creates distinctive, production-grade interfaces that avoid generic "AI aesthetics". It ensures:
-
-- Intentional typography choices (not default system fonts)
-- Cohesive color palettes with purpose
-- Thoughtful motion and micro-interactions
-- Memorable, context-appropriate design
-
-**Integration with TDD**: Write the test for behavior first, then use frontend-design for the implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
-
-```markdown
-## Example Flow
-
-1. Write test: "user sees project cards with name and status"
-2. Run test (Red)
-3. Invoke `/frontend-design` to implement the ProjectCard component
-4. Run test (Green)
-5. Refactor if needed
-6. Commit
-```
+**Integration with TDD**: Write the test for behavior first, then use frontend-design for implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
 
 ---
 
@@ -368,6 +339,34 @@ Check:
 - [ ] DRY opportunities identified
 - [ ] Naming is clear and consistent
 - [ ] Comments explain WHY (not WHAT)
+
+### Step 4.5: Update CHANGELOG
+
+Document changes in [Keep a Changelog](https://keepachangelog.com) format before creating PR.
+
+#### Add Entry to [Unreleased] Section
+
+```markdown
+## [Unreleased]
+
+### Added
+- New feature X for ticket #123
+
+### Changed
+- Updated behavior Y for ticket #123
+```
+
+**Categories**: Added, Changed, Deprecated, Removed, Fixed, Security
+
+#### Validate and Commit
+
+```bash
+# Check structure
+grep -E "^## \[" CHANGELOG.md | head -3
+
+# Commit update
+git add CHANGELOG.md && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
+```
 
 ---
 
