@@ -328,7 +328,7 @@ git log v1.0.0..HEAD --oneline
 
 ## Phase 3: Ready Report
 
-Output a readiness summary:
+Output a brief readiness summary:
 
 ```markdown
 ## Environment Ready
@@ -337,13 +337,74 @@ Output a readiness summary:
 **Dependencies**: [installed/updated]
 **Database**: [migrated/n/a]
 **Tests**: [passing/failing - count]
-**AI Visibility**: [visible/invisible/unknown]
-**CHANGELOG**: [current/needs update/not found]
-
-Ready to proceed with:
-- `/ks-plan` - Create a story and ticket
-- `/ks-produce` - Work on an existing ticket
 ```
+
+---
+
+## Phase 4: Development Context Summary
+
+After environment preparation, present a consolidated summary of key development choices that will impact subsequent skills.
+
+### Output Format
+
+```markdown
+---
+
+## Development Context
+
+These settings will be used throughout the workflow:
+
+| Setting | Value | Impact |
+|---------|-------|--------|
+| **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
+| **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
+| **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
+| **CHANGELOG** | [Current / Needs update / Not found] | Must update before PR |
+
+### What This Means
+
+- Commits will [include/exclude] `Co-Authored-By: Claude` attribution
+- Tickets will be [created in X / managed manually]
+- CHANGELOG [is current / should be updated during produce]
+- Test coverage [meets standards / should be monitored]
+
+---
+
+**Ready to proceed?** Review the settings above. If anything looks incorrect, address it now before starting work.
+```
+
+### Detect Ticket Management System
+
+```bash
+# Detection (see managing-tickets skill for full logic)
+gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
+[ -f ".jira" ] && echo "Jira"
+[ -n "$CLICKUP_API_TOKEN" ] && echo "ClickUp"
+[ -f ".linear" ] && echo "Linear"
+```
+
+### Capture Test Suite Status
+
+```bash
+# Rails - run tests and capture result
+bin/rails test 2>&1 | tee /tmp/test_output.txt
+TESTS_PASSED=$?
+TEST_COUNT=$(grep -E "^\d+ (tests|runs)" /tmp/test_output.txt | head -1)
+COVERAGE=$(grep -E "Coverage|LOC" /tmp/test_output.txt | head -1)
+
+# JavaScript
+npm test 2>&1 | tee /tmp/test_output.txt
+```
+
+### Store Context for Subsequent Skills
+
+These values should be remembered and applied in produce/present:
+
+- **AI_VISIBLE**: Include Co-Authored-By in commits
+- **TICKET_SYSTEM**: Which tool to use for ticket operations
+- **CHANGELOG_STATUS**: Whether to prompt for updates
+- **TESTS_PASSING**: Whether tests were green at start
 
 ---
 
@@ -352,7 +413,7 @@ Ready to proceed with:
 When invoked directly (`/ks-prep`), this skill:
 
 1. Performs full orientation and preparation
-2. Reports the project summary
+2. Reports the development context summary
 3. Ends without proceeding to next phase
 
 ## Workflow Usage
@@ -360,8 +421,10 @@ When invoked directly (`/ks-prep`), this skill:
 When invoked as part of `/ks-feature` or `/ks-ticket`:
 
 1. Performs full orientation and preparation
-2. Stores context for subsequent skills
-3. Automatically proceeds to next phase
+2. Presents development context summary
+3. **Pauses for user confirmation** before proceeding
+4. Stores context for subsequent skills
+5. Proceeds to next phase after confirmation
 
 ---
 
@@ -394,63 +457,13 @@ If dependency installation fails:
 
 ## Framework-Specific Notes
 
-### Rails Projects (The Gold Standard)
-
-Rails projects should follow the `bin/setup` + `bin/dev` pattern:
-
-```bash
-bin/setup   # First-time setup: bundle, database, seed
-bin/dev     # Start development: Rails server + CSS watcher + etc.
-```
-
-- `bin/setup` should handle everything from clone to ready
-- `bin/dev` should start all processes needed for development
-- Check for Solid Queue/Cable/Cache configuration
-- If these don't exist, the project needs them
-
-### Next.js/React Projects
-
-```bash
-npm install     # Install dependencies
-npm run dev     # Start development server
-```
-
-- Check for `.env.local` requirements (should be documented or have `.env.example`)
-- Verify Node version matches `.nvmrc` or `package.json` engines field
-- Consider adding a `setup` script to `package.json` if more steps are needed
-
-### Laravel Projects
-
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate:fresh --seed
-php artisan serve
-```
-
-- The above should be scriptable—consider a `composer setup` command
-- Check for queue worker requirements
-- Ensure `.env.example` has all required variables documented
-
-### .NET Projects
-
-```bash
-dotnet restore
-dotnet build
-dotnet run
-```
-
-- This is the original home of the F5 Manifesto
-- Setup should be minimal if NuGet packages are properly configured
-- Database migrations should run automatically or have a clear script
-
-### WordPress Projects
-
-- Check for local environment (Local, DDEV, wp-env)
-- `wp-env start` should handle everything for block theme development
-- Verify database connection and import process is scripted
-- Check for WP-CLI availability
+| Framework | Setup | Dev Server |
+|-----------|-------|------------|
+| Rails | `bin/setup` | `bin/dev` |
+| Next.js/React | `npm install` | `npm run dev` |
+| Laravel | `composer install && php artisan migrate:fresh --seed` | `php artisan serve` |
+| .NET | `dotnet restore && dotnet build` | `dotnet run` |
+| WordPress | `wp-env start` | (included) |
 
 ---
 
