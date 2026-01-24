@@ -31,7 +31,7 @@ gh issue list --limit 1 2>/dev/null && echo "TOOL=github"
 [ -f ".linear" ] && echo "TOOL=linear"
 
 # Check for Jira
-[ -f ".jira" ] || grep -q "jira" .env 2>/dev/null && echo "TOOL=jira"
+([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "TOOL=jira"
 
 # Check for ClickUp (file, .env, or environment variable)
 [ -f ".clickup" ] && echo "TOOL=clickup"
@@ -136,6 +136,23 @@ gh issue reopen [ISSUE_NUMBER]
 gh issue comment [ISSUE_NUMBER] --body "PR created: https://github.com/owner/repo/pull/123"
 gh issue comment [ISSUE_NUMBER] --body "Released in v1.1.0"
 ```
+
+#### Apply Labels
+
+```bash
+# Add labels during creation
+gh issue create --title "..." --body "..." --label "feature"
+
+# Add labels to existing issue
+gh issue edit [ISSUE_NUMBER] --add-label "bug"
+```
+
+Common labels:
+
+- `feature` - New functionality
+- `bug` - Something broken
+- `chore` - Maintenance task
+- `epic:[name]` - Links to parent epic
 
 #### Link PR to Issue
 
