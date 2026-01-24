@@ -264,6 +264,66 @@ Check if AI attribution should be visible or invisible in this project:
 
 3. Record the preference for use in later phases.
 
+### Step 2.9: Verify CHANGELOG Freshness
+
+Check if the CHANGELOG is up to date with recent work.
+
+#### Check for CHANGELOG
+
+```bash
+# Find CHANGELOG file (common naming conventions)
+ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1
+```
+
+#### Cross-Check Against Git Tags
+
+```bash
+# Get latest git tag
+LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
+
+# Get version from CHANGELOG (first version header)
+CHANGELOG_VERSION=$(grep -E "^## \[?[0-9]+\.[0-9]+\.[0-9]+\]?" CHANGELOG.md 2>/dev/null | head -1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+
+echo "Latest tag: $LATEST_TAG"
+echo "CHANGELOG version: $CHANGELOG_VERSION"
+```
+
+#### Check for Unreleased Changes
+
+```bash
+# Count commits since last tag
+COMMITS_SINCE_TAG=$(git rev-list ${LATEST_TAG}..HEAD --count 2>/dev/null || echo "0")
+
+# Check if CHANGELOG has [Unreleased] section with content
+HAS_UNRELEASED=$(grep -A 5 "## \[Unreleased\]" CHANGELOG.md 2>/dev/null | grep -E "^### " | wc -l)
+
+echo "Commits since $LATEST_TAG: $COMMITS_SINCE_TAG"
+echo "Unreleased sections: $HAS_UNRELEASED"
+```
+
+#### Report CHANGELOG Status
+
+If discrepancies are found, suggest updating:
+
+```markdown
+## CHANGELOG Status
+
+**Latest Tag**: v1.0.0
+**CHANGELOG Version**: 1.0.0
+**Commits Since Tag**: 15
+**Unreleased Section**: Empty
+
+⚠️ **Suggestion**: CHANGELOG may need updating. There are 15 commits since the last release with no [Unreleased] entries. Consider documenting recent changes before starting new work.
+
+To view recent commits:
+git log v1.0.0..HEAD --oneline
+```
+
+**CHANGELOG is current when:**
+
+- Latest tag version matches CHANGELOG's first version section, AND
+- Either no commits since tag, OR [Unreleased] section has entries
+
 ---
 
 ## Phase 3: Ready Report
@@ -278,6 +338,7 @@ Output a readiness summary:
 **Database**: [migrated/n/a]
 **Tests**: [passing/failing - count]
 **AI Visibility**: [visible/invisible/unknown]
+**CHANGELOG**: [current/needs update/not found]
 
 Ready to proceed with:
 - `/ks-plan` - Create a story and ticket
