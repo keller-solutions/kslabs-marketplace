@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG freshness verification in `prep` skill (cross-checks git tags and commits)
 - CHANGELOG update step in `produce` skill (Keep a Changelog format)
 - CHANGELOG verification in `present` skill (checks before PR creation, warns about CI validation)
+- Development Context summary in `prep` skill with user confirmation pause
+- Consolidated display of ticket system, test status, AI visibility, and CHANGELOG status
 
 ### Changed
 
