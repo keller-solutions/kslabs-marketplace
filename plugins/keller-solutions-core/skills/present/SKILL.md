@@ -65,6 +65,37 @@ bin/brakeman
 
 All must pass before creating PR.
 
+### Step 1.4: Verify CHANGELOG Updated
+
+Before creating a PR, ensure CHANGELOG reflects the changes.
+
+```bash
+# Check if CHANGELOG was modified in this branch (use develop or main as base)
+git diff develop...HEAD --name-only | grep -i changelog
+
+# If not modified, check if CI validates CHANGELOG
+grep -ri "changelog" .github/workflows/ 2>/dev/null | grep -v "#"
+```
+
+**If CI validates CHANGELOG** (like `Version Bump Required` checks):
+
+The PR will fail if CHANGELOG isn't updated. Add an entry now:
+
+```bash
+# View what to document
+git log develop..HEAD --oneline
+
+# Edit CHANGELOG.md with [Unreleased] or new version section
+```
+
+**Warning signs to check:**
+
+- `git diff` shows code changes but CHANGELOG unchanged
+- Project has `.github/workflows/` with changelog validation
+- Previous PRs failed on version/changelog checks
+
+If CHANGELOG needs updating, do it before creating the PR to avoid CI failures.
+
 ---
 
 ## Phase 2: Evidence Gathering
@@ -153,14 +184,16 @@ PR_URL=$(gh pr view --json url -q '.url')
 echo "PR created: $PR_URL"
 ```
 
-### Step 3.4: Link PR to ClickUp Task (if applicable)
+### Step 3.4: Link PR to Task
+
+Link the PR to your project management tool. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
+
+**GitHub Issues:** Use `Refs #[NUMBER]` in PR body (automatic linking).
+
+**Jira/ClickUp/Linear:** Add PR link as comment and update status to "In Review":
 
 ```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-
-# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
-# Add comment with PR link and update status to "In Review"
+# Example for ClickUp - see managing-tickets for full setup
 curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \

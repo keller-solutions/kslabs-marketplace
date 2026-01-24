@@ -264,11 +264,72 @@ Check if AI attribution should be visible or invisible in this project:
 
 3. Record the preference for use in later phases.
 
+### Step 2.9: Verify CHANGELOG Freshness
+
+Check if the CHANGELOG is up to date with recent work.
+
+#### Check for CHANGELOG
+
+```bash
+# Find CHANGELOG file (common naming conventions)
+CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
+echo "CHANGELOG: ${CHANGELOG_FILE:-not found}"
+```
+
+#### Cross-Check Against Git Tags
+
+```bash
+# Get latest git tag
+LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
+
+# Get version from CHANGELOG (first version header)
+CHANGELOG_VERSION=$(grep -E "^## \[?[0-9]+\.[0-9]+\.[0-9]+\]?" "$CHANGELOG_FILE" 2>/dev/null | head -1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+
+echo "Latest tag: $LATEST_TAG"
+echo "CHANGELOG version: $CHANGELOG_VERSION"
+```
+
+#### Check for Unreleased Changes
+
+```bash
+# Count commits since last tag
+COMMITS_SINCE_TAG=$(git rev-list "${LATEST_TAG}"..HEAD --count 2>/dev/null || echo "0")
+
+# Check if CHANGELOG has [Unreleased] section with content
+HAS_UNRELEASED=$(grep -A 5 "## \[Unreleased\]" "$CHANGELOG_FILE" 2>/dev/null | grep -E "^### " | wc -l)
+
+echo "Commits since $LATEST_TAG: $COMMITS_SINCE_TAG"
+echo "Unreleased sections: $HAS_UNRELEASED"
+```
+
+#### Report CHANGELOG Status
+
+If discrepancies are found, suggest updating:
+
+```markdown
+## CHANGELOG Status
+
+**Latest Tag**: v1.0.0
+**CHANGELOG Version**: 1.0.0
+**Commits Since Tag**: 15
+**Unreleased Section**: Empty
+
+⚠️ **Suggestion**: CHANGELOG may need updating. There are 15 commits since the last release with no [Unreleased] entries. Consider documenting recent changes before starting new work.
+
+To view recent commits:
+git log v1.0.0..HEAD --oneline
+```
+
+**CHANGELOG is current when:**
+
+- Latest tag version matches CHANGELOG's first version section, AND
+- Either no commits since tag, OR [Unreleased] section has entries
+
 ---
 
 ## Phase 3: Ready Report
 
-Output a readiness summary:
+Output a brief readiness summary:
 
 ```markdown
 ## Environment Ready
@@ -277,12 +338,74 @@ Output a readiness summary:
 **Dependencies**: [installed/updated]
 **Database**: [migrated/n/a]
 **Tests**: [passing/failing - count]
-**AI Visibility**: [visible/invisible/unknown]
-
-Ready to proceed with:
-- `/ks-plan` - Create a story and ticket
-- `/ks-produce` - Work on an existing ticket
 ```
+
+---
+
+## Phase 4: Development Context Summary
+
+After environment preparation, present a consolidated summary of key development choices that will impact subsequent skills.
+
+### Output Format
+
+```markdown
+---
+
+## Development Context
+
+These settings will be used throughout the workflow:
+
+| Setting | Value | Impact |
+|---------|-------|--------|
+| **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
+| **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
+| **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
+| **CHANGELOG** | [Current / Needs update / Not found] | Must update before PR |
+
+### What This Means
+
+- Commits will [include/exclude] `Co-Authored-By: Claude` attribution
+- Tickets will be [created in X / managed manually]
+- CHANGELOG [is current / should be updated during produce]
+- Test coverage [meets standards / should be monitored]
+
+---
+
+**Ready to proceed?** Review the settings above. If anything looks incorrect, address it now before starting work.
+```
+
+### Detect Ticket Management System
+
+```bash
+# Detection (matches managing-tickets skill logic)
+gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
+([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "Jira"
+([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "ClickUp"
+[ -f ".linear" ] && echo "Linear"
+```
+
+### Capture Test Suite Status
+
+```bash
+# Rails - run tests and capture result
+bin/rails test 2>&1 | tee /tmp/test_output.txt
+TESTS_PASSED=$?
+TEST_COUNT=$(grep -E "^[0-9]+ (tests|runs)" /tmp/test_output.txt | head -1)
+COVERAGE=$(grep -E "Coverage|LOC" /tmp/test_output.txt | head -1)
+
+# JavaScript
+npm test 2>&1 | tee /tmp/test_output.txt
+```
+
+### Store Context for Subsequent Skills
+
+These values should be remembered and applied in produce/present:
+
+- **AI_VISIBLE**: Include Co-Authored-By in commits
+- **TICKET_SYSTEM**: Which tool to use for ticket operations
+- **CHANGELOG_STATUS**: Whether to prompt for updates
+- **TESTS_PASSING**: Whether tests were green at start
 
 ---
 
@@ -291,7 +414,7 @@ Ready to proceed with:
 When invoked directly (`/ks-prep`), this skill:
 
 1. Performs full orientation and preparation
-2. Reports the project summary
+2. Reports the development context summary
 3. Ends without proceeding to next phase
 
 ## Workflow Usage
@@ -299,8 +422,10 @@ When invoked directly (`/ks-prep`), this skill:
 When invoked as part of `/ks-feature` or `/ks-ticket`:
 
 1. Performs full orientation and preparation
-2. Stores context for subsequent skills
-3. Automatically proceeds to next phase
+2. Presents development context summary
+3. **Pauses for user confirmation** before proceeding
+4. Stores context for subsequent skills
+5. Proceeds to next phase after confirmation
 
 ---
 
@@ -333,63 +458,13 @@ If dependency installation fails:
 
 ## Framework-Specific Notes
 
-### Rails Projects (The Gold Standard)
-
-Rails projects should follow the `bin/setup` + `bin/dev` pattern:
-
-```bash
-bin/setup   # First-time setup: bundle, database, seed
-bin/dev     # Start development: Rails server + CSS watcher + etc.
-```
-
-- `bin/setup` should handle everything from clone to ready
-- `bin/dev` should start all processes needed for development
-- Check for Solid Queue/Cable/Cache configuration
-- If these don't exist, the project needs them
-
-### Next.js/React Projects
-
-```bash
-npm install     # Install dependencies
-npm run dev     # Start development server
-```
-
-- Check for `.env.local` requirements (should be documented or have `.env.example`)
-- Verify Node version matches `.nvmrc` or `package.json` engines field
-- Consider adding a `setup` script to `package.json` if more steps are needed
-
-### Laravel Projects
-
-```bash
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate:fresh --seed
-php artisan serve
-```
-
-- The above should be scriptable—consider a `composer setup` command
-- Check for queue worker requirements
-- Ensure `.env.example` has all required variables documented
-
-### .NET Projects
-
-```bash
-dotnet restore
-dotnet build
-dotnet run
-```
-
-- This is the original home of the F5 Manifesto
-- Setup should be minimal if NuGet packages are properly configured
-- Database migrations should run automatically or have a clear script
-
-### WordPress Projects
-
-- Check for local environment (Local, DDEV, wp-env)
-- `wp-env start` should handle everything for block theme development
-- Verify database connection and import process is scripted
-- Check for WP-CLI availability
+| Framework | Setup | Dev Server |
+|-----------|-------|------------|
+| Rails | `bin/setup` | `bin/dev` |
+| Next.js/React | `npm install` | `npm run dev` |
+| Laravel | `composer install && php artisan migrate:fresh --seed` | `php artisan serve` |
+| .NET | `dotnet restore && dotnet build` | `dotnet run` |
+| WordPress | `wp-env start` | (included) |
 
 ---
 

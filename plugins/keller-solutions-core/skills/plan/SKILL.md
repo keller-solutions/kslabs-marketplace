@@ -207,27 +207,22 @@ Criteria that can't be objectively verified.
 
 ## Phase 5: Create the Ticket
 
+Use the [managing-tickets](../managing-tickets/SKILL.md) skill for tool-specific commands.
+
 ### Detect Project Management Tool
 
-Check what tool the project uses:
+First, detect which tool the project uses:
 
 ```bash
-# Check for GitHub issues
-gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
-
-# Check for Linear
-ls .linear 2>/dev/null && echo "Linear"
-
-# Check for Jira config
-ls .jira 2>/dev/null || grep -q "jira" .env 2>/dev/null && echo "Jira"
-
-# Check for ClickUp config (file, .env, or environment variable)
-ls .clickup 2>/dev/null && echo "ClickUp"
-grep -q "clickup" .env 2>/dev/null && echo "ClickUp"
-[ -n "$CLICKUP_API_TOKEN" ] && echo "ClickUp (env var)"
+# See managing-tickets skill for full detection script
+gh issue list --limit 1 2>/dev/null && echo "TOOL=github"
 ```
 
-### Create GitHub Issue
+### Create the Ticket
+
+Use the appropriate command for your project's tool:
+
+**GitHub Issues:**
 
 ```bash
 gh issue create \
@@ -252,73 +247,13 @@ EOF
 )"
 ```
 
-### Create Jira Issue
-
-```bash
-# Using Jira CLI (https://github.com/ankitpokhrel/jira-cli)
-jira issue create \
-  --type Story \
-  --summary "User sees project list on dashboard" \
-  --body "$(cat <<'EOF'
-*In order to* quickly resume work on recent audits
-*As a* returning user on the dashboard
-*I want* to see my projects listed by last activity
-
-h2. Acceptance Criteria
-
-* Projects section header is visible
-* Each project shows name and last scan date
-* Projects are sorted by last activity (most recent first)
-* Clicking a project navigates to the project detail page
-* Empty state shown when no projects exist
-EOF
-)"
-```
-
-### Create ClickUp Task
-
-```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-CLICKUP_LIST_ID="your_list_id"  # Find in ClickUp URL or via API
-
-curl -X POST "https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task" \
-  -H "Authorization: ${CLICKUP_API_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "$(cat <<'EOF'
-{
-  "name": "User sees project list on dashboard",
-  "markdown_description": "**In order to** quickly resume work on recent audits\n**As a** returning user on the dashboard\n**I want** to see my projects listed by last activity\n\n## Acceptance Criteria\n\n- [ ] Projects section header is visible\n- [ ] Each project shows name and last scan date\n- [ ] Projects are sorted by last activity\n- [ ] Clicking a project navigates to detail page\n- [ ] Empty state shown when no projects exist"
-}
-EOF
-)"
-
-# Response includes task ID: {"id": "abc123", ...}
-```
+For **Jira**, **ClickUp**, or **Linear**, see the [managing-tickets](../managing-tickets/SKILL.md) skill for detailed commands.
 
 ### Link to Epic (if applicable)
 
-If this story is part of an epic:
-
 ```bash
-# Add label linking to epic
 gh issue edit [ISSUE_NUMBER] --add-label "epic:dashboard-improvements"
-
-# Or use GitHub sub-issues if available
 ```
-
-### Apply Labels
-
-```bash
-gh issue edit [ISSUE_NUMBER] --add-label "feature"
-```
-
-Common labels:
-
-- `feature` - New functionality
-- `bug` - Something broken
-- `chore` - Maintenance task
-- `epic:[name]` - Links to parent epic
 
 ---
 

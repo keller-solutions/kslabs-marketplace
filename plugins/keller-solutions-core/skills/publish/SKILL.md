@@ -260,23 +260,20 @@ If using error monitoring (Sentry, Honeybadger, etc.):
 
 ## Phase 5: Post-Release
 
-### Step 5.1: Close Related Issues
+### Step 5.1: Notify Tickets of Release
 
-Update tickets that were released:
+Add release comments to related tickets. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
 
-**GitHub Issues:**
+**Quick reference:**
 
 ```bash
+# GitHub
 gh issue comment [ISSUE_NUMBER] --body "Released in v1.1.0"
-```
 
-**ClickUp:**
+# Jira
+jira issue comment add [ISSUE_KEY] "Released in v1.1.0"
 
-```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-
-# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
+# ClickUp - see managing-tickets for full setup
 curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \

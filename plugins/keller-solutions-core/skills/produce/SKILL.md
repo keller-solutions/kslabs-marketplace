@@ -46,29 +46,18 @@ gh issue view [TICKET_NUMBER] --json title,body,labels
 
 ### Step 1.3: Update Ticket Status
 
-Move the ticket to "In Progress" to signal work has started:
+Move the ticket to "In Progress" to signal work has started. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
 
-**GitHub Projects:**
+**Quick reference:**
 
 ```bash
-# Move issue to In Progress status (requires GitHub Projects)
+# GitHub
 gh issue edit [TICKET_NUMBER] --add-label "status:in-progress"
-```
 
-**Jira:**
-
-```bash
+# Jira
 jira issue move [TICKET_KEY] "In Progress"
-```
 
-**ClickUp:**
-
-```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-
-# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
-# Update task status (status ID varies by workspace - check your statuses)
+# ClickUp - see managing-tickets skill for full setup
 curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
@@ -285,38 +274,9 @@ Continue the Red-Green-Refactor cycle until all acceptance criteria are implemen
 
 ## UI Implementation: Frontend Design
 
-When implementing user-facing UI components, invoke the frontend-design skill:
+When implementing user-facing UI components, invoke `/frontend-design`. Use it for new pages, components, or any work where aesthetics matter.
 
-```bash
-/frontend-design
-```
-
-**When to use frontend-design:**
-
-- New pages or views
-- Component creation (cards, modals, forms, navigation)
-- Significant visual changes
-- Any work where aesthetics matter
-
-**Why**: The frontend-design skill creates distinctive, production-grade interfaces that avoid generic "AI aesthetics". It ensures:
-
-- Intentional typography choices (not default system fonts)
-- Cohesive color palettes with purpose
-- Thoughtful motion and micro-interactions
-- Memorable, context-appropriate design
-
-**Integration with TDD**: Write the test for behavior first, then use frontend-design for the implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
-
-```markdown
-## Example Flow
-
-1. Write test: "user sees project cards with name and status"
-2. Run test (Red)
-3. Invoke `/frontend-design` to implement the ProjectCard component
-4. Run test (Green)
-5. Refactor if needed
-6. Commit
-```
+**Integration with TDD**: Write the test for behavior first, then use frontend-design for implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
 
 ---
 
@@ -379,6 +339,37 @@ Check:
 - [ ] DRY opportunities identified
 - [ ] Naming is clear and consistent
 - [ ] Comments explain WHY (not WHAT)
+
+### Step 4.5: Update CHANGELOG
+
+Document changes in [Keep a Changelog](https://keepachangelog.com) format before creating PR.
+
+#### Add Entry to [Unreleased] Section
+
+```markdown
+## [Unreleased]
+
+### Added
+- New feature X for ticket #123
+
+### Changed
+- Updated behavior Y for ticket #123
+```
+
+**Categories**: Added, Changed, Deprecated, Removed, Fixed, Security
+
+#### Validate and Commit
+
+```bash
+# Find changelog file (CHANGELOG.md is most common)
+CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
+
+# Check structure
+grep -E "^## \[" "$CHANGELOG_FILE" | head -3
+
+# Commit update
+git add "$CHANGELOG_FILE" && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
+```
 
 ---
 
