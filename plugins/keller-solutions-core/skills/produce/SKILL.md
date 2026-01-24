@@ -46,29 +46,18 @@ gh issue view [TICKET_NUMBER] --json title,body,labels
 
 ### Step 1.3: Update Ticket Status
 
-Move the ticket to "In Progress" to signal work has started:
+Move the ticket to "In Progress" to signal work has started. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
 
-**GitHub Projects:**
+**Quick reference:**
 
 ```bash
-# Move issue to In Progress status (requires GitHub Projects)
+# GitHub
 gh issue edit [TICKET_NUMBER] --add-label "status:in-progress"
-```
 
-**Jira:**
-
-```bash
+# Jira
 jira issue move [TICKET_KEY] "In Progress"
-```
 
-**ClickUp:**
-
-```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-
-# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
-# Update task status (status ID varies by workspace - check your statuses)
+# ClickUp - see managing-tickets skill for full setup
 curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \

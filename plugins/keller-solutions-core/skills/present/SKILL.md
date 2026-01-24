@@ -153,14 +153,16 @@ PR_URL=$(gh pr view --json url -q '.url')
 echo "PR created: $PR_URL"
 ```
 
-### Step 3.4: Link PR to ClickUp Task (if applicable)
+### Step 3.4: Link PR to Task
+
+Link the PR to your project management tool. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
+
+**GitHub Issues:** Use `Refs #[NUMBER]` in PR body (automatic linking).
+
+**Jira/ClickUp/Linear:** Add PR link as comment and update status to "In Review":
 
 ```bash
-# Token from env var or 1Password CLI (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
-
-# [TASK_ID]: Find in ClickUp task URL (e.g., https://app.clickup.com/t/[TASK_ID])
-# Add comment with PR link and update status to "In Review"
+# Example for ClickUp - see managing-tickets for full setup
 curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
