@@ -361,11 +361,14 @@ Document changes in [Keep a Changelog](https://keepachangelog.com) format before
 #### Validate and Commit
 
 ```bash
+# Find changelog file (CHANGELOG.md is most common)
+CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
+
 # Check structure
-grep -E "^## \[" CHANGELOG.md | head -3
+grep -E "^## \[" "$CHANGELOG_FILE" | head -3
 
 # Commit update
-git add CHANGELOG.md && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
+git add "$CHANGELOG_FILE" && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
 ```
 
 ---

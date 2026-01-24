@@ -272,7 +272,8 @@ Check if the CHANGELOG is up to date with recent work.
 
 ```bash
 # Find CHANGELOG file (common naming conventions)
-ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1
+CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
+echo "CHANGELOG: ${CHANGELOG_FILE:-not found}"
 ```
 
 #### Cross-Check Against Git Tags
@@ -282,7 +283,7 @@ ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1
 LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
 
 # Get version from CHANGELOG (first version header)
-CHANGELOG_VERSION=$(grep -E "^## \[?[0-9]+\.[0-9]+\.[0-9]+\]?" CHANGELOG.md 2>/dev/null | head -1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
+CHANGELOG_VERSION=$(grep -E "^## \[?[0-9]+\.[0-9]+\.[0-9]+\]?" "$CHANGELOG_FILE" 2>/dev/null | head -1 | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
 
 echo "Latest tag: $LATEST_TAG"
 echo "CHANGELOG version: $CHANGELOG_VERSION"
@@ -292,10 +293,10 @@ echo "CHANGELOG version: $CHANGELOG_VERSION"
 
 ```bash
 # Count commits since last tag
-COMMITS_SINCE_TAG=$(git rev-list ${LATEST_TAG}..HEAD --count 2>/dev/null || echo "0")
+COMMITS_SINCE_TAG=$(git rev-list "${LATEST_TAG}"..HEAD --count 2>/dev/null || echo "0")
 
 # Check if CHANGELOG has [Unreleased] section with content
-HAS_UNRELEASED=$(grep -A 5 "## \[Unreleased\]" CHANGELOG.md 2>/dev/null | grep -E "^### " | wc -l)
+HAS_UNRELEASED=$(grep -A 5 "## \[Unreleased\]" "$CHANGELOG_FILE" 2>/dev/null | grep -E "^### " | wc -l)
 
 echo "Commits since $LATEST_TAG: $COMMITS_SINCE_TAG"
 echo "Unreleased sections: $HAS_UNRELEASED"
@@ -377,10 +378,10 @@ These settings will be used throughout the workflow:
 ### Detect Ticket Management System
 
 ```bash
-# Detection (see managing-tickets skill for full logic)
+# Detection (matches managing-tickets skill logic)
 gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
-[ -f ".jira" ] && echo "Jira"
-[ -n "$CLICKUP_API_TOKEN" ] && echo "ClickUp"
+([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "Jira"
+([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "ClickUp"
 [ -f ".linear" ] && echo "Linear"
 ```
 
@@ -390,7 +391,7 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 # Rails - run tests and capture result
 bin/rails test 2>&1 | tee /tmp/test_output.txt
 TESTS_PASSED=$?
-TEST_COUNT=$(grep -E "^\d+ (tests|runs)" /tmp/test_output.txt | head -1)
+TEST_COUNT=$(grep -E "^[0-9]+ (tests|runs)" /tmp/test_output.txt | head -1)
 COVERAGE=$(grep -E "Coverage|LOC" /tmp/test_output.txt | head -1)
 
 # JavaScript

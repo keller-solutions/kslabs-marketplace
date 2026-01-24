@@ -70,11 +70,11 @@ All must pass before creating PR.
 Before creating a PR, ensure CHANGELOG reflects the changes.
 
 ```bash
-# Check if CHANGELOG was modified in this branch
-git diff main...HEAD --name-only | grep -i changelog
+# Check if CHANGELOG was modified in this branch (use develop or main as base)
+git diff develop...HEAD --name-only | grep -i changelog
 
 # If not modified, check if CI validates CHANGELOG
-grep -r "changelog" .github/workflows/ 2>/dev/null | grep -v "#"
+grep -ri "changelog" .github/workflows/ 2>/dev/null | grep -v "#"
 ```
 
 **If CI validates CHANGELOG** (like `Version Bump Required` checks):
@@ -83,7 +83,7 @@ The PR will fail if CHANGELOG isn't updated. Add an entry now:
 
 ```bash
 # View what to document
-git log main..HEAD --oneline
+git log develop..HEAD --oneline
 
 # Edit CHANGELOG.md with [Unreleased] or new version section
 ```
