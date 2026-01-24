@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detection logic for identifying which tool a project uses
 - 1Password integration for secure credential management
 - Comprehensive CRUD operations for all supported tools
+- CHANGELOG freshness verification in `prep` skill (cross-checks git tags and commits)
+- CHANGELOG update step in `produce` skill (Keep a Changelog format)
+- CHANGELOG verification in `present` skill (checks before PR creation, warns about CI validation)
 
 ### Changed
 
