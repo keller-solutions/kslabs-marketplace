@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-24
+
+### Added
+
+- **managing-tickets** skill - Unified interface for project management tools (GitHub Issues, Jira, ClickUp, Linear)
+- Detection logic for identifying which tool a project uses
+- 1Password integration for secure credential management
+- Comprehensive CRUD operations for all supported tools
+
+### Changed
+
+- Updated `plan` skill to reference `managing-tickets` for ticket creation
+- Updated `produce` skill to reference `managing-tickets` for status updates
+- Updated `present` skill to reference `managing-tickets` for PR linking
+- Updated `publish` skill to reference `managing-tickets` for release notifications
+- Reduced duplication by consolidating tool-specific commands into single reference
+
+### Skills (6)
+
+- **prep** - Environment preparation and project orientation
+- **plan** - Story writing and ticket creation
+- **produce** - TDD implementation workflow
+- **present** - PR creation and feedback loop
+- **publish** - Release and deployment workflow
+- **managing-tickets** - Unified project management tool interface
+
 ## [1.0.0] - 2026-01-23
 
 ### Added
