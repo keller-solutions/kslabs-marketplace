@@ -16,7 +16,9 @@ This will:
 2. Run quality checks (tests, linters)
 3. Create PR with summary and test plan
 4. Wait for Copilot review
-5. For each comment:
-   - If agree: make change, commit, reply with commit SHA
-   - If disagree: reply with clear rationale
-6. Notify when PR is ready for final review
+5. Read `references/ai-visibility.md` to determine the project's visibility preference and response format
+6. For each comment, reply **directly to that comment thread** (not a general PR comment):
+   - If agree: make change, commit, reply using the "In PR feedback responses" format from ai-visibility.md
+   - If disagree: reply with clear rationale why
+   - Use: `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -X POST -f body="..."`
+7. Notify when PR is ready for final review

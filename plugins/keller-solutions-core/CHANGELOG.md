@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-02-04
+
+### Changed
+
+- **present** skill - Improved PR comment reply instructions
+  - Explicit step to read `references/ai-visibility.md` for response format
+  - Clarified that replies must go directly to each comment thread (not general PR comments)
+  - Added `gh api` command example for replying to review comments
+
 ## [1.1.0] - 2026-01-24
 
 ### Added
