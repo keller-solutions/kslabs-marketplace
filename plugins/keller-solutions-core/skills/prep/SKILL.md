@@ -153,8 +153,10 @@ git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; 
 **The 24-Hour Rule**: On projects that keep dependencies current, update them at the start of each dev day—small, frequent updates beat cumbersome catch-ups. Check when the lockfile last changed to see whether today's update has already happened:
 
 ```bash
-# Gemfile.lock / package-lock.json / yarn.lock / composer.lock
-stat -f "%Sm" Gemfile.lock 2>/dev/null || stat -c "%y" Gemfile.lock 2>/dev/null
+# Report last-modified for whichever lockfile(s) the project has
+for f in Gemfile.lock package-lock.json yarn.lock composer.lock; do
+  [ -f "$f" ] && echo "$f: $(stat -f "%Sm" "$f" 2>/dev/null || stat -c "%y" "$f")"
+done
 ```
 
 **Opt-outs are okay.** Some projects deliberately pin versions or delegate updates to a bot (Dependabot/Renovate) or a release process. Check for a stated policy (CLAUDE.md, README, CONTRIBUTING) before assuming. If the project opts out, install to match the lockfile and move on.
@@ -461,6 +463,6 @@ When preparation fails, diagnose the root cause:
 
 ## More Information
 
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [AI Visibility](../references/ai-visibility.md) - Attribution preferences
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [AI Visibility](../../references/ai-visibility.md) - Attribution preferences

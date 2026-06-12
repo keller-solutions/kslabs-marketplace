@@ -432,7 +432,7 @@ When invoked as part of `/ks-feature` or `/ks-ticket`:
 
 ## The Six Principles (Quick Reference)
 
-Apply these principles with every commit. See [Guiding Principles](../references/guiding-principles.md) for details.
+Apply these principles with every commit. See [Guiding Principles](../../references/guiding-principles.md) for details.
 
 1. **DRY**: Extract on the second use, not the first
 2. **Separate Code From Content**: No literal strings in views, use i18n
@@ -445,13 +445,13 @@ Apply these principles with every commit. See [Guiding Principles](../references
 
 ## Git Integrity
 
-**Never put yourself in a position where you have to force push.** Push after each commit. No rebasing, amending, or squashing pushed commits. See [Git Integrity](../references/git-integrity.md) for details.
+**Never put yourself in a position where you have to force push.** Push after each commit. No rebasing, amending, or squashing pushed commits. See [Git Integrity](../../references/git-integrity.md) for details.
 
 ---
 
 ## Maintaining the F5 Principle
 
-Every feature should preserve the F5 principle: clone, setup, run. See [The F5 Principle](../references/f5-manifesto.md) for full details.
+Every feature should preserve the F5 principle: clone, setup, run. See [The F5 Principle](../../references/f5-manifesto.md) for full details.
 
 **Before completing a feature, verify:**
 
@@ -487,7 +487,7 @@ Use frontend-design whenever implementing visual interfaces. It prevents generic
 
 ## More Information
 
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [Git Integrity](../references/git-integrity.md) - "Thou Shalt Not Lie"
-- [Test Coverage Philosophy](../references/test-coverage-philosophy.md) - Why 100% coverage matters
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
+- [Test Coverage Philosophy](../../references/test-coverage-philosophy.md) - Why 100% coverage matters

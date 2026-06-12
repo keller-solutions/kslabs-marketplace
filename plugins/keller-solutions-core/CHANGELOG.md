@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **prep** skill: installing is not updating—on projects following the 24-Hour Rule, run the real update (`bundle update`/`npm update`/`composer update`) at the start of each work session and commit the lockfile in the same PR as the day's work; projects may opt out via a stated policy (pins, Dependabot/Renovate, release process)
 - **prep** skill: Development Context summary gains a Dependency Updates row (24-Hour Rule vs. opt-out with policy source) so the update policy is verified and visible alongside Ticket System, AI Visibility, and CHANGELOG status
+- **prep** skill: lockfile freshness check now reports whichever lockfile the project has (Gemfile.lock, package-lock.json, yarn.lock, composer.lock) instead of only Gemfile.lock
+- All skills: repaired `../references/` links, which resolved to a non-existent `skills/references/` path—correct path from a skill directory is `../../references/`
 
 ### Changed
 

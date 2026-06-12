@@ -394,7 +394,7 @@ Title: User visits the About Us page from the footer
 
 ## Story Map Mode
 
-For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens or producing a large batch of stories—switch to [Story Map Mode](../references/story-map-mode.md) and write the full map as markdown **before** any tickets exist. It adds: epics with continuous numbering, coverage tables (element/interaction → story ID, where an uncovered item is a gap), the architecture sync rule, a user checkpoint before carding begins, a drift-focused **QA Pass**, and tickets created only after the map is ratified.
+For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens or producing a large batch of stories—switch to [Story Map Mode](../../references/story-map-mode.md) and write the full map as markdown **before** any tickets exist. It adds: epics with continuous numbering, coverage tables (element/interaction → story ID, where an uncovered item is a gap), the architecture sync rule, a user checkpoint before carding begins, a drift-focused **QA Pass**, and tickets created only after the map is ratified.
 
 Run that QA Pass whenever a session produces more than a handful of stories, even outside full story-map mode: long sessions drift, and the stories written last must obey the rules as strictly as the stories written first.
 
@@ -474,6 +474,6 @@ Before creating the ticket, verify:
 
 ## More Information
 
-- [Story Map Mode](../references/story-map-mode.md) - Carding a feature set: epics, coverage, sync rule, checkpoint, QA pass
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Story Map Mode](../../references/story-map-mode.md) - Carding a feature set: epics, coverage, sync rule, checkpoint, QA pass
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
