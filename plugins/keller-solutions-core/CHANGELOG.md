@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **produce** skill: build only this story's slice of the design—no placeholder nav items, buttons, or `#` links for elements that belong to later stories
 - **present** skill: walk the story as the user before gathering evidence—browser only, no Rails console; seeding not anticipated in the story's Developer Notes is a flag to resolve before review
 
+### Fixed
+
+- **prep** skill: installing is not updating—on projects following the 24-Hour Rule, run the real update (`bundle update`/`npm update`/`composer update`) at the start of each work session and commit the lockfile in the same PR as the day's work; projects may opt out via a stated policy (pins, Dependabot/Renovate, release process)
+
 ### Changed
 
 - **plan** skill: replaced the CRUD-ordering section with the general **Deliver Without Seeding** principle—every story should be acceptable using only what earlier stories built, with seeding a last resort called out in Developer Notes; CRUD (add → index → detail → edit → delete) is the worked example
