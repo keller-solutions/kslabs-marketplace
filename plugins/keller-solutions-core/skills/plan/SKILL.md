@@ -334,7 +334,7 @@ Keep chores **under 10% of total stories**. Above that, you're hiding user value
 
 ## Deliver Without Seeding
 
-**Every story must be acceptable using only what the application—as built by the stories before it—can produce.** A reviewer should never need console commands, fixtures, or hand-seeded data to accept a story, unless that is absolutely unavoidable (e.g., data only an external system can originate).
+**Every story should be acceptable using only what the application—as built by the stories before it—can produce.** Seeding—console commands, fixtures, hand-created data—is a last resort, reserved for preconditions the application genuinely cannot produce (e.g., data only an external system can originate). The payoff comes at acceptance: a reviewer walks the story with the normal tools an average user has (a browser, not the Rails console).
 
 This is why delivery order matters: each story creates the conditions the next one needs. A story may never depend on a later story.
 
@@ -347,7 +347,7 @@ The same logic reaches well beyond CRUD:
 - A report story comes after the entry flows that populate its data.
 - A search story comes after the stories that create something searchable.
 
-**The Seeding Test**: Walk the acceptance criteria as the reviewer. For every precondition ("a project exists", "a request is pending"), can you create it in the browser using only earlier stories? If not, reorder. If reordering is truly impossible, state the seeding requirement explicitly in Developer Notes—and treat it as a smell.
+**The Seeding Test**: Walk the acceptance criteria as the reviewer. For every precondition ("a project exists", "a request is pending"), can you create it in the browser using only earlier stories? If not, reorder. If no ordering can produce the precondition, seeding is the last resort—call it out in Developer Notes so the reviewer knows before they start.
 
 Each mutating story should include confirmation feedback: "[Item name] was created/updated/deleted."
 
@@ -462,7 +462,7 @@ Before creating the ticket, verify:
 - [ ] One context, one action, one outcome
 - [ ] 4-8 acceptance criteria
 - [ ] Each criterion is verifiable in a browser by a non-developer
-- [ ] Acceptable using only what earlier stories built—no seeded data, no forward dependencies
+- [ ] Acceptable using only what earlier stories built—no forward dependencies; any last-resort seeding called out in Developer Notes
 - [ ] Entry points (nav links, buttons) are criteria on the story that delivers their destination—no placeholder elements shipped early
 - [ ] No references to non-existent UI elements
 - [ ] Content is limited to copy that a criterion asserts verbatim, marked for externalization

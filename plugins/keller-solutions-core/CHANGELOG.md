@@ -19,10 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **plan** skill: **Elements Ship With Their Stories** section—a UI element appears only when the story that makes it work ships; the story delivering a destination also delivers its entry point (About Us nav-link example), and each additional entry point is its own story
 - **plan** skill: The Wireframe Dump anti-pattern—building every element a wireframe shows before the stories that wire them up
 - **produce** skill: build only this story's slice of the design—no placeholder nav items, buttons, or `#` links for elements that belong to later stories
+- **present** skill: walk the story as the user before gathering evidence—browser only, no Rails console; seeding not anticipated in the story's Developer Notes is a flag to resolve before review
 
 ### Changed
 
-- **plan** skill: replaced the CRUD-ordering section with the general **Deliver Without Seeding** principle—every story must be acceptable using only what earlier stories built, no seeded data; CRUD (add → index → detail → edit → delete) is the worked example
+- **plan** skill: replaced the CRUD-ordering section with the general **Deliver Without Seeding** principle—every story should be acceptable using only what earlier stories built, with seeding a last resort called out in Developer Notes; CRUD (add → index → detail → edit → delete) is the worked example
 - **plan** skill: Chore story type tightened—one-line purpose tied to the user value it unlocks, reviewer-checkable completion criteria, no fake narrative, under 10% of total stories
 - **plan** skill: Content section restricted to copy an acceptance criterion asserts verbatim; everything else points to References
 - **plan** skill: References must cite the specific artifact and location (e.g. "Wireframe B2 p.4"), never a bare link or screen code

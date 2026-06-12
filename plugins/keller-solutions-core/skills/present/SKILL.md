@@ -1,7 +1,7 @@
 ---
 name: present
 description: Self-review, create PR, and handle the feedback loop. Takes implemented code through review, PR creation, evidence gathering, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[PR number or 'current']"
 ---
 
@@ -100,7 +100,13 @@ If CHANGELOG needs updating, do it before creating the PR to avoid CI failures.
 
 ## Phase 2: Evidence Gathering
 
-### Step 2.1: Record Video Walkthrough (Optional)
+### Step 2.1: Walk the Story as the User
+
+Before gathering evidence, complete every step of the story yourself using only the tools an average user has—a browser, not the Rails console. Each acceptance criterion should be reachable that way, with preconditions created through the application itself (per the plan skill's Deliver Without Seeding principle).
+
+If a step can't be completed without seeding, check the story's Developer Notes: anticipated seeding should be called out there. If it isn't, flag it before asking a reviewer to accept—either the delivery order needs fixing or the note is missing.
+
+### Step 2.2: Record Video Walkthrough (Optional)
 
 Use `/compound-engineering:feature-video` to record a demonstration:
 
@@ -108,21 +114,13 @@ Use `/compound-engineering:feature-video` to record a demonstration:
 - Walk through key user flows
 - Demonstrate acceptance criteria being met
 
-### Step 2.2: Take Screenshots
+### Step 2.3: Take Screenshots
 
-Capture before/after screenshots for UI changes:
+Capture before/after screenshots for UI changes, using browser tools or Playwright.
 
-```bash
-# Take screenshot using browser tools or
-# Use Playwright for automated screenshots
-```
+### Step 2.4: Document Test Results
 
-### Step 2.3: Document Test Results
-
-```bash
-# Get test summary
-bin/rails test 2>&1 | tail -20
-```
+Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
 
 ---
 
