@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<feature description>"
 ---
 
@@ -28,9 +28,25 @@ Extract from the user's input:
 - **The user**: Who benefits from this?
 - **Any constraints**: Performance, compatibility, security
 
-### Step 1.2: Ask Clarifying Questions
+### Step 1.2: Ground in the Sources
 
-If the description is vague, ask focused questions:
+Before writing, read what already defines the work:
+
+- Requirements documents, designs/wireframes, and prototypes
+- The existing architecture and precedents (how similar features are already built in this codebase)
+
+Read designs **just in time**: review the relevant screen in full immediately before writing its story—not from memory of an earlier skim.
+
+When sources conflict, establish a precedence order (typically: most recent client-reviewed design > wireframes > written requirements) and flag material conflicts to the user.
+
+### Step 1.3: Ask Questions as They Arise—Decide and Log the Rest
+
+Don't try to determine every question in advance; real questions surface while writing. When one arises:
+
+- **Genuine product or scope decision, or conflicting sources**: stop and ask the user, focused on the story at hand.
+- **Low-stakes or cosmetic call**: decide it yourself and log it in a **Planning Decisions** list (decision / rationale / date) for the user to ratify at the end.
+
+If the initial description is too vague to start at all, ask focused questions first:
 
 ```markdown
 Before I write the story, I need to clarify a few things:
@@ -98,6 +114,18 @@ As a first-time user unfamiliar with accessibility terminology...
 As a busy consultant running audits for multiple clients...
 As a developer reviewing scan results during a sprint...
 ```
+
+**Stay on the user's side of the glass.** The persona is always someone using the product—never the developer building the feature, the platform itself, or a back-office system/vendor:
+
+```markdown
+# Banned personas
+As a developer... (building this feature)
+As the platform...
+As the system...
+As a [your company] staff member... (when your company isn't the product's user)
+```
+
+(A developer is a legitimate persona only when developers are the product's end users.) If no honest user persona exists, the work is a Chore (see Story Types)—never invent a fake narrative. Frame groundwork as the user-visible capability it enables wherever honestly possible: a data sync exists so "a member sees up-to-date availability," not so "the system has a mirror."
 
 #### The WHAT (I want)
 
@@ -202,6 +230,22 @@ References UI elements that don't exist yet.
 ### The Vague Criterion
 
 Criteria that can't be objectively verified.
+
+### The Fake Persona
+
+"As the platform" / "As the system" / "As a developer" (building the feature). If there's no honest user persona, it's a Chore.
+
+### The Placeholder
+
+A story with no acceptance criteria. If you can't state observable outcomes yet, you haven't finished the conversation the card promises.
+
+### The Forward Dependency
+
+Acceptance depends on a story that hasn't shipped yet (see Deliver Without Seeding).
+
+### The Hidden Plumbing
+
+Chores creeping past 10% of the story set—user value is being hidden in technical work. Reframe groundwork as the capability it enables.
 
 ---
 
@@ -333,27 +377,80 @@ Title: [Describes incorrect behavior]
 
 ### Chores
 
-Work that doesn't directly affect features.
+Groundwork that genuinely cannot be framed as user-visible value verifiable in a browser. A chore gets a one-line **purpose tied to the user value it unlocks** and **completion criteria a reviewer can check**—no fake user narrative.
 
 ```markdown
-Title: Update dependencies
+Title: Chore: Vendor data sync foundation
 
-- Update Rails to latest patch version
-- Update JavaScript dependencies
-- Verify all tests pass
+**Purpose:** every dashboard story reads from a local mirror of the
+vendor's data; this lays the sync engine those stories stand on.
+
+**Completion criteria**
+- [ ] A recurring job mirrors vendor records locally
+- [ ] Re-running the job is idempotent
+- [ ] Each run records counts a reviewer can inspect
 ```
+
+Keep chores **under 10% of total stories**. Above that, you're hiding user value in plumbing—reframe (see The Hidden Plumbing).
 
 ---
 
-## CRUD Stories
+## Deliver Without Seeding
 
-Admin features often follow Create, Read, Update, Delete patterns. Write these as separate stories with **intentional ordering**—each story should be deliverable and acceptable using only a browser.
+**Every story must be acceptable using only what the application—as built by the stories before it—can produce.** A reviewer should never need console commands, fixtures, or hand-seeded data to accept a story, unless that is absolutely unavoidable (e.g., data only an external system can originate).
 
-You can't test "edit" if nothing exists to edit. Order stories so each builds on the previous:
+This is why delivery order matters: each story creates the conditions the next one needs. A story may never depend on a later story.
 
-1. **Read** (list/empty state) → 2. **Create** → 3. **Update** (requires item) → 4. **Delete** (requires item)
+CRUD is the everyday case. Order it **add → index → detail → edit → delete**: the Add story is how the reviewer gets a record to look at, so it ships first—even when "first" means the section is nothing but an Add button landing on a bare confirmation page. The index arrives in the next story. You can't edit what nothing created.
 
-Each CRUD story should include confirmation feedback: "[Item name] was created/updated/deleted."
+The same logic reaches well beyond CRUD:
+
+- A notifications story comes after the story for the action that generates notifications.
+- An approval-queue story comes after the submission flow that fills the queue.
+- A report story comes after the entry flows that populate its data.
+- A search story comes after the stories that create something searchable.
+
+**The Seeding Test**: Walk the acceptance criteria as the reviewer. For every precondition ("a project exists", "a request is pending"), can you create it in the browser using only earlier stories? If not, reorder. If reordering is truly impossible, state the seeding requirement explicitly in Developer Notes—and treat it as a smell.
+
+Each mutating story should include confirmation feedback: "[Item name] was created/updated/deleted."
+
+---
+
+## Story Map Mode
+
+For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens—switch to story-map mode and write the full map as markdown **before** any tickets exist.
+
+### Structure
+
+- **Epics**: coherent, independently understandable slices of the platform, each with a one-line goal, in delivery order. Foundation epics (shell/layout, data sync, auth) come first; then configuration/admin surfaces; then consumer flows—per Deliver Without Seeding, there's nothing to consume until someone can configure it.
+- **Continuous numbering**: number epics continuously across all files; story IDs are `<epic>.<story>` (e.g. `13.9`), globally unique, and must never collide with design screen codes (A1–A8, B1–B5). Once IDs are referenced elsewhere (estimates, decision logs), **never renumber**—a new story takes the next free number in its epic.
+- **Granularity**: if a calibration helps, 5–8 epics with 30–50 stories is not unreasonable for a two-portal platform—but that is guidance, not a cap and not a target. Be detailed and thorough and let the count land where it lands.
+
+### Coverage Tables
+
+For each screen, enumerate **every element**—nav items, buttons, filters, tables, modals, steppers, empty states, error states, status chips, bulk flows—and assign each to exactly one story (or explicitly to a shared/foundation story). Record this in a Screen Coverage appendix, one table per screen (`element → story ID`). **An element with no story is a gap**: write the story or ask.
+
+### The Sync Rule
+
+When a story uncovers functionality that changes the architecture, update the architecture document **first**, then repair every already-written story affected by the change, **before** writing the next story. The architecture document and the story map must match in both directions at all times.
+
+### The Checkpoint
+
+Pause for explicit user sign-off between architecture and storycarding. Surface any decision that would contaminate many stories (e.g., the auth model) at this checkpoint. If the user leaves it open, card to the current design and tag affected stories (e.g. `⟨blocked on auth decision⟩`) rather than stalling.
+
+### The Final Pass
+
+Before presenting the map:
+
+1. Re-read every file end to end: dedupe overlapping stories; verify every story passes the Story Checklist.
+2. Verify every coverage table is complete and each row points at the story where the element actually ships.
+3. Verify cross-references are bidirectional ("ships with story X" appears in both stories).
+4. Verify the chore ratio is under 10%.
+5. Summarize: epic list with story counts (chores broken out, with the ratio), open questions needing answers, and Planning Decisions to ratify.
+
+### Tickets Come Last
+
+In story-map mode, do **not** create tickets while carding. Write the markdown, get the map ratified, then batch-create tickets with [managing-tickets](../managing-tickets/SKILL.md).
 
 ---
 
@@ -375,16 +472,21 @@ Title: [Who] [action] [where]
 
 ## Content
 
-[Any specific copy, to be externalized to locale/data files]
+[Only copy an acceptance criterion asserts verbatim—button labels,
+headlines, error/empty-state/confirmation messages]
 
 ## References
 
-[Links to design mockups, prototypes, or external documentation]
+[Specific artifact + location: screen IDs, design files, source docs]
 
 ## Developer Notes
 
 [Technical guidance that doesn't belong in acceptance criteria]
 ```
+
+### Content
+
+Only copy that an acceptance criterion asserts **verbatim**—button labels, headlines, error/empty-state/confirmation messages. For everything else, point References at the design source instead of transcribing it. Content strings are externalized to locale/data files at build time.
 
 ### Developer Notes
 
@@ -398,6 +500,8 @@ Technical context that helps implementation but shouldn't pollute acceptance cri
 
 Include links to design assets when available—Figma, prototypes, spreadsheets with calculation logic. This keeps stories self-contained and reduces back-and-forth.
 
+Cite the specific artifact and location, never a bare link or screen code: "Wireframe B2 p.4", "A3 Registrations — bulk add flow", "Figma: Checkout / payment error state".
+
 ---
 
 ## Story Checklist
@@ -405,14 +509,15 @@ Include links to design assets when available—Figma, prototypes, spreadsheets 
 Before creating the ticket, verify:
 
 - [ ] WHY expresses value (not restated WHAT)
-- [ ] WHO is specific (not generic "user")
+- [ ] WHO is specific (not generic "user") and on the user's side of the glass (not developer/platform/system)
 - [ ] WHAT describes user action (not system behavior)
 - [ ] One context, one action, one outcome
 - [ ] 4-8 acceptance criteria
 - [ ] Each criterion is verifiable in a browser by a non-developer
+- [ ] Acceptable using only what earlier stories built—no seeded data, no forward dependencies
 - [ ] No references to non-existent UI elements
-- [ ] Content/copy specified for externalization
-- [ ] Design references included where available
+- [ ] Content holds only copy a criterion asserts verbatim, specified for externalization
+- [ ] Design references cite the specific artifact and location
 - [ ] Developer notes for technical context (not observable behavior)
 - [ ] Title is unique and searchable
 

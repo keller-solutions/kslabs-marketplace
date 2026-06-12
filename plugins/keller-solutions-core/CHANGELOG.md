@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-06-12
+
+### Added
+
+- **plan** skill: perspective rule—personas stay on the user's side of the glass; developer/platform/system personas are banned, with groundwork reframed as the capability it enables
+- **plan** skill: source-grounding step (read requirements/designs/architecture before writing, just-in-time design reading, source precedence for conflicts)
+- **plan** skill: ask-as-they-arise question protocol—decide low-stakes calls and log them as Planning Decisions for ratification; ask only on genuine product/scope decisions or conflicting sources
+- **plan** skill: new anti-patterns—The Fake Persona, The Placeholder, The Forward Dependency, The Hidden Plumbing
+- **plan** skill: **Story Map Mode** for multi-screen feature sets—epics with continuous numbering, screen coverage tables (element → story ID), architecture sync rule, pre-storycarding checkpoint, final pass checklist, tickets created only after ratification
+
+### Changed
+
+- **plan** skill: replaced the CRUD-ordering section with the general **Deliver Without Seeding** principle—every story must be acceptable using only what earlier stories built, no seeded data; CRUD (add → index → detail → edit → delete) is the worked example
+- **plan** skill: Chore story type tightened—one-line purpose tied to the user value it unlocks, reviewer-checkable completion criteria, no fake narrative, under 10% of total stories
+- **plan** skill: Content section restricted to copy an acceptance criterion asserts verbatim; everything else points to References
+- **plan** skill: References must cite the specific artifact and location (e.g. "Wireframe B2 p.4"), never a bare link or screen code
+- **plan** skill: Story Checklist extended with perspective, self-sufficiency, Content, and Reference-specificity checks
+
 ## [1.1.1] - 2026-02-10
 
 ### Changed
