@@ -332,6 +332,7 @@ These settings will be used throughout the workflow:
 | Setting | Value | Impact |
 |---------|-------|--------|
 | **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
 | **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
 | **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
@@ -341,6 +342,7 @@ These settings will be used throughout the workflow:
 
 - Commits will [include/exclude] `Co-Authored-By: Claude` attribution
 - Tickets will be [created in X / managed manually]
+- Dependencies [were updated and the lockfile rides in this PR / follow the project's opt-out policy]
 - CHANGELOG [is current / should be updated during produce]
 - Test coverage [meets standards / should be monitored]
 
@@ -378,6 +380,7 @@ These values should be remembered and applied in produce/present:
 
 - **AI_VISIBLE**: Include Co-Authored-By in commits
 - **TICKET_SYSTEM**: Which tool to use for ticket operations
+- **DEPENDENCY_POLICY**: 24-Hour Rule (lockfile changes ride in the work PR) or opted out (and why)
 - **CHANGELOG_STATUS**: Whether to prompt for updates
 - **TESTS_PASSING**: Whether tests were green at start
 
