@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -278,6 +278,8 @@ When implementing user-facing UI components, invoke `/frontend-design`. Use it f
 
 **Integration with TDD**: Write the test for behavior first, then use frontend-design for implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
 
+**Build only this story's slice of the design.** A wireframe or comp shows the finished page; this story's acceptance criteria define which elements exist today. Do not add placeholder nav items, buttons, or links to `#` for elements that belong to later stories—an element appears only when the story that makes it work ships (Guiding Principle #3: Avoid Pre-Optimization). If the design shows an element no criterion covers, leave it out; if a criterion seems to need an element no story delivers, raise it with the user rather than stubbing it.
+
 ---
 
 ## Phase 4: Quality Gates
@@ -430,11 +432,11 @@ When invoked as part of `/ks-feature` or `/ks-ticket`:
 
 ## The Six Principles (Quick Reference)
 
-Apply these principles with every commit. See [Guiding Principles](../references/guiding-principles.md) for details.
+Apply these principles with every commit. See [Guiding Principles](../../references/guiding-principles.md) for details.
 
 1. **DRY**: Extract on the second use, not the first
 2. **Separate Code From Content**: No literal strings in views, use i18n
-3. **Avoid Pre-Optimization**: Build only what the story requires
+3. **Avoid Pre-Optimization**: Build only what the story requires—no placeholder UI for later stories
 4. **Keep Code Tidy**: No commented-out code, no debug traces
 5. **Maintain Consistency**: Follow established patterns everywhere
 6. **Make It Understandable**: Spell out names, code is read more than written
@@ -443,13 +445,13 @@ Apply these principles with every commit. See [Guiding Principles](../references
 
 ## Git Integrity
 
-**Never put yourself in a position where you have to force push.** Push after each commit. No rebasing, amending, or squashing pushed commits. See [Git Integrity](../references/git-integrity.md) for details.
+**Never put yourself in a position where you have to force push.** Push after each commit. No rebasing, amending, or squashing pushed commits. See [Git Integrity](../../references/git-integrity.md) for details.
 
 ---
 
 ## Maintaining the F5 Principle
 
-Every feature should preserve the F5 principle: clone, setup, run. See [The F5 Principle](../references/f5-manifesto.md) for full details.
+Every feature should preserve the F5 principle: clone, setup, run. See [The F5 Principle](../../references/f5-manifesto.md) for full details.
 
 **Before completing a feature, verify:**
 
@@ -485,7 +487,7 @@ Use frontend-design whenever implementing visual interfaces. It prevents generic
 
 ## More Information
 
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [Git Integrity](../references/git-integrity.md) - "Thou Shalt Not Lie"
-- [Test Coverage Philosophy](../references/test-coverage-philosophy.md) - Why 100% coverage matters
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
+- [Test Coverage Philosophy](../../references/test-coverage-philosophy.md) - Why 100% coverage matters

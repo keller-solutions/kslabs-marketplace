@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<feature description>"
 ---
 
@@ -28,9 +28,27 @@ Extract from the user's input:
 - **The user**: Who benefits from this?
 - **Any constraints**: Performance, compatibility, security
 
-### Step 1.2: Ask Clarifying Questions
+### Step 1.2: Ground in the Sources
 
-If the description is vague, ask focused questions:
+Before writing, read what already defines the work:
+
+- Requirements documents, designs/wireframes, and prototypes
+- The existing architecture and precedents (how similar features are already built in this codebase)
+
+Source material varies—sometimes polished wireframes and a design handoff, sometimes only a written spec, sometimes nothing but the description in the prompt. The method is the same regardless: **break whatever material you have down to its key interactions**, and card each as one context, one action, one outcome. Richer sources mean more verbatim Content and tighter References; thinner sources mean more decisions to make and log. What never changes is the decomposition—and the QA pass at the end to confirm you applied it consistently.
+
+Read designs **just in time**: review the relevant screen in full immediately before writing its story—not from memory of an earlier skim.
+
+When sources conflict, establish a precedence order (typically: most recent client-reviewed design > wireframes > written requirements) and flag material conflicts to the user.
+
+### Step 1.3: Ask Questions as They Arise—Decide and Log the Rest
+
+Don't try to determine every question in advance; real questions surface while writing. When one arises:
+
+- **Genuine product or scope decision, or conflicting sources**: stop and ask the user, focused on the story at hand.
+- **Low-stakes or cosmetic call**: decide it yourself and log it in a **Planning Decisions** list (decision / rationale / date) for the user to ratify at the end.
+
+If the initial description is too vague to start at all, ask focused questions first:
 
 ```markdown
 Before I write the story, I need to clarify a few things:
@@ -98,6 +116,18 @@ As a first-time user unfamiliar with accessibility terminology...
 As a busy consultant running audits for multiple clients...
 As a developer reviewing scan results during a sprint...
 ```
+
+**Stay on the user's side of the glass.** The persona is always someone using the product—never the developer building the feature, the platform itself, or a back-office system/vendor:
+
+```markdown
+# Banned personas
+As a developer... (building this feature)
+As the platform...
+As the system...
+As a [your company] staff member... (when your company isn't the product's user)
+```
+
+(A developer is a legitimate persona only when developers are the product's end users.) If no honest user persona exists, the work is a Chore (see Story Types)—never invent a fake narrative. Frame groundwork as the user-visible capability it enables wherever honestly possible: a data sync exists so "a member sees up-to-date availability," not so "the system has a mirror."
 
 #### The WHAT (I want)
 
@@ -203,86 +233,37 @@ References UI elements that don't exist yet.
 
 Criteria that can't be objectively verified.
 
+### The Fake Persona
+
+"As the platform" / "As the system" / "As a developer" (building the feature). If there's no honest user persona, it's a Chore.
+
+### The Placeholder
+
+A story with no acceptance criteria. If you can't state observable outcomes yet, you haven't finished the conversation the card promises.
+
+### The Forward Dependency
+
+Acceptance depends on a story that hasn't shipped yet (see Deliver Without Seeding).
+
+### The Hidden Plumbing
+
+Chores creeping past 10% of the story set—user value is being hidden in technical work. Reframe groundwork as the capability it enables.
+
+### The Wireframe Dump
+
+The first story for a page builds every element the wireframe shows, with siblings linked to `#` "for now." Each element ships with the story that wires it up (see Elements Ship With Their Stories).
+
 ---
 
 ## Phase 5: Create the Ticket
 
-Use the [managing-tickets](../managing-tickets/SKILL.md) skill for tool-specific commands.
-
-### Detect Project Management Tool
-
-First, detect which tool the project uses:
-
-```bash
-# See managing-tickets skill for full detection script
-gh issue list --limit 1 2>/dev/null && echo "TOOL=github"
-```
-
-### Create the Ticket
-
-Use the appropriate command for your project's tool:
-
-**GitHub Issues:**
-
-```bash
-gh issue create \
-  --title "User sees project list on dashboard" \
-  --body "$(cat <<'EOF'
-**In order to** quickly resume work on recent audits
-**As a** returning user on the dashboard
-**I want** to see my projects listed by last activity
-
-## Acceptance Criteria
-
-- [ ] Projects section header is visible
-- [ ] Each project shows name and last scan date
-- [ ] Projects are sorted by last activity (most recent first)
-- [ ] Clicking a project navigates to the project detail page
-- [ ] Empty state shown when no projects exist
-
-## Developer Notes
-
-See existing dashboard patterns in `app/views/dashboard/`.
-EOF
-)"
-```
-
-For **Jira**, **ClickUp**, or **Linear**, see the [managing-tickets](../managing-tickets/SKILL.md) skill for detailed commands.
-
-### Link to Epic (if applicable)
-
-```bash
-gh issue edit [ISSUE_NUMBER] --add-label "epic:dashboard-improvements"
-```
+Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which tool the project uses (GitHub Issues, Jira, ClickUp, Linear), create the ticket with the full story as the body—narrative, acceptance criteria, Content, References, Developer Notes—and link it to its epic if one applies.
 
 ---
 
 ## Phase 6: Output the Result
 
-Present the created story:
-
-```markdown
-## Story Created
-
-**Issue**: #[NUMBER]
-**Title**: [TITLE]
-**URL**: [URL]
-
-### Narrative
-
-**In order to** [WHY]
-**As a** [WHO]
-**I want** [WHAT]
-
-### Acceptance Criteria
-
-1. [Criterion 1]
-2. [Criterion 2]
-3. [Criterion 3]
-4. [Criterion 4]
-
-Ready to proceed with `/ks-produce` to implement this story.
-```
+Present the created story: issue number, title, URL, the narrative, and the numbered acceptance criteria. Close with: "Ready to proceed with `/ks-produce` to implement this story."
 
 ---
 
@@ -333,27 +314,89 @@ Title: [Describes incorrect behavior]
 
 ### Chores
 
-Work that doesn't directly affect features.
+Groundwork that genuinely cannot be framed as user-visible value verifiable in a browser. A chore gets a one-line **purpose tied to the user value it unlocks** and **completion criteria a reviewer can check**—no fake user narrative.
 
 ```markdown
-Title: Update dependencies
+Title: Chore: Vendor data sync foundation
 
-- Update Rails to latest patch version
-- Update JavaScript dependencies
-- Verify all tests pass
+**Purpose:** every dashboard story reads from a local mirror of the
+vendor's data; this lays the sync engine those stories stand on.
+
+**Completion criteria**
+- [ ] A recurring job mirrors vendor records locally
+- [ ] Re-running the job is idempotent
+- [ ] Each run records counts a reviewer can inspect
+```
+
+Keep chores **under 10% of total stories**. Above that, you're hiding user value in plumbing—reframe (see The Hidden Plumbing).
+
+---
+
+## Deliver Without Seeding
+
+**Every story should be acceptable using only what the application—as built by the stories before it—can produce.** Seeding—console commands, fixtures, hand-created data—is a last resort, reserved for preconditions the application genuinely cannot produce (e.g., data only an external system can originate). The payoff comes at acceptance: a reviewer walks the story with the normal tools an average user has (a browser, not the Rails console).
+
+This is why delivery order matters: each story creates the conditions the next one needs. A story may never depend on a later story.
+
+CRUD is the everyday case. Order it **add → index → detail → edit → delete**: the Add story is how the reviewer gets a record to look at, so it ships first—even when "first" means the section is nothing but an Add button landing on a bare confirmation page. The index arrives in the next story. You can't edit what nothing created.
+
+The same logic reaches well beyond CRUD:
+
+- A notifications story comes after the story for the action that generates notifications.
+- An approval-queue story comes after the submission flow that fills the queue.
+- A report story comes after the entry flows that populate its data.
+- A search story comes after the stories that create something searchable.
+
+**The Seeding Test**: Walk the acceptance criteria as the reviewer. For every precondition ("a project exists", "a request is pending"), can you create it in the browser using only earlier stories? If not, reorder. If no ordering can produce the precondition, seeding is the last resort—call it out in Developer Notes so the reviewer knows before they start.
+
+Each mutating story should include confirmation feedback: "[Item name] was created/updated/deleted."
+
+---
+
+## Elements Ship With Their Stories
+
+The flip side of Deliver Without Seeding: just as a story may not lean on later stories, it may not ship fragments of them either. **A UI element appears only when the story that makes it work ships.** Never add a placeholder button, nav item, or link to `#` because the design shows one—that's pre-optimization (Guiding Principle #3), and dead links get reported as bugs.
+
+A wireframe or comp is a map of where future stories will land, not a checklist for the first story to touch that page. The screen accretes element by element as its stories ship.
+
+Write stories knowing this and they describe elements differently: the story that delivers a destination also delivers its entry point, and an early criterion asserts the element appears. The classic example is the About page. The global-nav About link is not part of a "build the nav" story—it ships with the story that gives it somewhere to go:
+
+```markdown
+Title: User visits the About Us page
+
+**In order to** learn more about the company
+**As a** user on any page in the site
+**I want** to view the About Us page
+
+## Acceptance Criteria
+
+- [ ] About Us link is present in the global nav
+- [ ] Clicking About Us takes me to the About Us page
+- [ ] I see the About Us headline and copy with images specified in the copy doc
+```
+
+A second entry point is a second story (different context—see the Cardinal Rule):
+
+```markdown
+Title: User visits the About Us page from the footer
+
+**In order to** quickly access the About page without scrolling back to the top
+**As a** user at the bottom of any page in the site
+**I want** to visit the About Us page
+
+## Acceptance Criteria
+
+- [ ] About Us link is present in the footer nav
+- [ ] Clicking About Us takes me to the About Us page
 ```
 
 ---
 
-## CRUD Stories
+## Story Map Mode
 
-Admin features often follow Create, Read, Update, Delete patterns. Write these as separate stories with **intentional ordering**—each story should be deliverable and acceptable using only a browser.
+For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens or producing a large batch of stories—switch to [Story Map Mode](../../references/story-map-mode.md) and write the full map as markdown **before** any tickets exist. It adds: epics with continuous numbering, coverage tables (element/interaction → story ID, where an uncovered item is a gap), the architecture sync rule, a user checkpoint before carding begins, a drift-focused **QA Pass**, and tickets created only after the map is ratified.
 
-You can't test "edit" if nothing exists to edit. Order stories so each builds on the previous:
-
-1. **Read** (list/empty state) → 2. **Create** → 3. **Update** (requires item) → 4. **Delete** (requires item)
-
-Each CRUD story should include confirmation feedback: "[Item name] was created/updated/deleted."
+Run that QA Pass whenever a session produces more than a handful of stories, even outside full story-map mode: long sessions drift, and the stories written last must obey the rules as strictly as the stories written first.
 
 ---
 
@@ -375,16 +418,21 @@ Title: [Who] [action] [where]
 
 ## Content
 
-[Any specific copy, to be externalized to locale/data files]
+[Only copy an acceptance criterion asserts verbatim—button labels,
+headlines, error/empty-state/confirmation messages]
 
 ## References
 
-[Links to design mockups, prototypes, or external documentation]
+[Specific artifact + location, e.g. "Wireframe B2 p.4", "Figma: Checkout / payment error state"]
 
 ## Developer Notes
 
 [Technical guidance that doesn't belong in acceptance criteria]
 ```
+
+### Content
+
+Only copy that an acceptance criterion asserts **verbatim**—button labels, headlines, error/empty-state/confirmation messages. For everything else, point References at the design source instead of transcribing it. Content strings are externalized to locale/data files at build time.
 
 ### Developer Notes
 
@@ -398,21 +446,27 @@ Technical context that helps implementation but shouldn't pollute acceptance cri
 
 Include links to design assets when available—Figma, prototypes, spreadsheets with calculation logic. This keeps stories self-contained and reduces back-and-forth.
 
+Cite the specific artifact and location, never a bare link or screen code: "Wireframe B2 p.4", "A3 Registrations — bulk add flow", "Figma: Checkout / payment error state".
+
 ---
 
 ## Story Checklist
 
+For a single story, this checklist is the QA. When a session produces a batch of stories, also run the QA Pass (see Story Map Mode) to catch drift across the set.
+
 Before creating the ticket, verify:
 
 - [ ] WHY expresses value (not restated WHAT)
-- [ ] WHO is specific (not generic "user")
+- [ ] WHO is specific (not generic "user") and on the user's side of the glass (not developer/platform/system)
 - [ ] WHAT describes user action (not system behavior)
 - [ ] One context, one action, one outcome
 - [ ] 4-8 acceptance criteria
 - [ ] Each criterion is verifiable in a browser by a non-developer
+- [ ] Acceptable using only what earlier stories built—no forward dependencies; any last-resort seeding called out in Developer Notes
+- [ ] Entry points (nav links, buttons) are criteria on the story that delivers their destination—no placeholder elements shipped early
 - [ ] No references to non-existent UI elements
-- [ ] Content/copy specified for externalization
-- [ ] Design references included where available
+- [ ] Content is limited to copy that a criterion asserts verbatim, marked for externalization
+- [ ] Design references cite the specific artifact and location
 - [ ] Developer notes for technical context (not observable behavior)
 - [ ] Title is unique and searchable
 
@@ -420,5 +474,6 @@ Before creating the ticket, verify:
 
 ## More Information
 
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Story Map Mode](../../references/story-map-mode.md) - Carding a feature set: epics, coverage, sync rule, checkpoint, QA pass
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"

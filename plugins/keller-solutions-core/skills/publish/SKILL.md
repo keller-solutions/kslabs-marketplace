@@ -394,6 +394,6 @@ After releasing:
 
 ## More Information
 
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [Git Integrity](../references/git-integrity.md) - "Thou Shalt Not Lie"
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
