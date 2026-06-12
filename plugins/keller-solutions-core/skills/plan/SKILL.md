@@ -35,6 +35,8 @@ Before writing, read what already defines the work:
 - Requirements documents, designs/wireframes, and prototypes
 - The existing architecture and precedents (how similar features are already built in this codebase)
 
+Source material varies—sometimes polished wireframes and a design handoff, sometimes only a written spec, sometimes nothing but the description in the prompt. The method is the same regardless: **break whatever material you have down to its key interactions**, and card each as one context, one action, one outcome. Richer sources mean more verbatim Content and tighter References; thinner sources mean more decisions to make and log. What never changes is the decomposition—and the QA pass at the end to confirm you applied it consistently.
+
 Read designs **just in time**: review the relevant screen in full immediately before writing its story—not from memory of an earlier skim.
 
 When sources conflict, establish a precedence order (typically: most recent client-reviewed design > wireframes > written requirements) and flag material conflicts to the user.
@@ -461,7 +463,7 @@ Title: User visits the About Us page from the footer
 
 ## Story Map Mode
 
-For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens—switch to story-map mode and write the full map as markdown **before** any tickets exist.
+For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens or producing a large batch of stories—switch to story-map mode and write the full map as markdown **before** any tickets exist.
 
 ### Structure
 
@@ -475,6 +477,8 @@ For each screen, enumerate **every element**—nav items, buttons, filters, tabl
 
 A screen's first story does not ship the whole screen. Per Elements Ship With Their Stories, each interactive affordance appears only when its story ships—the coverage table records where, and the screen accretes story by story.
 
+When the source is a spec or a prose description rather than screens, the unit of coverage is the **interaction**: enumerate every action the source implies and assign each to exactly one story. An uncovered interaction is a gap all the same.
+
 ### The Sync Rule
 
 When a story uncovers functionality that changes the architecture, update the architecture document **first**, then repair every already-written story affected by the change, **before** writing the next story. The architecture document and the story map must match in both directions at all times.
@@ -483,15 +487,19 @@ When a story uncovers functionality that changes the architecture, update the ar
 
 Pause for explicit user sign-off between architecture and storycarding. Surface any decision that would contaminate many stories (e.g., the auth model) at this checkpoint. If the user leaves it open, card to the current design and tag affected stories (e.g. `⟨blocked on auth decision⟩`) rather than stalling.
 
-### The Final Pass
+### The QA Pass
 
-Before presenting the map:
+A long carding session drifts: the perspective rule applied rigorously at story 3 gets sloppy by story 33, terminology shifts ("member" becomes "user"), criteria counts creep, Content starts absorbing copy no criterion asserts. The stories written last must obey the rules as strictly as the stories written first—so before presenting the map, re-read the whole set with fresh eyes:
 
-1. Re-read every file end to end: dedupe overlapping stories; verify every story passes the Story Checklist.
-2. Verify every coverage table is complete and each row points at the story where the element actually ships.
-3. Verify cross-references are bidirectional ("ships with story X" appears in both stories).
-4. Verify the chore ratio is under 10%.
-5. Summarize: epic list with story counts (chores broken out, with the ratio), open questions needing answers, and Planning Decisions to ratify.
+1. **Checklist**: re-read every file end to end; dedupe overlapping stories; verify every story passes the Story Checklist—paying particular attention to the latest-written stories, where drift concentrates.
+2. **Consistency**: personas, terminology, ID format, Content/Reference conventions, and criteria granularity match across the entire set.
+3. **Order**: walk the delivery order start to finish and confirm each story is acceptable given only the stories before it—the Seeding Test at map scale. No forward dependencies, no placeholder elements shipped early.
+4. **Coverage**: every coverage table is complete and each row points at the story where the element (or interaction) actually ships.
+5. **Cross-references**: bidirectional ("ships with story X" appears in both stories).
+6. **Chore ratio**: under 10%.
+7. **Summarize**: epic list with story counts (chores broken out, with the ratio), open questions needing answers, and Planning Decisions to ratify.
+
+Run the QA pass whenever a session produces more than a handful of stories, even outside full story-map mode.
 
 ### Tickets Come Last
 
@@ -550,6 +558,8 @@ Cite the specific artifact and location, never a bare link or screen code: "Wire
 ---
 
 ## Story Checklist
+
+For a single story, this checklist is the QA. When a session produces a batch of stories, also run the QA Pass (see Story Map Mode) to catch drift across the set.
 
 Before creating the ticket, verify:
 
