@@ -1,7 +1,7 @@
 ---
 name: prep
 description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of /ks-feature workflow.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[optional: path to project]"
 ---
 
@@ -150,53 +150,29 @@ git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; 
 
 ### Step 2.4: Check Dependency Freshness
 
-**The 24-Hour Rule**: Dependencies should be updated at least daily or at the start of each feature branch.
-
-For **Ruby/Rails**:
+**The 24-Hour Rule**: On projects that keep dependencies current, update them at the start of each dev day—small, frequent updates beat cumbersome catch-ups. Check when the lockfile last changed to see whether today's update has already happened:
 
 ```bash
-# Check when Gemfile.lock was last modified
-stat -f "%Sm" Gemfile.lock 2>/dev/null || stat -c "%y" Gemfile.lock 2>/dev/null
+# Report last-modified for whichever lockfile(s) the project has
+for f in Gemfile.lock package-lock.json yarn.lock composer.lock; do
+  [ -f "$f" ] && echo "$f: $(stat -f "%Sm" "$f" 2>/dev/null || stat -c "%y" "$f")"
+done
 ```
 
-For **JavaScript/Node**:
+**Opt-outs are okay.** Some projects deliberately pin versions or delegate updates to a bot (Dependabot/Renovate) or a release process. Check for a stated policy (CLAUDE.md, README, CONTRIBUTING) before assuming. If the project opts out, install to match the lockfile and move on.
 
-```bash
-# Check package-lock.json or yarn.lock
-stat -f "%Sm" package-lock.json 2>/dev/null || stat -f "%Sm" yarn.lock 2>/dev/null
-```
+### Step 2.5: Update Dependencies
 
-### Step 2.5: Update Dependencies (if needed)
+**Installing is not updating**: `bundle install`/`npm install` only satisfies the existing lockfile. On projects that follow the 24-Hour Rule, run the real update at the outset of the session:
 
-**Ruby/Rails:**
+| Stack | Update command |
+|-------|----------------|
+| Ruby/Rails | `bundle update` |
+| JavaScript/Node | `npm update` |
+| PHP/Composer | `composer update` |
+| .NET | `dotnet list package --outdated`, then update as needed |
 
-```bash
-bundle install
-# Or for full update:
-bundle update
-```
-
-**JavaScript/Node:**
-
-```bash
-npm install
-# Or for full update:
-npm update
-```
-
-**PHP/Composer:**
-
-```bash
-composer install
-# Or for full update:
-composer update
-```
-
-**.NET:**
-
-```bash
-dotnet restore
-```
+Commit the updated lockfile **in the same PR as the day's work**—don't park the session waiting on a separate dependencies PR before work even starts. The test suite run in Step 2.7 verifies the update broke nothing; if it did break something, that's the 24-Hour Rule working—fix or pin the offender and note it.
 
 ### Step 2.6: Verify Database (if applicable)
 
@@ -335,7 +311,7 @@ Output a brief readiness summary:
 ## Environment Ready
 
 **Branch**: [current branch]
-**Dependencies**: [installed/updated]
+**Dependencies**: [updated / install-only (project opts out of the 24-Hour Rule)]
 **Database**: [migrated/n/a]
 **Tests**: [passing/failing - count]
 ```
@@ -358,6 +334,7 @@ These settings will be used throughout the workflow:
 | Setting | Value | Impact |
 |---------|-------|--------|
 | **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
 | **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
 | **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
@@ -367,6 +344,7 @@ These settings will be used throughout the workflow:
 
 - Commits will [include/exclude] `Co-Authored-By: Claude` attribution
 - Tickets will be [created in X / managed manually]
+- Dependencies [were updated and the lockfile rides in this PR / follow the project's opt-out policy]
 - CHANGELOG [is current / should be updated during produce]
 - Test coverage [meets standards / should be monitored]
 
@@ -404,6 +382,7 @@ These values should be remembered and applied in produce/present:
 
 - **AI_VISIBLE**: Include Co-Authored-By in commits
 - **TICKET_SYSTEM**: Which tool to use for ticket operations
+- **DEPENDENCY_POLICY**: 24-Hour Rule (lockfile changes ride in the work PR) or opted out (and why)
 - **CHANGELOG_STATUS**: Whether to prompt for updates
 - **TESTS_PASSING**: Whether tests were green at start
 
@@ -484,6 +463,6 @@ When preparation fails, diagnose the root cause:
 
 ## More Information
 
-- [The F5 Principle](../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
-- [Guiding Principles](../references/guiding-principles.md) - The six principles
-- [AI Visibility](../references/ai-visibility.md) - Attribution preferences
+- [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
+- [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [AI Visibility](../../references/ai-visibility.md) - Attribution preferences

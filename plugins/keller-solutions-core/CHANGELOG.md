@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - 2026-02-04
+## [1.2.1] - 2026-06-12
 
 ### Changed
 
@@ -13,6 +13,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Explicit step to read `references/ai-visibility.md` for response format
   - Clarified that replies must go directly to each comment thread (not general PR comments)
   - Added `gh api` command example for replying to review comments
+
+## [1.2.0] - 2026-06-12
+
+### Added
+
+- **plan** skill: perspective rule—personas stay on the user's side of the glass; developer/platform/system personas are banned, with groundwork reframed as the capability it enables
+- **plan** skill: source-grounding step (read requirements/designs/architecture before writing, just-in-time design reading, source precedence for conflicts)
+- **plan** skill: ask-as-they-arise question protocol—decide low-stakes calls and log them as Planning Decisions for ratification; ask only on genuine product/scope decisions or conflicting sources
+- **plan** skill: new anti-patterns—The Fake Persona, The Placeholder, The Forward Dependency, The Hidden Plumbing
+- **plan** skill: **Story Map Mode** (new `references/story-map-mode.md`) for multi-screen feature sets—epics with continuous numbering, coverage tables (element/interaction → story ID), architecture sync rule, pre-storycarding checkpoint, end-of-session QA pass, tickets created only after ratification
+- **plan** skill: source-agnostic decomposition—wireframes, specs, or a bare prompt description all break down to key interactions carded as one context, one action, one outcome
+- **plan** skill: QA Pass targets drift—consistency of personas/terminology/conventions across the set, delivery-order walk (the Seeding Test at map scale), with extra scrutiny on the latest-written stories
+- **plan** skill: **Elements Ship With Their Stories** section—a UI element appears only when the story that makes it work ships; the story delivering a destination also delivers its entry point (About Us nav-link example), and each additional entry point is its own story
+- **plan** skill: The Wireframe Dump anti-pattern—building every element a wireframe shows before the stories that wire them up
+- **produce** skill: build only this story's slice of the design—no placeholder nav items, buttons, or `#` links for elements that belong to later stories
+- **present** skill: walk the story as the user before gathering evidence—browser only, no Rails console; seeding not anticipated in the story's Developer Notes is a flag to resolve before review
+
+### Fixed
+
+- **prep** skill: installing is not updating—on projects following the 24-Hour Rule, run the real update (`bundle update`/`npm update`/`composer update`) at the start of each work session and commit the lockfile in the same PR as the day's work; projects may opt out via a stated policy (pins, Dependabot/Renovate, release process)
+- **prep** skill: Development Context summary gains a Dependency Updates row (24-Hour Rule vs. opt-out with policy source) so the update policy is verified and visible alongside Ticket System, AI Visibility, and CHANGELOG status
+- **prep** skill: lockfile freshness check now reports whichever lockfile the project has (Gemfile.lock, package-lock.json, yarn.lock, composer.lock) instead of only Gemfile.lock
+- All skills: repaired `../references/` links, which resolved to a non-existent `skills/references/` path—correct path from a skill directory is `../../references/`
+
+### Changed
+
+- **plan** skill: replaced the CRUD-ordering section with the general **Deliver Without Seeding** principle—every story should be acceptable using only what earlier stories built, with seeding a last resort called out in Developer Notes; CRUD (add → index → detail → edit → delete) is the worked example
+- **plan** skill: Chore story type tightened—one-line purpose tied to the user value it unlocks, reviewer-checkable completion criteria, no fake narrative, under 10% of total stories
+- **plan** skill: Content section restricted to copy an acceptance criterion asserts verbatim; everything else points to References
+- **plan** skill: References must cite the specific artifact and location (e.g. "Wireframe B2 p.4"), never a bare link or screen code
+- **plan** skill: Story Checklist extended with perspective, self-sufficiency, Content, and Reference-specificity checks
+
+## [1.1.1] - 2026-02-10
+
+### Changed
+
+- Migrated release workflow to org-level reusable workflow from keller-solutions/.github
+- Reduced CI maintenance burden by centralizing release logic
 
 ## [1.1.0] - 2026-01-24
 
