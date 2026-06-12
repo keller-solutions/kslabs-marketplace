@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **plan** skill: ask-as-they-arise question protocol—decide low-stakes calls and log them as Planning Decisions for ratification; ask only on genuine product/scope decisions or conflicting sources
 - **plan** skill: new anti-patterns—The Fake Persona, The Placeholder, The Forward Dependency, The Hidden Plumbing
 - **plan** skill: **Story Map Mode** for multi-screen feature sets—epics with continuous numbering, screen coverage tables (element → story ID), architecture sync rule, pre-storycarding checkpoint, final pass checklist, tickets created only after ratification
+- **plan** skill: **Elements Ship With Their Stories** section—a UI element appears only when the story that makes it work ships; the story delivering a destination also delivers its entry point (About Us nav-link example), and each additional entry point is its own story
+- **plan** skill: The Wireframe Dump anti-pattern—building every element a wireframe shows before the stories that wire them up
+- **produce** skill: build only this story's slice of the design—no placeholder nav items, buttons, or `#` links for elements that belong to later stories
 
 ### Changed
 

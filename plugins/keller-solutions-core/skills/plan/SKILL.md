@@ -247,6 +247,10 @@ Acceptance depends on a story that hasn't shipped yet (see Deliver Without Seedi
 
 Chores creeping past 10% of the story set—user value is being hidden in technical work. Reframe groundwork as the capability it enables.
 
+### The Wireframe Dump
+
+The first story for a page builds every element the wireframe shows, with siblings linked to `#` "for now." Each element ships with the story that wires it up (see Elements Ship With Their Stories).
+
 ---
 
 ## Phase 5: Create the Ticket
@@ -416,6 +420,45 @@ Each mutating story should include confirmation feedback: "[Item name] was creat
 
 ---
 
+## Elements Ship With Their Stories
+
+The flip side of Deliver Without Seeding: just as a story may not lean on later stories, it may not ship fragments of them either. **A UI element appears only when the story that makes it work ships.** Never add a placeholder button, nav item, or link to `#` because the design shows one—that's pre-optimization (Guiding Principle #3), and dead links get reported as bugs.
+
+A wireframe or comp is a map of where future stories will land, not a checklist for the first story to touch that page. The screen accretes element by element as its stories ship.
+
+Write stories knowing this and they describe elements differently: the story that delivers a destination also delivers its entry point, and an early criterion asserts the element appears. The classic example is the About page. The global-nav About link is not part of a "build the nav" story—it ships with the story that gives it somewhere to go:
+
+```markdown
+Title: User visits the About Us page
+
+**In order to** learn more about the company
+**As a** user on any page in the site
+**I want** to view the About Us page
+
+## Acceptance Criteria
+
+- [ ] About Us link is present in the global nav
+- [ ] Clicking About Us takes me to the About Us page
+- [ ] I see the About Us headline and copy with images specified in the copy doc
+```
+
+A second entry point is a second story (different context—see the Cardinal Rule):
+
+```markdown
+Title: User visits the About Us page from the footer
+
+**In order to** quickly access the About page without scrolling back to the top
+**As a** user at the bottom of any page in the site
+**I want** to visit the About Us page
+
+## Acceptance Criteria
+
+- [ ] About Us link is present in the footer nav
+- [ ] Clicking About Us takes me to the About Us page
+```
+
+---
+
 ## Story Map Mode
 
 For a single feature, the phases above run once and end in a ticket. For a **feature set**—a new portal, a new client area, anything spanning multiple screens—switch to story-map mode and write the full map as markdown **before** any tickets exist.
@@ -429,6 +472,8 @@ For a single feature, the phases above run once and end in a ticket. For a **fea
 ### Coverage Tables
 
 For each screen, enumerate **every element**—nav items, buttons, filters, tables, modals, steppers, empty states, error states, status chips, bulk flows—and assign each to exactly one story (or explicitly to a shared/foundation story). Record this in a Screen Coverage appendix, one table per screen (`element → story ID`). **An element with no story is a gap**: write the story or ask.
+
+A screen's first story does not ship the whole screen. Per Elements Ship With Their Stories, each interactive affordance appears only when its story ships—the coverage table records where, and the screen accretes story by story.
 
 ### The Sync Rule
 
@@ -515,6 +560,7 @@ Before creating the ticket, verify:
 - [ ] 4-8 acceptance criteria
 - [ ] Each criterion is verifiable in a browser by a non-developer
 - [ ] Acceptable using only what earlier stories built—no seeded data, no forward dependencies
+- [ ] Entry points (nav links, buttons) are criteria on the story that delivers their destination—no placeholder elements shipped early
 - [ ] No references to non-existent UI elements
 - [ ] Content holds only copy a criterion asserts verbatim, specified for externalization
 - [ ] Design references cite the specific artifact and location
