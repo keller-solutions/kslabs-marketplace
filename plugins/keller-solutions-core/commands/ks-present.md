@@ -16,7 +16,7 @@ This will:
 2. Run quality checks (tests, linters)
 3. Create PR with summary and test plan
 4. Wait for Copilot review
-5. Read `references/ai-visibility.md` to determine the project's visibility preference and response format
+5. Read `../references/ai-visibility.md` to determine the project's visibility preference and response format
 6. For each comment, reply **directly to that comment thread** (not a general PR comment):
    - If agree: make change, commit, reply using the "In PR feedback responses" format from ai-visibility.md
    - If disagree: reply with clear rationale why
