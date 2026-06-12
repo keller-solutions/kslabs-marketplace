@@ -20,5 +20,5 @@ This will:
 6. For each comment, reply **directly to that comment thread** (not a general PR comment):
    - If agree: make change, commit, reply using the "In PR feedback responses" format from ai-visibility.md
    - If disagree: reply with clear rationale why
-   - Use: `gh api repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -X POST -f body="..."`
+   - Use: `gh api -X POST repos/{owner}/{repo}/pulls/{pr}/comments/{comment_id}/replies -f body="..."`
 7. Notify when PR is ready for final review
