@@ -1,7 +1,7 @@
 ---
 name: present
-description: Self-review, create PR, and handle the feedback loop. Takes implemented code through review, PR creation, evidence gathering, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.1.0
+description: Self-review, create PR, and handle the feedback loop. Takes implemented code through review, PR creation, evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
+version: 1.2.0
 argument-hint: "[PR number or 'current']"
 ---
 
@@ -47,6 +47,7 @@ For each changed file, verify:
 - [ ] Tests cover the changes
 - [ ] DRY opportunities identified
 - [ ] F5 Principle preserved (new dependencies in package manager, env vars documented)
+- [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
 
 ### Step 1.3: Run Quality Checks
 
@@ -157,6 +158,15 @@ gh pr create \
 - [ ] Manual testing performed
 - [ ] Verified acceptance criteria
 
+## Quality Dimensions
+
+Which applied and how each was addressed or verified (mark the rest N/A) —
+see references/quality-dimensions.md:
+
+- [e.g. Security] — [how addressed / verified]
+- [e.g. Accessibility] — [how addressed / verified]
+- N/A: [dimensions that don't apply to this change]
+
 ## Screenshots
 
 [Include if UI changes]
@@ -166,6 +176,7 @@ gh pr create \
 - [ ] Tests pass
 - [ ] Linters pass
 - [ ] Self-review complete
+- [ ] Quality dimensions reviewed
 
 Refs #[TICKET_NUMBER]
 
@@ -389,6 +400,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 - [x] All acceptance criteria implemented
 - [x] Tests pass
 - [x] Linting passes
+- [x] Quality dimensions reviewed and reported in the PR
 - [x] Copilot review feedback addressed
 - [x] All PR comments responded to
 
@@ -493,4 +505,5 @@ This skill integrates with compound-engineering commands:
 
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions to report in every PR
 - [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"

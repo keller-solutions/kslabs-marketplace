@@ -1,7 +1,7 @@
 ---
 name: produce
-description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.1.0
+description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates (including a review across the nine quality dimensions). Works standalone or as part of /ks-feature or /ks-ticket workflow.
+version: 1.2.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -341,8 +341,27 @@ Check:
 - [ ] DRY opportunities identified
 - [ ] Naming is clear and consistent
 - [ ] Comments explain WHY (not WHAT)
+- [ ] Quality dimensions reviewed (Step 4.5)
 
-### Step 4.5: Update CHANGELOG
+### Step 4.5: Quality Dimensions Review
+
+"It works" is the start of the quality conversation, not the end. A feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Evaluate the feature against the quality dimensions before reporting it ready. See [Quality Dimensions](../../references/quality-dimensions.md) for what each means and how to check it.
+
+**Triage, then verify** — most features touch 3–6 of these; the rest are recorded as "N/A — <why>," never skipped silently:
+
+1. **Security** — authorization scoped to the actor, input validated + DB-backed, no secrets in code/logs, rate limits on public endpoints, injection-safe.
+2. **Performance / CWV** — no N+1, render not blocked, LCP/CLS/INP healthy on affected pages.
+3. **Accessibility** — keyboard-only and screen-reader users complete the flow; contrast, focus (incl. forced-colors), labels, live regions for async updates.
+4. **SEO** — public pages indexable with title/description/canonical; private pages `noindex`; structured data valid.
+5. **AEO** — public content answer-shaped + JSON-LD entity graph; private content kept out of AI reach.
+6. **Reliability** — failure handled with an honest fallback, timeouts/bounded retries, idempotency, no partial-write corruption.
+7. **Privacy** — minimum data collected/retained; nothing sensitive in URLs, logs, analytics, or unfurls.
+8. **Observability** — you can tell in production whether it works (structured logs, a success signal, errors tracked).
+9. **Cost & Efficiency** — query/external/LLM call volume bounded, cached, and rate-limited; payloads reasonable.
+
+Many checks run now (`bin/brakeman` for Security, the suite for Reliability, the contrast script for Accessibility); for the rest, reason from the diff. Carry the result forward — `/ks-present` reports which dimensions applied and how each was addressed.
+
+### Step 4.6: Update CHANGELOG
 
 Document changes in [Keep a Changelog](https://keepachangelog.com) format before creating PR.
 
@@ -396,6 +415,7 @@ Output implementation summary:
 - [x] All tests passing ([count] tests)
 - [x] Linters passing
 - [x] Coverage at [X]%
+- [x] Quality dimensions reviewed ([applicable ones, e.g. Security, Accessibility, Reliability])
 
 ### Files Changed
 
@@ -489,5 +509,6 @@ Use frontend-design whenever implementing visual interfaces. It prevents generic
 
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions every feature is evaluated against
 - [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
 - [Test Coverage Philosophy](../../references/test-coverage-philosophy.md) - Why 100% coverage matters

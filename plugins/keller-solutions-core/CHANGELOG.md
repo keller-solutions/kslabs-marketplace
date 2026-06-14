@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-06-14
+
+### Added
+
+- **Quality Dimensions** reference (`references/quality-dimensions.md`) — the nine
+  dimensions every feature is evaluated against: Security, Performance/CWV,
+  Accessibility, SEO, AEO, Reliability, Privacy, Observability, and Cost & Efficiency.
+  Framed as a per-feature lens (triage to what the feature touches; record the rest
+  as N/A), applied across plan → produce → present rather than a separate end audit.
+
+### Changed
+
+- **plan** skill - Phase 1 now includes a quality-dimensions pass (Step 1.4):
+  applicable dimensions become acceptance criteria (browser-verifiable) or Developer
+  Notes up front; added to the Story Checklist.
+- **produce** skill - Phase 4 gains a Quality Dimensions Review (Step 4.5) before the
+  ready report; added to the self-review checklist and the ready report's quality gates.
+- **present** skill - the PR body now carries a Quality Dimensions section (which
+  applied and how each was addressed/verified, the rest N/A); added to the self-review
+  and ready-for-merge checklists.
+
 ## [1.2.1] - 2026-06-12
 
 ### Changed
