@@ -1,7 +1,7 @@
 ---
 name: present
-description: Self-review, create PR, and handle the feedback loop. Takes implemented code through review, PR creation, evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.2.0
+description: Self-review, create PR, and handle the feedback loop. Takes implemented code through an in-depth stack review, PR creation (one PR per epic), evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
+version: 1.3.0
 argument-hint: "[PR number or 'current']"
 ---
 
@@ -48,6 +48,7 @@ For each changed file, verify:
 - [ ] DRY opportunities identified
 - [ ] F5 Principle preserved (new dependencies in package manager, env vars documented)
 - [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
+- [ ] In-depth stack-appropriate review run on the final diff (Step 1.5)
 
 ### Step 1.3: Run Quality Checks
 
@@ -91,6 +92,10 @@ git log develop..HEAD --oneline
 
 **Warning signs:** code changed but CHANGELOG unchanged; `.github/workflows/` has changelog validation; previous PRs failed on version/changelog checks. If any apply, update the CHANGELOG before creating the PR to avoid CI failures.
 
+### Step 1.5: In-Depth Stack Review
+
+Before opening the PR, run an in-depth review **appropriate to the project's stack** on the final diff. **That a review happens is the rule; which review is a project-level determination** (surfaced during prep) — for example, a DHH-style review for Rails, a frontend review for React/TS, or a code-review persona panel otherwise. This matters on every PR and especially on an Epic PR that delivers many stories at once. Address findings before creating the PR.
+
 ---
 
 ## Phase 2: Evidence Gathering
@@ -116,6 +121,8 @@ Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
 ---
 
 ## Phase 3: Create Pull Request
+
+**Epic Mode:** present runs **once** for the whole epic. The single PR references every child (`Refs <child-id> …`) and the epic; batch-attach any held evidence to its child ticket now; aggregate the Quality Dimensions across children. See [Epic Mode](../../references/epic-mode.md).
 
 ### Step 3.1: Determine Target Branch
 
@@ -206,24 +213,7 @@ curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
 
 ## Phase 4: Review Environment (if applicable)
 
-### Step 4.1: Verify in Staging
-
-If the project has preview deployments:
-
-```bash
-# Wait for deployment
-gh pr checks $PR_NUMBER
-
-# Get preview URL (project-specific)
-```
-
-### Step 4.2: Run Browser Tests
-
-If applicable, run Playwright tests:
-
-```bash
-/compound-engineering:playwright-test
-```
+If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/compound-engineering:playwright-test`).
 
 ---
 
@@ -389,6 +379,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 - [x] Tests pass
 - [x] Linting passes
 - [x] Quality dimensions reviewed and reported in the PR
+- [x] In-depth stack-appropriate review completed before the PR
 - [x] Copilot review feedback addressed
 - [x] All PR comments responded to
 
@@ -494,4 +485,5 @@ This skill integrates with compound-engineering commands:
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
 - [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions to report in every PR
+- [Epic Mode](../../references/epic-mode.md) - Delivering an epic as a single branch and PR
 - [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"

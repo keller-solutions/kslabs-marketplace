@@ -1,7 +1,7 @@
 ---
 name: managing-tickets
 description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<tool> <operation> [options]"
 ---
 
@@ -405,6 +405,40 @@ Update status at these milestones:
 | Work started | In Progress | `/ks-produce` |
 | PR created | In Review | `/ks-present` |
 | PR merged | Done | Product owner (manual) |
+
+`To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it).
+
+### Discovering the Status Workflow
+
+```bash
+# ClickUp — statuses available on a list
+curl -s "https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" | jq '.statuses[].status'
+
+# Jira — valid transitions for an issue
+jira issue move [ISSUE_KEY] --help   # or view the board's columns
+
+# GitHub — project columns or status: labels
+gh label list | grep -i status
+```
+
+### Attaching Evidence
+
+Capture evidence (screenshots, recordings, test output) as each ticket is done.
+
+- **ClickUp — attach as you go** (API supports file attachment):
+
+  ```bash
+  curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/attachment" \
+    -H "Authorization: ${CLICKUP_API_TOKEN}" \
+    -F "attachment=@./evidence/EADEV-180.png"
+  ```
+
+- **GitHub / Jira / Linear — hold and batch.** File upload needs developer involvement (no clean CLI image upload), so collect evidence during the work and attach/link it in a batch at PR time; post links or markdown inline where possible.
+
+### Epic Lifecycle
+
+An epic/parent ticket is a **grouping** — it gets no commit of its own. Its child feature tickets are the unit of work. While delivering an epic (see [epic-mode](../../references/epic-mode.md)), lifecycle **each child** through the discovered states **in order** (in-progress when started, awaiting-review when its commit + evidence land), and move the epic itself to awaiting-review when the single PR opens. On merge, children and epic move to done.
 
 ---
 
