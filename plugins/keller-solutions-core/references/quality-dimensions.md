@@ -75,7 +75,7 @@ Sustainable as usage grows (overlaps Performance, but focuses on dollars and sca
 
 1. List the dimensions this feature plausibly touches (most features touch 3–6).
 2. For each touched dimension, name the concrete requirement or check.
-3. Record the rest as "N/A — <one-line why>." A dimension is never skipped silently; it is either addressed or explicitly dismissed.
+3. Record the rest as `N/A — <one-line why>`. A dimension is never skipped silently; it is either addressed or explicitly dismissed.
 
 ---
 
