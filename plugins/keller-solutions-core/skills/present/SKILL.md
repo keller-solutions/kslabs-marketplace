@@ -89,13 +89,7 @@ git log develop..HEAD --oneline
 # Edit CHANGELOG.md with [Unreleased] or new version section
 ```
 
-**Warning signs to check:**
-
-- `git diff` shows code changes but CHANGELOG unchanged
-- Project has `.github/workflows/` with changelog validation
-- Previous PRs failed on version/changelog checks
-
-If CHANGELOG needs updating, do it before creating the PR to avoid CI failures.
+**Warning signs:** code changed but CHANGELOG unchanged; `.github/workflows/` has changelog validation; previous PRs failed on version/changelog checks. If any apply, update the CHANGELOG before creating the PR to avoid CI failures.
 
 ---
 
@@ -109,11 +103,7 @@ If a step can't be completed without seeding, check the story's Developer Notes:
 
 ### Step 2.2: Record Video Walkthrough (Optional)
 
-Use `/compound-engineering:feature-video` to record a demonstration:
-
-- Show the feature working
-- Walk through key user flows
-- Demonstrate acceptance criteria being met
+Use `/compound-engineering:feature-video` to demonstrate the feature working, key user flows, and acceptance criteria being met.
 
 ### Step 2.3: Take Screenshots
 
@@ -160,11 +150,9 @@ gh pr create \
 
 ## Quality Dimensions
 
-Which applied and how each was addressed or verified (mark the rest N/A) —
-see references/quality-dimensions.md:
+Which applied and how each was addressed/verified; mark the rest N/A (see references/quality-dimensions.md):
 
 - [e.g. Security] — [how addressed / verified]
-- [e.g. Accessibility] — [how addressed / verified]
 - N/A: [dimensions that don't apply to this change]
 
 ## Screenshots

@@ -345,21 +345,7 @@ Check:
 
 ### Step 4.5: Quality Dimensions Review
 
-"It works" is the start of the quality conversation, not the end. A feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Evaluate the feature against the quality dimensions before reporting it ready. See [Quality Dimensions](../../references/quality-dimensions.md) for what each means and how to check it.
-
-**Triage, then verify** — most features touch 3–6 of these; the rest are recorded as "N/A — <why>," never skipped silently:
-
-1. **Security** — authorization scoped to the actor, input validated + DB-backed, no secrets in code/logs, rate limits on public endpoints, injection-safe.
-2. **Performance / CWV** — no N+1, render not blocked, LCP/CLS/INP healthy on affected pages.
-3. **Accessibility** — keyboard-only and screen-reader users complete the flow; contrast, focus (incl. forced-colors), labels, live regions for async updates.
-4. **SEO** — public pages indexable with title/description/canonical; private pages `noindex`; structured data valid.
-5. **AEO** — public content answer-shaped + JSON-LD entity graph; private content kept out of AI reach.
-6. **Reliability** — failure handled with an honest fallback, timeouts/bounded retries, idempotency, no partial-write corruption.
-7. **Privacy** — minimum data collected/retained; nothing sensitive in URLs, logs, analytics, or unfurls.
-8. **Observability** — you can tell in production whether it works (structured logs, a success signal, errors tracked).
-9. **Cost & Efficiency** — query/external/LLM call volume bounded, cached, and rate-limited; payloads reasonable.
-
-Many checks run now (`bin/brakeman` for Security, the suite for Reliability, the contrast script for Accessibility); for the rest, reason from the diff. Carry the result forward — `/ks-present` reports which dimensions applied and how each was addressed.
+"It works" is the start of the quality conversation, not the end — a feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Before the ready report, triage which of the nine [Quality Dimensions](../../references/quality-dimensions.md) this feature touches (most touch 3–6) — **Security, Performance/CWV, Accessibility, SEO, AEO, Reliability, Privacy, Observability, Cost & Efficiency** — verify each, and record the rest as "N/A — <why>," never skipped silently. The reference defines each and how to check it; many checks run now (`bin/brakeman`, the suite, the contrast script), and for the rest you reason from the diff. Carry the result forward — `/ks-present` reports which applied and how each was addressed.
 
 ### Step 4.6: Update CHANGELOG
 
@@ -499,9 +485,7 @@ This skill integrates with commands from dependent plugins:
 
 ### frontend-design
 
-- `/frontend-design` - Create distinctive, production-grade UI components
-
-Use frontend-design whenever implementing visual interfaces. It prevents generic "AI slop" aesthetics and produces memorable, polished designs with intentional typography, color, and motion.
+- `/frontend-design` - Create distinctive, production-grade UI components. Use whenever implementing visual interfaces — it prevents generic "AI slop" aesthetics and produces polished designs with intentional typography, color, and motion.
 
 ---
 
