@@ -45,7 +45,7 @@ After the last child and **before** opening the PR, run an in-depth review **app
 
 Run [present](../skills/present/SKILL.md) a **single time** for the whole epic:
 
-- Open **one PR** referencing every child (`Closes <child-id> …`) and the epic.
+- Open **one PR** referencing every child (`Refs <child-id> …`) and the epic. (On GitHub Issues you may use `Closes` to auto-close children on merge; for other tools the epic lifecycle moves them to done — see [managing-tickets](../skills/managing-tickets/SKILL.md).)
 - **Batch-attach** any held evidence to its child ticket now.
 - **Aggregate** the Quality Dimensions report across the children.
 - Request Copilot review, address feedback, then hand to the user for final review + merge.

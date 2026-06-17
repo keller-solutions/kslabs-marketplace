@@ -122,7 +122,7 @@ Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
 
 ## Phase 3: Create Pull Request
 
-**Epic Mode:** present runs **once** for the whole epic. The single PR references every child (`Closes <child-id> …`) and the epic; batch-attach any held evidence to its child ticket now; aggregate the Quality Dimensions across children. See [Epic Mode](../../references/epic-mode.md).
+**Epic Mode:** present runs **once** for the whole epic. The single PR references every child (`Refs <child-id> …`) and the epic; batch-attach any held evidence to its child ticket now; aggregate the Quality Dimensions across children. See [Epic Mode](../../references/epic-mode.md).
 
 ### Step 3.1: Determine Target Branch
 
