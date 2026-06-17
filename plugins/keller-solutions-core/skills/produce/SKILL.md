@@ -1,7 +1,7 @@
 ---
 name: produce
-description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.1.0
+description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates (including a review across the nine quality dimensions). Works standalone or as part of /ks-feature or /ks-ticket workflow.
+version: 1.2.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -341,8 +341,13 @@ Check:
 - [ ] DRY opportunities identified
 - [ ] Naming is clear and consistent
 - [ ] Comments explain WHY (not WHAT)
+- [ ] Quality dimensions reviewed (Step 4.5)
 
-### Step 4.5: Update CHANGELOG
+### Step 4.5: Quality Dimensions Review
+
+"It works" is the start of the quality conversation, not the end — a feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Before the ready report, triage which of the nine [Quality Dimensions](../../references/quality-dimensions.md) this feature touches (most touch 3–6) — **Security, Performance/CWV, Accessibility, SEO, AEO, Reliability, Privacy, Observability, Cost & Efficiency** — verify each, and record the rest as `N/A — <why>`, never skipped silently. The reference defines each and how to check it; some checks run via existing tooling (e.g. `bin/brakeman` for Security, the test suite for Reliability, a contrast/a11y check for Accessibility), and for the rest you reason from the diff. Carry the result forward — `/ks-present` reports which applied and how each was addressed.
+
+### Step 4.6: Update CHANGELOG
 
 Document changes in [Keep a Changelog](https://keepachangelog.com) format before creating PR.
 
@@ -396,6 +401,7 @@ Output implementation summary:
 - [x] All tests passing ([count] tests)
 - [x] Linters passing
 - [x] Coverage at [X]%
+- [x] Quality dimensions reviewed ([applicable ones, e.g. Security, Accessibility, Reliability])
 
 ### Files Changed
 
@@ -479,9 +485,7 @@ This skill integrates with commands from dependent plugins:
 
 ### frontend-design
 
-- `/frontend-design` - Create distinctive, production-grade UI components
-
-Use frontend-design whenever implementing visual interfaces. It prevents generic "AI slop" aesthetics and produces memorable, polished designs with intentional typography, color, and motion.
+- `/frontend-design` - Create distinctive, production-grade UI components. Use whenever implementing visual interfaces — it prevents generic "AI slop" aesthetics and produces polished designs with intentional typography, color, and motion.
 
 ---
 
@@ -489,5 +493,6 @@ Use frontend-design whenever implementing visual interfaces. It prevents generic
 
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
+- [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions every feature is evaluated against
 - [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
 - [Test Coverage Philosophy](../../references/test-coverage-philosophy.md) - Why 100% coverage matters

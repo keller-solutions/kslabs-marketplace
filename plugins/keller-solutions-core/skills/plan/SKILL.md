@@ -1,7 +1,7 @@
 ---
 name: plan
-description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.1.0
+description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, quality-dimension requirements, and ticket creation. Works standalone or as part of /ks-feature workflow.
+version: 1.2.0
 argument-hint: "<feature description>"
 ---
 
@@ -59,6 +59,15 @@ Before I write the story, I need to clarify a few things:
 ```
 
 Only ask questions that will change the story. Don't ask for the sake of asking.
+
+### Step 1.4: Consider the Quality Dimensions
+
+A story carries more than "what the user can do" — it carries the cross-cutting quality the feature must meet. Before writing criteria, triage which [Quality Dimensions](../../references/quality-dimensions.md) this feature touches (most touch 3–6) and bake their requirements in now. A dimension named at plan time costs a sentence; discovered after launch it costs an incident.
+
+- **As acceptance criteria** when a non-developer can verify them in a browser: "I can complete this with the keyboard alone" (Accessibility); "an invalid amount shows a friendly error, not a crash" (Reliability); "the shared page's link preview shows no dollar figures" (Privacy).
+- **As Developer Notes** when they aren't browser-observable: rate-limit the public endpoint (Security); log the outcome (Observability); cache the external call (Cost); `noindex` this page (SEO); add the JSON-LD (AEO).
+
+Record dimensions that genuinely don't apply as a one-line "N/A" in Planning Decisions, so later phases know they were considered, not missed. The nine: Security, Performance/CWV, Accessibility, SEO, AEO, Reliability, Privacy, Observability, Cost & Efficiency.
 
 ---
 
@@ -468,6 +477,7 @@ Before creating the ticket, verify:
 - [ ] Content is limited to copy that a criterion asserts verbatim, marked for externalization
 - [ ] Design references cite the specific artifact and location
 - [ ] Developer notes for technical context (not observable behavior)
+- [ ] Applicable quality dimensions reflected in criteria or Developer Notes (the rest noted N/A)
 - [ ] Title is unique and searchable
 
 ---
@@ -475,5 +485,6 @@ Before creating the ticket, verify:
 ## More Information
 
 - [Story Map Mode](../../references/story-map-mode.md) - Carding a feature set: epics, coverage, sync rule, checkpoint, QA pass
+- [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions to anticipate in every story
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"

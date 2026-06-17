@@ -1,6 +1,6 @@
 {
   "name": "keller-solutions-core",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "The Keller Solutions Way—30 years of development methodology. 6 skills, 8 commands for TDD workflow: Prepare, Plan, Produce, Present, Publish. Requires compound-engineering, ralph-loop, and frontend-design plugins.",
   "author": {
     "name": "Keller Solutions",
