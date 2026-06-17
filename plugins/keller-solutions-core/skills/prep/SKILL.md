@@ -1,7 +1,7 @@
 ---
 name: prep
 description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of /ks-feature workflow.
-version: 1.1.0
+version: 1.2.0
 argument-hint: "[optional: path to project]"
 ---
 
@@ -334,6 +334,8 @@ These settings will be used throughout the workflow:
 | Setting | Value | Impact |
 |---------|-------|--------|
 | **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Status Workflow** | [the project's actual state names + order, e.g. `To Do → In Progress → In Review → Done`] | Which statuses to set, and when, so the board stays accurate in real time |
+| **Code Review** | [project's in-depth review, e.g. DHH for Rails / frontend review for React / code-review panel] | The stack-appropriate review run before every PR |
 | **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
 | **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
@@ -363,6 +365,14 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 [ -f ".linear" ] && echo "Linear"
 ```
 
+### Discover the Status Workflow
+
+Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
+
+### Determine the Code Review Approach
+
+Identify the in-depth, stack-appropriate review the project expects before each PR (check CLAUDE.md / project conventions). The rule is that a review happens; the specific one is project-level — e.g. DHH-style for Rails, a frontend review for React/TS, otherwise a code-review persona panel.
+
 ### Capture Test Suite Status
 
 ```bash
@@ -382,6 +392,8 @@ These values should be remembered and applied in produce/present:
 
 - **AI_VISIBLE**: Include Co-Authored-By in commits
 - **TICKET_SYSTEM**: Which tool to use for ticket operations
+- **STATUS_WORKFLOW**: The project's status names + order (esp. in-progress and awaiting-review states)
+- **REVIEW_APPROACH**: The in-depth stack review to run before each PR
 - **DEPENDENCY_POLICY**: 24-Hour Rule (lockfile changes ride in the work PR) or opted out (and why)
 - **CHANGELOG_STATUS**: Whether to prompt for updates
 - **TESTS_PASSING**: Whether tests were green at start

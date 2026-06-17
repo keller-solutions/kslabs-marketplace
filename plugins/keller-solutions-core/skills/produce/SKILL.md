@@ -1,7 +1,7 @@
 ---
 name: produce
-description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, proper commits, and quality gates (including a review across the nine quality dimensions). Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.2.0
+description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of /ks-feature or /ks-ticket workflow.
+version: 1.3.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -64,10 +64,10 @@ curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -d '{"status": "in progress"}'
 ```
 
-**Note**: Update the ticket status at each major milestone:
+**Note**: Use the project's own status names (discovered during prep) and keep the ticket accurate in real time. The standard milestones:
 
 - **In Progress**: When starting work
-- **In Review**: When PR is created (see `/ks-present`)
+- **In Review / Awaiting Review**: When the PR is created (`/ks-present`) — or, in **Epic Mode**, the moment a child's commit and evidence land, even though the single PR comes later. See [Epic Mode](../../references/epic-mode.md).
 - **Done**: When merged (product owner typically handles this)
 
 ### Step 1.4: Determine AI Visibility
@@ -238,9 +238,9 @@ Run full test suite after refactoring:
 bin/rails test
 ```
 
-#### Step 3.4: Commit
+#### Step 3.4: Commit (once per story)
 
-After each criterion is implemented and tests pass:
+A user story is one unit of work → **one commit**. Run Red-Green-Refactor for *every* acceptance criterion in the story first; commit once when they all pass (a story with 6 criteria is still 1 commit, not 6). Additional commits are only for later refactor or review feedback.
 
 ```bash
 git add .
@@ -260,15 +260,14 @@ git push
 
 **Commit rules:**
 
-- Each commit is independently functional with passing tests
-- No debug code (`console.log`, `binding.pry`, `puts`)
-- No commented-out code
-- Reference ticket with `Refs #123`
-- Push after each commit (git integrity)
+- **One commit per story, not per criterion** — the story is the unit; the commit is independently functional with all its tests passing
+- No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
+- Reference the ticket with `Refs #123`
+- Push after the commit (git integrity — no squashing later)
 
-### Repeat for Each Criterion
+### Repeat the Cycle
 
-Continue the Red-Green-Refactor cycle until all acceptance criteria are implemented.
+Run Red-Green-Refactor across the story's criteria, commit once, done. In **Epic Mode** the next story is the next child ticket on the shared epic branch — see [Epic Mode](../../references/epic-mode.md).
 
 ---
 
@@ -494,5 +493,6 @@ This skill integrates with commands from dependent plugins:
 - [The F5 Principle](../../references/f5-manifesto.md) - "If it isn't scripted, it's magic—bad magic"
 - [Guiding Principles](../../references/guiding-principles.md) - The six principles
 - [Quality Dimensions](../../references/quality-dimensions.md) - The nine dimensions every feature is evaluated against
+- [Epic Mode](../../references/epic-mode.md) - One commit per child story; whole epic in one branch/PR
 - [Git Integrity](../../references/git-integrity.md) - "Thou Shalt Not Lie"
 - [Test Coverage Philosophy](../../references/test-coverage-philosophy.md) - Why 100% coverage matters

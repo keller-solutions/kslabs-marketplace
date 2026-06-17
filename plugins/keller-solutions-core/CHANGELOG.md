@@ -5,6 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-06-17
+
+### Added
+
+- **Epic Mode** reference (`references/epic-mode.md`) — delivering an epic/parent
+  ticket as a single branch and a single PR: detect the epic and its children,
+  iterate the produce skill over each child **in order** (one commit per child,
+  status kept live, evidence captured as each child is done), run the project's
+  in-depth stack review, then present **once**.
+- **prep** skill - now discovers the project's **status workflow** (actual state
+  names + order) and **code-review approach**, surfaced in the Development Context.
+- **managing-tickets** skill - adds status-workflow discovery, an evidence
+  attachment operation per tool (ClickUp attaches as you go; GitHub/Jira/Linear
+  hold-and-batch), and an epic lifecycle section.
+
+### Changed
+
+- **produce** skill - commit rule corrected to **one commit per user story**
+  (not per acceptance criterion); a story with 6 criteria is still 1 commit. Adds
+  Epic Mode awareness (reuse the epic branch, set child status to awaiting-review
+  when its commit lands).
+- **present** skill - adds an in-depth, stack-appropriate review (e.g. DHH for
+  Rails) before **every** PR; the specific review is a project-level
+  determination. In Epic Mode, present runs once for the whole epic.
+- **ks-ticket** command - detects an epic/parent ticket and routes to Epic Mode
+  (one branch/PR, ordered child iteration); single tickets are unchanged.
+
 ## [1.3.0] - 2026-06-14
 
 ### Added
