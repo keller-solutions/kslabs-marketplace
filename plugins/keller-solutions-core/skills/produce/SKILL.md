@@ -264,7 +264,7 @@ git push
 
 - **One commit per story, not per criterion** — the story is the unit; the commit is independently functional with all its tests passing
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
-- Reference the ticket with `Refs <id>` — `Refs #123` (GitHub), your tool's ID, e.g. `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps auto-linking)
+- Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
 - Push after the commit (git integrity — no squashing later)
 
 ### Repeat the Cycle

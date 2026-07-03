@@ -37,8 +37,8 @@ gh issue list --limit 1 2>/dev/null && echo "TOOL=github"
 ([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "TOOL=clickup"
 
 # Check for Azure DevOps (file, .env, env var, or dev.azure.com remote)
-([ -f ".azuredevops" ] || grep -q "azure" .env 2>/dev/null || [ -n "$AZURE_DEVOPS_EXT_PAT" ]) && echo "TOOL=azure-devops"
-git remote -v 2>/dev/null | grep -q "dev\.azure\.com" && echo "TOOL=azure-devops"
+([ -f ".azuredevops" ] || grep -q "AZURE_DEVOPS" .env 2>/dev/null || [ -n "$AZURE_DEVOPS_EXT_PAT" ] \
+  || git remote -v 2>/dev/null | grep -q "dev\.azure\.com") && echo "TOOL=azure-devops"
 ```
 
 ### Detection Priority
@@ -58,8 +58,9 @@ Tokens resolve in this order: **environment variable → Apple Keychain → 1Pas
 ### Apple Keychain (preferred)
 
 ```bash
-# Store a token once (prompts for the secret, keeping it out of shell history)
-security add-generic-password -s CLICKUP_API_TOKEN -a "$USER" -w
+# Store a token once — trailing -w prompts for the secret, keeping it out of
+# shell history; -U updates the entry if it already exists
+security add-generic-password -U -s CLICKUP_API_TOKEN -a "$USER" -w
 
 # Read a token
 security find-generic-password -s CLICKUP_API_TOKEN -w

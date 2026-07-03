@@ -208,7 +208,8 @@ curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Content-Type: application/json" \
   -d '{"status": "in review"}'
 
-# Example for Azure DevOps (or reference AB#[ID] in the PR title/description)
+# Example for Azure DevOps (or reference AB#[ID] in the PR title/description);
+# set the project's awaiting-review state — the Agile template calls it "Resolved"
 az boards work-item update --id [WORK_ITEM_ID] \
   --state "Resolved" --discussion "PR created: ${PR_URL}"
 ```

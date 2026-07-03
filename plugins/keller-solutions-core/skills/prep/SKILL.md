@@ -363,7 +363,7 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 ([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "Jira"
 ([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "ClickUp"
 [ -f ".linear" ] && echo "Linear"
-([ -f ".azuredevops" ] || [ -n "$AZURE_DEVOPS_EXT_PAT" ] || git remote -v 2>/dev/null | grep -q "dev\.azure\.com") && echo "Azure DevOps"
+([ -f ".azuredevops" ] || grep -q "AZURE_DEVOPS" .env 2>/dev/null || [ -n "$AZURE_DEVOPS_EXT_PAT" ] || git remote -v 2>/dev/null | grep -q "dev\.azure\.com") && echo "Azure DevOps"
 ```
 
 ### Discover the Status Workflow
