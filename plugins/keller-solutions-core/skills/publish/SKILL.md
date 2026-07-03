@@ -278,6 +278,9 @@ curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"comment_text": "Released in v1.1.0"}'
+
+# Azure DevOps
+az boards work-item update --id [WORK_ITEM_ID] --discussion "Released in v1.1.0"
 ```
 
 Note: The product owner typically closes issues after acceptance testing.

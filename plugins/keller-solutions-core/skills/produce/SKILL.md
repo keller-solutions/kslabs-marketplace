@@ -59,9 +59,11 @@ jira issue move [TICKET_KEY] "In Progress"
 
 # ClickUp - see managing-tickets skill for full setup
 curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
-  -H "Authorization: ${CLICKUP_API_TOKEN}" \
-  -H "Content-Type: application/json" \
+  -H "Authorization: ${CLICKUP_API_TOKEN}" -H "Content-Type: application/json" \
   -d '{"status": "in progress"}'
+
+# Azure DevOps
+az boards work-item update --id [WORK_ITEM_ID] --state "Active"
 ```
 
 **Note**: Use the project's own status names (discovered during prep) and keep the ticket accurate in real time. The standard milestones:
@@ -262,7 +264,7 @@ git push
 
 - **One commit per story, not per criterion** — the story is the unit; the commit is independently functional with all its tests passing
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
-- Reference the ticket with `Refs <id>` — `Refs #123` (GitHub) or your tool's ID, e.g. `Refs EADEV-180` (Jira/ClickUp/Linear)
+- Reference the ticket with `Refs <id>` — `Refs #123` (GitHub), your tool's ID, e.g. `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps auto-linking)
 - Push after the commit (git integrity — no squashing later)
 
 ### Repeat the Cycle

@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-07-02
+
+### Added
+
+- **Azure DevOps support** — new project management tool option across the
+  workflow. The managing-tickets skill gains a full Azure DevOps section
+  (`az boards` via the Azure DevOps CLI extension, authenticated with a
+  Personal Access Token through `AZURE_DEVOPS_EXT_PAT`): create/read work
+  items, update state, comment via `--discussion`, and `AB#[ID]` PR
+  auto-linking. Detection (prep + managing-tickets) recognizes
+  `.azuredevops`, `.env` references, `AZURE_DEVOPS_EXT_PAT`, or a
+  `dev.azure.com` git remote. Epic Mode maps Epic/Feature work items with
+  parent/child links; plan, produce, present, and publish reference the new
+  tool in their quick references.
+
+### Changed
+
+- **Credential management** — Apple Keychain (`security` CLI) is now the
+  preferred token store, reflecting the move away from 1Password; 1Password
+  remains in use as a fallback. Tokens resolve environment variable →
+  Apple Keychain → 1Password via a shared `get_token` pattern in the
+  managing-tickets skill.
+
 ## [1.4.0] - 2026-06-17
 
 ### Added

@@ -194,7 +194,7 @@ Link the PR to your project management tool. See [managing-tickets](../managing-
 
 **GitHub Issues:** Use `Refs #[NUMBER]` in PR body (automatic linking).
 
-**Jira/ClickUp/Linear:** Add PR link as comment and update status to "In Review":
+**Jira/ClickUp/Linear/Azure DevOps:** Add PR link as comment and update status to "In Review":
 
 ```bash
 # Example for ClickUp - see managing-tickets for full setup
@@ -207,6 +207,10 @@ curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"status": "in review"}'
+
+# Example for Azure DevOps (or reference AB#[ID] in the PR title/description)
+az boards work-item update --id [WORK_ITEM_ID] \
+  --state "Resolved" --discussion "PR created: ${PR_URL}"
 ```
 
 ---

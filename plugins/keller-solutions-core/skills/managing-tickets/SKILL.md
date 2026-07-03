@@ -1,7 +1,7 @@
 ---
 name: managing-tickets
-description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
-version: 1.1.0
+description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
+version: 1.2.0
 argument-hint: "<tool> <operation> [options]"
 ---
 
@@ -13,7 +13,7 @@ Unified interface for interacting with project management tools across the devel
 
 **One skill for all ticket operations, regardless of the tool.**
 
-Whether your project uses GitHub Issues, Jira, ClickUp, or Linear, this skill provides consistent patterns for creating, reading, updating, and linking tickets.
+Whether your project uses GitHub Issues, Jira, ClickUp, Linear, or Azure DevOps, this skill provides consistent patterns for creating, reading, updating, and linking tickets.
 
 ---
 
@@ -34,9 +34,11 @@ gh issue list --limit 1 2>/dev/null && echo "TOOL=github"
 ([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "TOOL=jira"
 
 # Check for ClickUp (file, .env, or environment variable)
-[ -f ".clickup" ] && echo "TOOL=clickup"
-grep -q "clickup" .env 2>/dev/null && echo "TOOL=clickup"
-[ -n "$CLICKUP_API_TOKEN" ] && echo "TOOL=clickup"
+([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "TOOL=clickup"
+
+# Check for Azure DevOps (file, .env, env var, or dev.azure.com remote)
+([ -f ".azuredevops" ] || grep -q "azure" .env 2>/dev/null || [ -n "$AZURE_DEVOPS_EXT_PAT" ]) && echo "TOOL=azure-devops"
+git remote -v 2>/dev/null | grep -q "dev\.azure\.com" && echo "TOOL=azure-devops"
 ```
 
 ### Detection Priority
@@ -45,24 +47,38 @@ grep -q "clickup" .env 2>/dev/null && echo "TOOL=clickup"
 2. **Linear** - Check for `.linear` config file
 3. **Jira** - Check for `.jira` or jira references in `.env`
 4. **ClickUp** - Check for `.clickup`, env file, or `CLICKUP_API_TOKEN`
+5. **Azure DevOps** - Check for `.azuredevops`, env file, `AZURE_DEVOPS_EXT_PAT`, or a `dev.azure.com` git remote
 
 ---
 
 ## Credential Management
 
-### 1Password Integration
+Tokens resolve in this order: **environment variable → Apple Keychain → 1Password**. We have moved away from 1Password toward Apple Keychain, but both are still in use — prefer Keychain, and fall through to 1Password before giving up.
 
-For tools requiring API tokens, use 1Password CLI:
+### Apple Keychain (preferred)
 
 ```bash
-# ClickUp token from 1Password (Private vault)
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
+# Store a token once (prompts for the secret, keeping it out of shell history)
+security add-generic-password -s CLICKUP_API_TOKEN -a "$USER" -w
 
-# Jira token from 1Password
-JIRA_API_TOKEN="${JIRA_API_TOKEN:-$(op read "op://Private/JIRA_API_TOKEN/credential")}"
+# Read a token
+security find-generic-password -s CLICKUP_API_TOKEN -w
+```
 
-# Linear token from 1Password
-LINEAR_API_KEY="${LINEAR_API_KEY:-$(op read "op://Private/LINEAR_API_KEY/credential")}"
+### Resolution Pattern
+
+Falls back to 1Password (`op read`, Private vault) for tokens not yet migrated:
+
+```bash
+get_token() {
+  security find-generic-password -s "$1" -w 2>/dev/null \
+    || op read "op://Private/$1/credential" 2>/dev/null
+}
+
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(get_token CLICKUP_API_TOKEN)}"
+JIRA_API_TOKEN="${JIRA_API_TOKEN:-$(get_token JIRA_API_TOKEN)}"
+LINEAR_API_KEY="${LINEAR_API_KEY:-$(get_token LINEAR_API_KEY)}"
+AZURE_DEVOPS_EXT_PAT="${AZURE_DEVOPS_EXT_PAT:-$(get_token AZURE_DEVOPS_EXT_PAT)}"
 ```
 
 ### Environment Variables
@@ -73,6 +89,7 @@ Alternatively, set tokens in `.env` (not committed):
 CLICKUP_API_TOKEN=pk_xxx
 JIRA_API_TOKEN=xxx
 LINEAR_API_KEY=lin_api_xxx
+AZURE_DEVOPS_EXT_PAT=xxx
 ```
 
 ---
@@ -98,8 +115,6 @@ gh issue create \
 - [ ] Projects section header is visible
 - [ ] Each project shows name and last scan date
 - [ ] Projects are sorted by last activity (most recent first)
-- [ ] Clicking a project navigates to the project detail page
-- [ ] Empty state shown when no projects exist
 EOF
 )"
 ```
@@ -123,10 +138,8 @@ gh issue list --assignee "@me"
 gh issue edit [ISSUE_NUMBER] --add-label "status:in-progress"
 gh issue edit [ISSUE_NUMBER] --remove-label "status:in-progress" --add-label "status:in-review"
 
-# Close issue
+# Close / reopen issue
 gh issue close [ISSUE_NUMBER]
-
-# Reopen issue
 gh issue reopen [ISSUE_NUMBER]
 ```
 
@@ -140,19 +153,12 @@ gh issue comment [ISSUE_NUMBER] --body "Released in v1.1.0"
 #### Apply Labels
 
 ```bash
-# Add labels during creation
+# Add labels during creation or to an existing issue
 gh issue create --title "..." --body "..." --label "feature"
-
-# Add labels to existing issue
 gh issue edit [ISSUE_NUMBER] --add-label "bug"
 ```
 
-Common labels:
-
-- `feature` - New functionality
-- `bug` - Something broken
-- `chore` - Maintenance task
-- `epic:[name]` - Links to parent epic
+Common labels: `feature` (new functionality), `bug` (something broken), `chore` (maintenance), `epic:[name]` (links to parent epic).
 
 #### Link PR to Issue
 
@@ -185,8 +191,6 @@ h2. Acceptance Criteria
 * Projects section header is visible
 * Each project shows name and last scan date
 * Projects are sorted by last activity (most recent first)
-* Clicking a project navigates to the project detail page
-* Empty state shown when no projects exist
 EOF
 )"
 ```
@@ -211,19 +215,11 @@ jira issue move [ISSUE_KEY] "In Review"
 jira issue move [ISSUE_KEY] "Done"
 ```
 
-#### Add Comment
+#### Add Comment / Link PR
 
 ```bash
+# PR links are added as comments (or use Jira's GitHub integration if configured)
 jira issue comment add [ISSUE_KEY] "PR created: https://github.com/owner/repo/pull/123"
-```
-
-#### Link PR to Issue
-
-```bash
-# Add PR link as comment
-jira issue comment add [ISSUE_KEY] "PR: https://github.com/owner/repo/pull/123"
-
-# Or use Jira's GitHub integration if configured
 ```
 
 ---
@@ -235,8 +231,8 @@ ClickUp uses REST API calls with `curl`.
 #### Setup
 
 ```bash
-# Token from env var or 1Password
-CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(op read "op://Private/CLICKUP_API_TOKEN/credential")}"
+# Token from env var, Apple Keychain, or 1Password (see Credential Management)
+CLICKUP_API_TOKEN="${CLICKUP_API_TOKEN:-$(get_token CLICKUP_API_TOKEN)}"
 
 # Find your list ID from ClickUp URL or via API
 CLICKUP_LIST_ID="your_list_id"
@@ -260,13 +256,10 @@ EOF
 #### Read Task
 
 ```bash
-# Get task by ID (find ID in ClickUp URL: https://app.clickup.com/t/[TASK_ID])
+# Get task by ID (find ID in ClickUp URL: https://app.clickup.com/t/[TASK_ID]);
+# list tasks via GET /list/{id}/task
 curl -s "https://api.clickup.com/api/v2/task/[TASK_ID]" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" | jq '.name, .status.status'
-
-# List tasks in a list
-curl -s "https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task" \
-  -H "Authorization: ${CLICKUP_API_TOKEN}" | jq '.tasks[] | {id, name, status: .status.status}'
 ```
 
 #### Update Status
@@ -281,29 +274,14 @@ curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
 # Common status names: "to do", "in progress", "in review", "complete"
 ```
 
-#### Add Comment
+#### Add Comment / Link PR
 
 ```bash
+# PR links are added as comments; pair with an Update Status call to "in review"
 curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
   -H "Authorization: ${CLICKUP_API_TOKEN}" \
   -H "Content-Type: application/json" \
   -d "{\"comment_text\": \"PR created: ${PR_URL}\"}"
-```
-
-#### Link PR to Task
-
-```bash
-# Add PR link as comment
-curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/comment" \
-  -H "Authorization: ${CLICKUP_API_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "{\"comment_text\": \"PR created: ${PR_URL}\"}"
-
-# Update status to "in review"
-curl -X PUT "https://api.clickup.com/api/v2/task/[TASK_ID]" \
-  -H "Authorization: ${CLICKUP_API_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d '{"status": "in review"}'
 ```
 
 ---
@@ -315,14 +293,13 @@ Linear uses GraphQL API or the `linear` CLI.
 #### Setup
 
 ```bash
-# Token from env var or 1Password
-LINEAR_API_KEY="${LINEAR_API_KEY:-$(op read "op://Private/LINEAR_API_KEY/credential")}"
+# Token from env var, Apple Keychain, or 1Password (see Credential Management)
+LINEAR_API_KEY="${LINEAR_API_KEY:-$(get_token LINEAR_API_KEY)}"
 ```
 
 #### Create Issue
 
 ```bash
-# Using Linear CLI
 linear issue create \
   --title "User sees project list on dashboard" \
   --description "$(cat <<'EOF'
@@ -337,44 +314,98 @@ linear issue create \
 - [ ] Projects are sorted by last activity
 EOF
 )"
-
-# Using API
-curl -X POST https://api.linear.app/graphql \
-  -H "Authorization: ${LINEAR_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "mutation { issueCreate(input: { title: \"User sees project list\", teamId: \"TEAM_ID\" }) { issue { id identifier } } }"
-  }'
 ```
 
 #### Read Issue
 
 ```bash
-# Using Linear CLI
 linear issue view [ISSUE_ID]
-
-# List issues
 linear issue list
 ```
 
 #### Update Status
 
 ```bash
-# Using Linear CLI
 linear issue update [ISSUE_ID] --state "In Progress"
 linear issue update [ISSUE_ID] --state "In Review"
 ```
 
-#### Add Comment
+#### Add Comment / Link PR
 
 ```bash
-# Using API
+# PR links are added as comments via the API
 curl -X POST https://api.linear.app/graphql \
   -H "Authorization: ${LINEAR_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation { commentCreate(input: { issueId: \"ISSUE_ID\", body: \"PR created\" }) { comment { id } } }"
   }'
+```
+
+---
+
+### Azure DevOps
+
+Azure DevOps uses the `az` CLI with the Azure DevOps extension, authenticated with a Personal Access Token (PAT).
+
+#### Setup
+
+```bash
+# One-time: install the extension
+az extension add --name azure-devops
+
+# PAT from env var, Apple Keychain, or 1Password (see Credential Management);
+# the az CLI picks up AZURE_DEVOPS_EXT_PAT automatically
+export AZURE_DEVOPS_EXT_PAT="${AZURE_DEVOPS_EXT_PAT:-$(get_token AZURE_DEVOPS_EXT_PAT)}"
+
+# Set defaults once per project
+az devops configure --defaults organization=https://dev.azure.com/[ORG] project=[PROJECT]
+```
+
+#### Create Work Item
+
+```bash
+az boards work-item create \
+  --type "User Story" \
+  --title "User sees project list on dashboard" \
+  --description "<b>In order to</b> quickly resume work on recent audits<br><b>As a</b> returning user on the dashboard<br><b>I want</b> to see my projects listed by last activity<br><h2>Acceptance Criteria</h2><ul><li>Projects section header is visible</li><li>Each project shows name and last scan date</li><li>Projects are sorted by last activity</li></ul>"
+```
+
+Note: work item descriptions render as HTML, not markdown.
+
+#### Read Work Item
+
+```bash
+# View work item
+az boards work-item show --id [WORK_ITEM_ID]
+
+# List my open work items
+az boards query --wiql "SELECT [System.Id], [System.Title], [System.State] FROM WorkItems WHERE [System.AssignedTo] = @Me AND [System.State] <> 'Closed'"
+```
+
+#### Update Status
+
+```bash
+az boards work-item update --id [WORK_ITEM_ID] --state "Active"
+az boards work-item update --id [WORK_ITEM_ID] --state "Resolved"
+
+# States vary by process template (Agile: New → Active → Resolved → Closed)
+```
+
+#### Add Comment
+
+```bash
+az boards work-item update --id [WORK_ITEM_ID] --discussion "PR created: ${PR_URL}"
+```
+
+#### Link PR to Work Item
+
+```bash
+# In the PR title/description or commit message, reference the work item:
+# AB#123 (auto-links; can auto-complete the work item on merge if configured)
+
+# Or add the PR link as a comment
+az boards work-item update --id [WORK_ITEM_ID] --discussion "PR: ${PR_URL}"
 ```
 
 ---
@@ -420,6 +451,9 @@ jira issue move [ISSUE_KEY] --help   # or view the board's columns
 
 # GitHub — project columns or status: labels
 gh label list | grep -i status
+
+# Azure DevOps — states follow the process template (Agile: New → Active →
+# Resolved → Closed); confirm against the board columns in the web UI
 ```
 
 ### Attaching Evidence
@@ -434,7 +468,7 @@ Capture evidence (screenshots, recordings, test output) as each ticket is done.
     -F "attachment=@./evidence/EADEV-180.png"
   ```
 
-- **GitHub / Jira / Linear — hold and batch.** File upload needs developer involvement (no clean CLI image upload), so collect evidence during the work and attach/link it in a batch at PR time; post links or markdown inline where possible.
+- **GitHub / Jira / Linear / Azure DevOps — hold and batch.** File upload needs developer involvement (no clean CLI image upload), so collect evidence during the work and attach/link it in a batch at PR time; post links or markdown inline where possible.
 
 ### Epic Lifecycle
 
@@ -444,41 +478,13 @@ An epic/parent ticket is a **grouping** — it gets no commit of its own. Its ch
 
 ## Quick Reference
 
-### GitHub Issues
-
-```bash
-gh issue create --title "..." --body "..."
-gh issue view [NUMBER]
-gh issue edit [NUMBER] --add-label "status:in-progress"
-gh issue comment [NUMBER] --body "..."
-gh issue close [NUMBER]
-```
-
-### Jira
-
-```bash
-jira issue create --type Story --summary "..." --body "..."
-jira issue view [KEY]
-jira issue move [KEY] "In Progress"
-jira issue comment add [KEY] "..."
-```
-
-### ClickUp
-
-```bash
-# Create: POST /list/{id}/task
-# Read: GET /task/{id}
-# Update: PUT /task/{id}
-# Comment: POST /task/{id}/comment
-```
-
-### Linear
-
-```bash
-linear issue create --title "..."
-linear issue view [ID]
-linear issue update [ID] --state "In Progress"
-```
+| Operation | GitHub | Jira | ClickUp (REST) | Linear | Azure DevOps |
+|-----------|--------|------|----------------|--------|--------------|
+| Create | `gh issue create` | `jira issue create` | `POST /list/{id}/task` | `linear issue create` | `az boards work-item create` |
+| Read | `gh issue view` | `jira issue view` | `GET /task/{id}` | `linear issue view` | `az boards work-item show` |
+| Status | `gh issue edit --add-label` | `jira issue move` | `PUT /task/{id}` | `linear issue update --state` | `az boards work-item update --state` |
+| Comment | `gh issue comment` | `jira issue comment add` | `POST /task/{id}/comment` | GraphQL `commentCreate` | `az boards work-item update --discussion` |
+| Close | `gh issue close` | `jira issue move [KEY] "Done"` | `PUT /task/{id}` status | `--state "Done"` | `--state "Closed"` |
 
 ---
 
@@ -488,4 +494,6 @@ linear issue update [ID] --state "In Progress"
 - [Jira CLI Documentation](https://github.com/ankitpokhrel/jira-cli)
 - [ClickUp API Documentation](https://clickup.com/api)
 - [Linear API Documentation](https://developers.linear.app/docs)
+- [Azure DevOps CLI Documentation](https://learn.microsoft.com/en-us/azure/devops/cli/)
+- [Apple Keychain `security` CLI](https://ss64.com/mac/security.html)
 - [1Password CLI Documentation](https://developer.1password.com/docs/cli/)
