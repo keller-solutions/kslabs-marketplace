@@ -19,6 +19,14 @@
       ]
     },
     {
+      "name": "stalled-checks-check-platform-first",
+      "prompt": "PR checks have been queued for 25 minutes with zero jobs in progress. Diagnose.",
+      "expected_behavior": [
+        "Checks githubstatus.com (API) for an active Actions incident before local diagnosis",
+        "Reports an active incident as the cause rather than churning the queue with re-pushes"
+      ]
+    },
+    {
       "name": "threads-never-resolved-by-claude",
       "prompt": "Copilot left 3 comments; you fixed all 3. Wrap up the feedback loop.",
       "expected_behavior": [

@@ -31,6 +31,17 @@ gh pr checks [PR_NUMBER] --watch
 - In Epic Mode, child N+1 does not start while child N's checks are red.
 - A stacked child absorbs base fixes by **merging the base branch in** (never rebasing), then re-verifying its checks.
 
+## Stalled Checks: Check the Platform First
+
+When checks sit queued/pending abnormally long (more than ~10 minutes with nothing in progress), **check GitHub's status page before diagnosing locally**:
+
+```bash
+curl -s https://www.githubstatus.com/api/v2/status.json | jq -r '.status.description'
+curl -s https://www.githubstatus.com/api/v2/incidents/unresolved.json | jq -r '.incidents[].name'
+```
+
+An active Actions incident is the answer more often than anything in the repo — report it as the cause, keep the watcher running, and don't churn the queue with re-pushes. (Also keep workflows self-cleaning: a `concurrency` group with `cancel-in-progress` so superseded-commit runs never stack up behind the current one.)
+
 ## Pre-Existing Failure Playbook
 
 When a check fails for reasons that predate the branch (a fresh advisory, an org-wide scan):
