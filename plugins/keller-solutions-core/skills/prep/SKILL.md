@@ -341,6 +341,7 @@ These settings will be used throughout the workflow:
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
 | **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
 | **CHANGELOG** | [Current / Needs update / Not found] | Must update before PR |
+| **Repo Baseline** | [present items, e.g. ruleset ✓, bin/ci ✓, Renovate ✗] | Server-side reinforcements on owned repos ([Repo Baseline](../../references/repo-baseline.md)) |
 
 ### What This Means
 

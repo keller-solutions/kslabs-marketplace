@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   runner; the retro rule in `docs/evals.md` requires every session
   correction to land as skill text *and* an eval case in the same PR, so
   regressions can't return silently. (#36)
+- **KS repo baseline documented** — `references/repo-baseline.md`:
+  branch rulesets (block force pushes, required checks, optional
+  auto-Copilot-review with its cost stated), edited `bin/ci` +
+  gh-signoff recorded local gates, Renovate shared preset (advisories as
+  green bot PRs), tuned `copilot-instructions.md`, and a changelog CI
+  check — each item guidance with enforces/costs, adopted per repo. prep
+  reports which baseline items a repo has in the Development Context. (#37)
 - **Guardrail hooks** — the plugin now ships deterministic enforcement in
   `hooks/`: `gh pr merge` (any form) and force pushes are denied with
   what-to-do-instead reasons; CLI remote-branch deletion (closes dependent
