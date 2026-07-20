@@ -137,6 +137,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   gains Step 2.0: promote `[Unreleased]` into the versioned section with
   human curation (optional `git cliff --unreleased` keepachangelog
   drafting). (#35)
+- **prep is reality-checked, cached, and a bookend** — Step 1.0 reads
+  project memory (lessons applied, not rediscovered) and a `.ks/`
+  context cache with a staleness check, fast-pathing repeat sessions;
+  stale-state cleanup now catches uncommitted/unpushed work, orphaned dev
+  servers, and leftover worktrees (rolling back their shared-dev-DB
+  migrations first — an orphaned migration once drifted for 18 days);
+  the database step flags phantom migrations and schema drift at session
+  start. present and publish close by offering the "next thing" prep
+  pass, making prep both ends of the session. (#38)
 
 ## [1.5.0] - 2026-07-02
 

@@ -409,6 +409,8 @@ Please review the PR and merge when satisfied.
 
 **To merge** (your act — Claude never merges): use the **merge-commit** method, then delete the branch **via the GitHub UI/API** (auto-retargets any dependent PRs; CLI deletion closes them). No squash — history stays honest ([Git Integrity](../../references/git-integrity.md)).
 
+*Bookend*: once handed back, offer to run `/ks-prep` — "getting ready for the next thing" — so stray state, drift, and dependencies are settled before the next session starts.
+
 ---
 ```
 

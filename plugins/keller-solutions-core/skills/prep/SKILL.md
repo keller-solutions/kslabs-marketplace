@@ -21,6 +21,13 @@ Preparation prevents wasted effort, ensures you're working from the latest code,
 
 ## Phase 1: Project Orientation
 
+### Step 1.0: Fast-Path from Cached Context
+
+Prep's findings persist between sessions — don't re-derive what's already known:
+
+1. **Read the project's Claude memory** (its memory index and any feedback/lesson notes) and the CLAUDE.md `Ticket Workflow` block. A recorded lesson is *applied*, not rediscovered — if a note says "run X before deploy," X is now part of this session's gates.
+2. **Read `.ks/context.json`** (gitignored, written by Step 4 below). If it exists and is fresh — no changes to CI config, CLAUDE.md, or lockfiles since it was written, and less than a week old — print its Development Context table with a "cached, verified fresh" note and skip straight to Phase 2's hygiene steps (pull, stray-state, drift, gate). Stale or absent → full orientation below, then rewrite the cache.
+
 ### Step 1.1: Detect Project Type
 
 Examine the project root to understand the tech stack:
@@ -136,17 +143,20 @@ git checkout develop 2>/dev/null || git checkout main
 git pull --ff-only
 ```
 
-### Step 2.3: Clean Up Stale Branches
+### Step 2.3: Clean Up Stale State
 
-Remove local branches that no longer exist on origin:
+Remove branches that no longer exist on origin — and catch what the last session left behind:
 
 ```bash
-# Prune remote-tracking branches
 git fetch --prune
-
-# Delete merged local branches (except main/develop)
 git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; do git branch -d "$branch" 2>/dev/null || true; done
+
+git status --short                 # uncommitted work from a prior session? surface it, don't stash it silently
+git log --branches --not --remotes --oneline | head -5   # committed but never pushed?
+git worktree list                  # leftover worktrees?
 ```
+
+**Worktree rule**: before removing a leftover worktree, check whether it ran migrations against the shared dev database (`bin/rails db:migrate:status` — Down entries whose files exist only in the worktree) and roll them back first. An orphaned worktree migration once left schema drift undetected for 18 days. Also check for orphaned dev servers (`lsof -i :3000 -i :3036 2>/dev/null`) and kill ones no session owns.
 
 ### Step 2.4: Check Dependency Freshness
 
@@ -181,10 +191,12 @@ For database-backed applications:
 **Rails:**
 
 ```bash
-bin/rails db:migrate:status
-# Run pending migrations if needed:
+bin/rails db:migrate:status        # pending migrations — and phantom ones (status without a file = drift)
+git diff --stat -- db/schema.rb    # schema drift the last session left behind
 bin/rails db:migrate
 ```
+
+Phantom migrations or unexplained schema.rb changes are **drift** — flag and resolve them now, at session start, not weeks later in an audit.
 
 **Laravel:**
 
@@ -390,6 +402,8 @@ These values should be remembered and applied in produce/present:
 - **DEPENDENCY_POLICY**: 24-Hour Rule (lockfile changes ride in the work PR) or opted out (and why)
 - **CHANGELOG_STATUS**: Whether to prompt for updates
 - **TESTS_PASSING**: Whether tests were green at start
+
+**Persist the table**: write these values to `.ks/context.json` (gitignored) with a timestamp and the checksums of CI config, CLAUDE.md, and lockfiles — Step 1.0's fast-path reads it next session.
 
 ---
 

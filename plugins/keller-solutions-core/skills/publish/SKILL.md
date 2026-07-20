@@ -289,14 +289,18 @@ az boards work-item update --id [WORK_ITEM_ID] --discussion "Released in v1.1.0"
 
 Note: The product owner typically closes issues after acceptance testing.
 
-### Step 5.2: Clean Up Release Branch
+### Step 5.2: Prep for the Next Thing
+
+Offer to run `/ks-prep` as the closing bookend — the release is out; leave the environment the way the next session wants to find it (stray state cleaned, drift checked, dependencies current).
+
+### Step 5.3: Clean Up Release Branch
 
 ```bash
 git branch -d release/v1.1.0
 git push origin --delete release/v1.1.0
 ```
 
-### Step 5.3: Document Any Issues
+### Step 5.4: Document Any Issues
 
 If issues were found during deployment:
 
