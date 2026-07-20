@@ -34,7 +34,7 @@ fi
 
 ### Step 1.2: Get the Ticket
 
-Retrieve the **full ticket body** — never plan from a title (titles-only analysis has produced materially wrong groupings, including working a ticket that was already Closed):
+Retrieve the **full ticket body** — never plan from a title (titles-only analysis has produced materially wrong groupings, including working a ticket that was already Closed). **Blocking questions**: if the ticket number is missing or any decision needs the developer, use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply) — never silently skip the question or choose a default on the developer's behalf:
 
 ```bash
 # If ticket number provided
@@ -43,8 +43,6 @@ gh issue view [TICKET_NUMBER] --json title,body,labels,state
 # If "current" or no argument, check branch name for ticket reference
 # Or ask user for ticket number
 ```
-
-**Blocking questions**: whenever this skill needs the developer's answer — a decision, a confirmation, a choice (a missing ticket number, an ambiguous scope call) — use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply). Never silently skip the question or choose a default on the developer's behalf.
 
 ### Step 1.3: Update Ticket Status
 

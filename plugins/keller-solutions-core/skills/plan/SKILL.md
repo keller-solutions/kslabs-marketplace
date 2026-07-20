@@ -491,8 +491,6 @@ Run this with honest ✓/✗ verdicts before creating the ticket — an ✗ bloc
 - [ ] Applicable quality dimensions reflected in criteria or Developer Notes (the rest noted N/A)
 - [ ] Title is unique and searchable
 
----
-
 ## More Information
 
 - [Story Map Mode](../../references/story-map-mode.md) - Carding a feature set: epics, coverage, sync rule, checkpoint, QA pass
