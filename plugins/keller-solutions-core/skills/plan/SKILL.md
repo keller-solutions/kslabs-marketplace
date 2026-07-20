@@ -55,8 +55,7 @@ Don't try to determine every question in advance; real questions surface while w
 
 - **Genuine product or scope decision, or conflicting sources**: stop and ask the user, focused on the story at hand.
 - **Low-stakes or cosmetic call**: decide it yourself and log it in a **Planning Decisions** list (decision / rationale / date) for the user to ratify at the end.
-
-**Blocking questions**: whenever this skill needs the developer's answer — a decision, a confirmation, a choice — use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply). Never silently skip the question or choose a default on the developer's behalf.
+- **Asking blocking questions**: use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply). Never silently skip the question or choose a default on the developer's behalf.
 
 If the initial description is too vague to start at all, ask focused questions first:
 
