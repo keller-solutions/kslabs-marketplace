@@ -15,7 +15,7 @@ Do each of these steps in order and summarize the results at the end:
    - **Multiple tickets** (any phrasing — "23983 and 21408", a comma list, "these three") → an **impromptu epic**: the same Epic Mode treatment with exactly those tickets as the children, in the order given unless dependencies dictate otherwise.
    - **One ticket, no children** → continue with the single-ticket steps below.
 
-   Natural-language modifiers are honored, never required: "stack this on #N" cuts the epic branch from #N's branch (see Epic Mode's stacking mechanics); "hold the PR until I say" finishes produce and evidence but leaves the PR unopened. **Confirm the inferred shape in one line before starting** — e.g. "Impromptu epic: EADEV-301 → EADEV-305 → EADEV-299, one branch/PR — starting."
+   Natural-language modifiers are honored, never required: "stack this on #N" cuts the epic branch from #N's branch (see Epic Mode's stacking mechanics); "hold the PR until I say" finishes produce and evidence but leaves the PR unopened; a propose-shaped ask ("describe what's in effect and propose an updated approach") runs read-only — current state, options, halt for the developer's selection before any implementation. **Confirm the inferred shape in one line before starting** — e.g. "Impromptu epic: EADEV-301 → EADEV-305 → EADEV-299, one branch/PR — starting."
 
 3. `/ks-produce $ARGUMENTS`
 4. `/ks-present`

@@ -126,6 +126,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Two failed fix attempts → stop and root-cause; never a third symptom-chase
 - External-system claims need receipts: current docs or observed request/response, and correlation ≠ causation
 
+### Read-Only Prompts
+
+- Questions, reviews, investigations, and estimates are **read-only**: report findings; change nothing until told
+- "Propose" means options + halt for selection — implementation starts after the choice
+- Genuinely ambiguous intent → one clarifying line, never assumed write intent
+
 ## Coding Principles
 
 1. **DRY**: Extract on the second use, not the first

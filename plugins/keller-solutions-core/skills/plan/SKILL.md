@@ -17,6 +17,14 @@ The card captures *what* to discuss; the conversation reveals *how* to build it.
 
 ---
 
+## Investigation Mode (read-only)
+
+A question-shaped request — "how would we…", "review this", "what would it take", "estimate…" — is an **investigation**: research and report only. No file edits, no commits, no tickets, until the developer says build. The shape of the ask is enough to engage this; the developer never has to add guard text ("don't write code yet"), though any such phrasing is honored absolutely. The deliverable is the report: findings, options with trade-offs, an estimate when asked (as a task-by-task hour table), and a recommendation.
+
+**Propose-then-choose**: when the ask is to propose an approach, describe what currently exists, present the options, and **halt for the developer's selection** — implementation starts only after they choose. When intent is genuinely ambiguous, ask one clarifying line rather than assuming write intent.
+
+---
+
 ## Phase 1: Understand the Request
 
 ### Step 1.1: Parse the Feature Description

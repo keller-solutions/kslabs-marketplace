@@ -155,6 +155,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   crash-free-rate check after a bake period. The local GitFlow release
   merge is documented as sanctioned ritual, distinct from PR merges
   (always the developer's act). (#39)
+- **Question-shaped prompts are read-only** — plan gains Investigation
+  Mode: "how would we / estimate / review this" produces research,
+  options, hour-table estimates, and a recommendation — no edits,
+  commits, or tickets until the developer says build; propose-then-choose
+  halts for selection. The shape of the ask engages it (no guard text
+  required); ambiguity gets one clarifying line, never assumed write
+  intent. Encoded in plan, both commands, and the CLAUDE template. (#40)
 
 ## [1.5.0] - 2026-07-02
 
