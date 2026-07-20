@@ -255,6 +255,23 @@ Integration branches (QA, staging, etc.) have different expectations:
 
 If others might have pulled it, don't change it.
 
+### Client Repos: When in Rome
+
+Avoid squash — but **the client's repo policy wins**. When a client org mandates squash-merge (or rebase-merge), follow their convention rather than silently violating it or arguing doctrine on their turf. Record the exception once in the project's context (CLAUDE.md or project memory) so later sessions honor it without re-deciding. Inside the branch, nothing changes: shippable commits, no force pushes, push after each commit — what the *merge button* does to them is the client's call.
+
+---
+
+## Stacking Without Lying
+
+Dependent features on separate PRs, with zero history rewriting (the full mechanics live in [Epic Mode](epic-mode.md)):
+
+1. Cut the dependent branch **from the parent branch**; open its PR **based on the parent** so reviews see only the delta.
+2. Sync by **merging the parent in** when it changes — never rebasing.
+3. When the parent merges, delete its branch **via the GitHub UI or API only** — CLI deletion (`git push --delete`) silently *closes* dependent PRs, while UI/API deletion auto-retargets them to the base.
+4. Verify the retarget, merge the base in once, re-verify checks.
+
+Every mainstream stacking tool (Graphite, ghstack, spr) restacks by rebase + force-push — which is why we do it this way instead.
+
 ---
 
 ## Enforcement

@@ -123,6 +123,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (verified against installed 3.19.0), with a stated rule that a missing
   helper never blocks — do the step manually. README records tested
   dependency versions. (#33)
+- **Git Integrity covers the previously-silent cases** — a client-policy
+  override clause (avoid squash, but the client's repo convention wins,
+  recorded once in project context); a "Stacking Without Lying" recipe
+  (branch from parent, sync by merge, UI/API-only base deletion since CLI
+  deletion closes dependent PRs, verify retarget) with the note that
+  mainstream stacking tools all rebase — which is why we don't use them.
+  (#34; joins #29's `--first-parent` discipline and WIP convention)
 
 ## [1.5.0] - 2026-07-02
 
