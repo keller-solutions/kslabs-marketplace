@@ -74,10 +74,10 @@ az boards work-item update --id [WORK_ITEM_ID] --state "Active"
 
 ### Step 1.4: Determine AI Visibility
 
-Check project preference (detected during prep):
+Check project preference (detected during prep) and apply it to **every** commit, PR body, and feedback reply — the examples in this skill show the Visible form:
 
-- **Visible**: Include `Co-Authored-By` in commits
-- **Invisible**: Standard commits without AI attribution
+- **Visible**: Include `Co-Authored-By: Claude <noreply@anthropic.com>` (generic — never a model-version string, which goes stale)
+- **Invisible**: Standard commits and replies with zero AI references — omit the trailer, the PR badge, and "with the help of Claude Code" phrasing entirely
 
 ### Step 1.5: Create/Verify Feature Branch
 
@@ -254,7 +254,7 @@ by_recent_activity scope.
 
 Refs #123
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
 git push

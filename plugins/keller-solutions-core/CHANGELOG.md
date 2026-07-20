@@ -106,6 +106,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   after compaction. The enforcement ladder (printed checklist → guardrail
   hooks → goal condition → fresh-context verification) is documented in
   the new `references/self-check.md`. (#30)
+- **Attribution and branch targets resolve from the project, not
+  templates** — attribution is generic (`Co-Authored-By: Claude`, never a
+  model-version string) and fully conditional on the project's visibility
+  preference (Invisible projects get zero AI references anywhere); present
+  detects the target branch (develop when it exists, else the repo's
+  default; hotfixes → main; stacked epics → parent branch) instead of
+  hardcoding develop; and the hand-back's merge guidance now matches
+  doctrine — merge commit, UI/API branch deletion, no squash (the old
+  `gh pr merge --squash --delete-branch` suggestion contradicted Git
+  Integrity). (#32)
 
 ## [1.5.0] - 2026-07-02
 

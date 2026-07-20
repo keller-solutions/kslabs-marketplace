@@ -125,17 +125,22 @@ Capture a test summary for the PR body: `bin/rails test:all 2>&1 | tail -20`
 
 ### Step 3.1: Determine Target Branch
 
+Detect — never assume `develop` (repos differ; a wrong base has forced retargeting before):
+
 ```bash
-# Feature branches → develop
-# Hotfix branches → main
-TARGET_BRANCH="develop"
+# GitFlow repos target develop when it exists; otherwise the repo's default branch.
+# Hotfixes target main. Stacked epics target the parent epic's branch (see Epic Mode).
+DEFAULT_BRANCH=$(git remote show origin | sed -n 's/.*HEAD branch: //p')
+git show-ref --verify --quiet refs/remotes/origin/develop && TARGET_BRANCH="develop" || TARGET_BRANCH="$DEFAULT_BRANCH"
 ```
 
 ### Step 3.2: Create PR
 
+The AI badge line below appears on **Visible** projects only — omit it entirely when the project's AI-visibility preference (from prep) is Invisible ([AI Visibility](../../references/ai-visibility.md)).
+
 ```bash
 gh pr create \
-  --base develop \
+  --base "$TARGET_BRANCH" \
   --title "feat(scope): brief description" \
   --body "$(cat <<'EOF'
 ## Summary
@@ -268,7 +273,7 @@ For each piece of feedback, determine the appropriate response.
 
    Refs #[TICKET_NUMBER]
 
-   Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+   Co-Authored-By: Claude <noreply@anthropic.com>
    EOF
    )"
    ```
@@ -375,7 +380,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 **Ticket**: [TICKET_ID] — [TICKET_TITLE]
 **PR**: [PR_URL]
 **Title**: [PR_TITLE]
-**Branch**: [PR_BRANCH] → develop
+**Branch**: [PR_BRANCH] → [TARGET_BRANCH]
 
 ### Summary
 
@@ -402,7 +407,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 Please review the PR and merge when satisfied.
 
-**To merge:** `gh pr merge [PR_NUMBER] --squash --delete-branch`
+**To merge** (your act — Claude never merges): use the **merge-commit** method, then delete the branch **via the GitHub UI/API** (auto-retargets any dependent PRs; CLI deletion closes them). No squash — history stays honest ([Git Integrity](../../references/git-integrity.md)).
 
 ---
 ```
