@@ -77,19 +77,28 @@ if [ ! -e "$TARGET" ]; then
 fi
 
 if grep -qF "$BEGIN_MARKER" "$TARGET"; then
-  # Replace the existing block in place.
-  if ! grep -qF "$END_MARKER" "$TARGET"; then
-    echo "error: $TARGET has the begin marker but no end marker; fix the file manually, then re-run." >&2
+  # Replace the existing block in place — positionally, by line number, so a
+  # stray END marker elsewhere in the file can never cause the replacement to
+  # run past the block and truncate unrelated content.
+  begin_count=$(grep -cF "$BEGIN_MARKER" "$TARGET")
+  if [ "$begin_count" -gt 1 ]; then
+    echo "error: $TARGET contains $begin_count KS begin markers; fix the file manually, then re-run." >&2
+    exit 1
+  fi
+  begin_line=$(grep -nF "$BEGIN_MARKER" "$TARGET" | head -1 | cut -d: -f1)
+  end_line=$(awk -v n="$begin_line" -v end="$END_MARKER" 'NR > n && $0 == end { print NR; exit }' "$TARGET")
+  if [ -z "$end_line" ]; then
+    echo "error: $TARGET has the KS begin marker but no end marker after it; fix the file manually, then re-run." >&2
     exit 1
   fi
   tmp_out=$(mktemp "${TARGET}.tmp.XXXXXX")
   tmp_block=$(mktemp "${TARGET}.block.XXXXXX")
   trap 'rm -f "$tmp_out" "$tmp_block"' EXIT
   print_block > "$tmp_block"
-  awk -v begin="$BEGIN_MARKER" -v end="$END_MARKER" -v blockfile="$tmp_block" '
-    $0 == begin { while ((getline line < blockfile) > 0) print line; close(blockfile); skip = 1; next }
-    $0 == end   { skip = 0; next }
-    skip != 1   { print }
+  awk -v b="$begin_line" -v e="$end_line" -v blockfile="$tmp_block" '
+    NR == b { while ((getline line < blockfile) > 0) print line; close(blockfile) }
+    NR >= b && NR <= e { next }
+    { print }
   ' "$TARGET" > "$tmp_out"
   mv "$tmp_out" "$TARGET"
   rm -f "$tmp_block"
