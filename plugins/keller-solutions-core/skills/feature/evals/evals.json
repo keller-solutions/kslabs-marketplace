@@ -1,0 +1,21 @@
+{
+  "cases": [
+    {
+      "name": "phases-in-order",
+      "prompt": "Run the full feature workflow: Add user dashboard with project list.",
+      "expected_behavior": [
+        "Runs prep first and pauses at the Development Context summary for confirmation",
+        "Runs plan with the feature description and creates the ticket before any implementation",
+        "Runs produce, then present, and summarizes the results at the end"
+      ]
+    },
+    {
+      "name": "question-shaped-input-investigates",
+      "prompt": "ks-feature: what would it take to add SSO to the admin area?",
+      "expected_behavior": [
+        "Engages the plan skill's Investigation Mode: research and report only",
+        "Creates no ticket and writes no code until the developer says build"
+      ]
+    }
+  ]
+}

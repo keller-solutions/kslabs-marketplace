@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "name": "impromptu-epic-shape",
+      "prompt": "Work tickets 23983 and 21408.",
+      "expected_behavior": [
+        "Fetches full ticket bodies before deciding the shape, never titles alone",
+        "Treats the pair as an impromptu epic: one branch, one PR, Epic Mode",
+        "Confirms the inferred shape in one line before starting"
+      ]
+    },
+    {
+      "name": "single-ticket-skips-plan",
+      "prompt": "Pick up ticket #123.",
+      "expected_behavior": [
+        "Runs prep, then produce, then present — no plan phase",
+        "Moves the ticket to In Progress before the first line of code"
+      ]
+    },
+    {
+      "name": "hold-the-pr-modifier",
+      "prompt": "Work ticket #77 but hold the PR until I say.",
+      "expected_behavior": [
+        "Finishes produce and evidence but leaves the PR unopened"
+      ]
+    }
+  ]
+}
