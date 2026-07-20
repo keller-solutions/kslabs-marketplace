@@ -6,9 +6,8 @@ argument-hint: "<feature description>"
 
 # Feature Workflow
 
-Do each of these steps in order and summarize the results at the end:
+Run the feature workflow skill:
 
-1. `/ks-prep`
-2. `/ks-plan $ARGUMENTS`
-3. `/ks-produce`
-4. `/ks-present`
+`skill: feature $ARGUMENTS`
+
+This runs the four phases in order — prep, plan, produce, present — and summarizes the results at the end.

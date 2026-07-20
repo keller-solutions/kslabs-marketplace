@@ -1,7 +1,7 @@
 ---
 name: plan
-description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, quality-dimension requirements, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.3.0
+description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, quality-dimension requirements, and ticket creation. Works standalone or as part of the ks-feature workflow.
+version: 1.3.1
 argument-hint: "<feature description>"
 ---
 
@@ -282,13 +282,13 @@ Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which too
 
 ## Phase 6: Output the Result
 
-Present the created story: issue number, title, URL, the narrative, and the numbered acceptance criteria. Close with: "Ready to proceed with `/ks-produce` to implement this story."
+Present the created story: issue number, title, URL, the narrative, and the numbered acceptance criteria. Close with: "Ready to proceed with the ks-produce workflow to implement this story."
 
 ---
 
 ## Standalone Usage
 
-When invoked directly (`/ks-plan <description>`):
+When invoked directly (the ks-plan workflow with a feature description):
 
 1. Asks clarifying questions if needed
 2. Writes the story
@@ -298,13 +298,13 @@ When invoked directly (`/ks-plan <description>`):
 
 ## Workflow Usage
 
-When invoked as part of `/ks-feature`:
+When invoked as part of the ks-feature workflow:
 
 1. Asks clarifying questions if needed
 2. Writes the story
 3. Creates the ticket
 4. Stores the ticket number for subsequent skills
-5. Automatically proceeds to `/ks-produce`
+5. Automatically proceeds to the produce phase
 
 ---
 

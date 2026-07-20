@@ -1,7 +1,7 @@
 ---
 name: publish
 description: Release, deploy, and verify. Takes merged code through release preparation, GitHub release creation, deployment, and production verification. Typically run after PR is merged. Triggers on natural phrasing — "cut a release", "prep a production release", "ship it to prod" — no exact command required.
-version: 1.1.0
+version: 1.1.1
 argument-hint: "[version or 'auto']"
 ---
 
@@ -312,7 +312,7 @@ Note: The product owner typically closes issues after acceptance testing.
 
 ### Step 5.2: Prep for the Next Thing
 
-Offer to run `/ks-prep` as the closing bookend — the release is out; leave the environment the way the next session wants to find it (stray state cleaned, drift checked, dependencies current).
+Offer to run the prep workflow as the closing bookend — the release is out; leave the environment the way the next session wants to find it (stray state cleaned, drift checked, dependencies current).
 
 ### Step 5.3: Clean Up Release Branch
 
@@ -369,7 +369,7 @@ https://example.com
 
 ## Standalone Usage
 
-When invoked directly (`/ks-publish [version]`):
+When invoked directly (the ks-publish workflow, optionally with a version):
 
 1. Gathers changes since last release
 2. Determines version bump

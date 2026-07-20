@@ -1,7 +1,7 @@
 ---
 name: present
-description: Self-review, create PR, and handle the feedback loop. Takes implemented code through an in-depth stack review, PR creation (one PR per epic), evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.4.0
+description: Self-review, create PR, and handle the feedback loop. Takes implemented code through an in-depth stack review, PR creation (one PR per epic), evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of the ks-feature or ks-ticket workflow.
+version: 1.4.1
 argument-hint: "[PR number or 'current']"
 ---
 
@@ -103,7 +103,7 @@ If a step can't be completed without seeding, check the story's Developer Notes:
 
 ### Step 2.2: Record Video Walkthrough (Optional)
 
-Record a walkthrough with your screen tooling, or drive the flow with browser automation (`/ce-test-browser` from compound-engineering, or the agent-browser skill) and capture it — demonstrating key user flows and acceptance criteria being met.
+Record a walkthrough with your screen tooling, or drive the flow with browser automation (the ce-test-browser skill from compound-engineering, or the agent-browser skill) and capture it — demonstrating key user flows and acceptance criteria being met.
 
 ### Step 2.3: Capture Evidence Per Criterion
 
@@ -136,7 +136,7 @@ git show-ref --verify --quiet refs/remotes/origin/develop && TARGET_BRANCH="deve
 
 ### Step 3.2: Create PR
 
-The AI badge line below appears on **Visible** projects only — omit it entirely when the project's AI-visibility preference (from prep) is Invisible ([AI Visibility](../../references/ai-visibility.md)).
+The AI badge line below appears on **Visible** projects only — omit it entirely when the project's AI-visibility preference (from prep) is Invisible ([AI Visibility](../../references/ai-visibility.md)). The badge and reply templates show the Claude Code form; under a different coding agent, substitute that agent's own attribution — never claim a tool that wasn't used.
 
 ```bash
 gh pr create \
@@ -222,7 +222,7 @@ az boards work-item update --id [WORK_ITEM_ID] \
 
 ## Phase 4: Review Environment (if applicable)
 
-If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/ce-test-browser`).
+If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (the ce-test-browser skill).
 
 ---
 
@@ -369,7 +369,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 ### Step 6.3: Present Ready Notification
 
-**Claude does not merge PRs.** The checklist below carries **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)) — any ✗ retitles this "PR Status", names what remains, and defers the words "ready for review". Output notification for user:
+**The agent does not merge PRs.** The checklist below carries **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)) — any ✗ retitles this "PR Status", names what remains, and defers the words "ready for review". Output notification for user:
 
 ```markdown
 ---
@@ -406,9 +406,9 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 Please review the PR and merge when satisfied.
 
-**To merge** (your act — Claude never merges): use the **merge-commit** method, then delete the branch **via the GitHub UI/API** (auto-retargets any dependent PRs; CLI deletion closes them). No squash — history stays honest ([Git Integrity](../../references/git-integrity.md)).
+**To merge** (your act — the agent never merges): use the **merge-commit** method, then delete the branch **via the GitHub UI/API** (auto-retargets any dependent PRs; CLI deletion closes them). No squash — history stays honest ([Git Integrity](../../references/git-integrity.md)).
 
-*Bookend*: once handed back, offer to run `/ks-prep` — "getting ready for the next thing" — so stray state, drift, and dependencies are settled before the next session starts.
+*Bookend*: once handed back, offer to run the prep workflow — "getting ready for the next thing" — so stray state, drift, and dependencies are settled before the next session starts.
 
 ---
 ```
@@ -417,7 +417,7 @@ Please review the PR and merge when satisfied.
 
 ## Standalone Usage
 
-When invoked directly (`/ks-present`):
+When invoked directly (the ks-present workflow):
 
 1. Performs self-review
 2. Creates PR (if not already created)
@@ -427,7 +427,7 @@ When invoked directly (`/ks-present`):
 
 ## Workflow Usage
 
-When invoked as part of `/ks-feature` or `/ks-ticket`:
+When invoked as part of the ks-feature or ks-ticket workflow:
 
 1. Receives context from previous skill
 2. Creates PR
@@ -478,13 +478,13 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
 
 ## Leveraging compound-engineering
 
-This skill integrates with compound-engineering commands:
+This skill integrates with compound-engineering skills:
 
 Verified against compound-engineering **3.19.0**; missing helpers never block — do the step manually.
 
-- `/ce-test-browser` - Diff-scoped browser QA of the change
-- `/ce-resolve-pr-feedback` - Address PR review findings
-- `/ce-code-review` - In-depth review pass
+- `ce-test-browser` - Diff-scoped browser QA of the change
+- `ce-resolve-pr-feedback` - Address PR review findings
+- `ce-code-review` - In-depth review pass
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "keller-solutions-core",
   "version": "1.7.0",
-  "description": "The Keller Solutions Way\u201430 years of development methodology. 8 skills, 8 commands for TDD workflow: Prepare, Plan, Produce, Present, Publish. Works best with the optional compound-engineering, ralph-loop, and frontend-design plugins; skills fall back to manual steps without them.",
+  "description": "The Keller Solutions Way—30 years of development methodology. 8 skills for TDD workflow: Prepare, Plan, Produce, Present, Publish, plus feature/ticket orchestrators. Pairs best with compound-engineering, ralph-loop, and frontend-design when available.",
   "author": {
     "name": "Keller Solutions",
     "email": "hello@kellersolutions.com",
@@ -11,7 +11,7 @@
   "repository": "https://github.com/keller-solutions/kslabs-marketplace",
   "license": "MIT",
   "keywords": [
-    "claude-code",
+    "codex",
     "skills",
     "development",
     "keller-solutions",
@@ -19,5 +19,7 @@
     "gitflow",
     "workflow",
     "methodology"
-  ]
+  ],
+  "skills": "./skills",
+  "hooks": "./hooks/hooks.json"
 }

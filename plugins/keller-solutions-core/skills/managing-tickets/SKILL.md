@@ -1,7 +1,7 @@
 ---
 name: managing-tickets
 description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
-version: 1.3.0
+version: 1.3.1
 argument-hint: "<tool> <operation> [options]"
 ---
 
@@ -417,10 +417,10 @@ This skill is referenced by other keller-solutions-core skills:
 
 | Skill | Uses This For |
 |-------|---------------|
-| `/ks-plan` | Creating tickets from stories |
-| `/ks-produce` | Updating status to "In Progress" |
-| `/ks-present` | Linking PRs and updating to "In Review" |
-| `/ks-publish` | Adding release comments |
+| `plan` | Creating tickets from stories |
+| `produce` | Updating status to "In Progress" |
+| `present` | Linking PRs and updating to "In Review" |
+| `publish` | Adding release comments |
 
 ### Status Transitions
 
@@ -434,13 +434,13 @@ Update status at these milestones:
 
 | Milestone | Status | Triggered By |
 |-----------|--------|--------------|
-| Work started | In Progress | `/ks-produce` |
-| PR created | In Review | `/ks-present` |
+| Work started | In Progress | `produce` |
+| PR created | In Review | `present` |
 | PR merged | Done | Product owner (manual) |
 
 `To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it — In Progress lands *before* the first line of code).
 
-**Discover once, document in the project.** The first time a project's status workflow is confirmed, write it into that project — a `Ticket Workflow` block in the project's CLAUDE.md (tool, state names in order, any quirks) or its project memory — so later sessions read it instead of rediscovering it. Rule of the workflow: **fetch full work-item bodies before any planning or grouping** — titles alone mislead.
+**Discover once, document in the project.** The first time a project's status workflow is confirmed, write it into that project — a `Ticket Workflow` block in the project's CLAUDE.md or AGENTS.md (tool, state names in order, any quirks) or its project memory — so later sessions read it instead of rediscovering it. Rule of the workflow: **fetch full work-item bodies before any planning or grouping** — titles alone mislead.
 
 ### Discovering the Status Workflow
 
