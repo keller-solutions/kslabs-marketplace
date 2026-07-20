@@ -1,6 +1,6 @@
 ---
 name: publish
-description: Release, deploy, and verify. Takes merged code through release preparation, GitHub release creation, deployment, and production verification. Typically run after PR is merged.
+description: Release, deploy, and verify. Takes merged code through release preparation, GitHub release creation, deployment, and production verification. Typically run after PR is merged. Triggers on natural phrasing — "cut a release", "prep a production release", "ship it to prod" — no exact command required.
 version: 1.0.0
 argument-hint: "[version or 'auto']"
 ---
@@ -114,6 +114,8 @@ git commit -am "chore: bump version to 1.1.0"
 
 ### Step 2.2: Merge to Main
 
+This local release merge is part of the sanctioned release ritual — distinct from PR merges, which are always the developer's act on GitHub.
+
 ```bash
 # Merge release to main
 git checkout main
@@ -190,17 +192,22 @@ gh run list --workflow=deploy
 gh run watch [RUN_ID]
 ```
 
-### Step 3.3: Monitor Deployment
+### Step 3.3: Watch the Deployment to Completion
+
+Never walk away at "pushed" — a release isn't deployed until the platform says so:
 
 ```bash
-# Wait for deployment to complete
-echo "Monitoring deployment..."
+# Heroku: poll the release status (pending → succeeded/failed)
+heroku releases --app [APP] | head -3
+# On failure, fetch the release-phase output — the answer is in there
+heroku releases:output [RELEASE_NUM] --app [APP]
+# (Release phase also runs on pipeline promotions — watch those too.)
 
-# Platform-specific monitoring
-# Heroku: heroku logs --tail
-# Render: check dashboard
-# Vercel: check deployment status
+# CI/CD platforms
+gh run watch [RUN_ID]
 ```
+
+A failed release phase means **the release did not deploy** — report it with the output, fix forward, and re-release. Never report "deployed" from a successful push alone.
 
 ---
 
@@ -210,14 +217,22 @@ echo "Monitoring deployment..."
 
 Verify critical paths work in production:
 
+```bash
+# App answers (health endpoint or root)
+curl -sf https://[PROD_URL]/up || curl -sf -o /dev/null -w "%{http_code}" https://[PROD_URL]/
+
+# Running version matches the tag just released (where the app exposes it)
+curl -s https://[PROD_URL]/version   # compare to v1.1.0 / the release SHA
+```
+
 ```markdown
 ## Smoke Test Checklist
 
-- [ ] Application loads at production URL
+- [ ] Application answers at the production URL (health endpoint green)
+- [ ] Deployed version/SHA matches the release tag
 - [ ] User can sign in
 - [ ] Key features work (project-specific)
-- [ ] No console errors
-- [ ] No 500 errors in logs
+- [ ] No console errors / no new 500s in logs
 ```
 
 ### Step 4.2: Verify Released Features
@@ -235,9 +250,15 @@ Verify each feature works as expected in production.
 
 If using error monitoring (Sentry, Honeybadger, etc.):
 
-- Check for new errors since deployment
-- Verify error rates are normal
-- Set up alerts for new error types
+```bash
+# Sentry: mark the release and deploy, then check health after a bake period
+sentry-cli releases finalize "v1.1.0"
+sentry-cli deploys new -e production --release "v1.1.0"
+# After ~15–30 min of traffic: new-issue count and crash-free rate for the release
+```
+
+- No new error types since the deploy; rates within normal range
+- Crash-free rate healthy after the bake period — verification isn't done at deploy time; check back before declaring the release complete
 
 ### Step 4.4: Notify Stakeholders
 

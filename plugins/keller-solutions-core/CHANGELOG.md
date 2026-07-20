@@ -146,6 +146,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the database step flags phantom migrations and schema drift at session
   start. present and publish close by offering the "next thing" prep
   pass, making prep both ends of the session. (#38)
+- **publish triggers naturally and verifies to completion** — "cut a
+  release"-style phrasing invokes it (no exact command); deployment is
+  watched to a terminal state (Heroku release polling with failure output
+  fetched — a failed release phase means not deployed); smoke includes a
+  health-endpoint check and deployed-version-vs-tag comparison; error
+  monitoring gets concrete Sentry release/deploy marking and a
+  crash-free-rate check after a bake period. The local GitFlow release
+  merge is documented as sanctioned ritual, distinct from PR merges
+  (always the developer's act). (#39)
 
 ## [1.5.0] - 2026-07-02
 
