@@ -3,7 +3,7 @@
 [![Validate](https://github.com/keller-solutions/marketplace/actions/workflows/validate.yml/badge.svg)](https://github.com/keller-solutions/marketplace/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Curated Claude Code skills and plugins from Keller Solutions.
+Curated coding-agent skills and plugins from Keller Solutions, for Claude Code and OpenAI Codex CLI.
 
 ## About Keller Solutions
 
@@ -60,12 +60,13 @@ We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for the complet
 
 ### Version Requirements
 
-PRs to `main` must include a version bump. Update these three files:
+PRs to `main` must include a version bump. Update these files:
 
 | File | What to update |
 |------|----------------|
 | `.claude-plugin/marketplace.json` | `.version` and `.plugins[].version` |
 | `plugins/{name}/.claude-plugin/plugin.json` | `.version` |
+| `plugins/{name}/.codex-plugin/plugin.json` | `.version` (where the plugin ships one) |
 | `plugins/{name}/CHANGELOG.md` | Add new `## [x.y.z]` section |
 
 When merged, a GitHub Release is created automatically.

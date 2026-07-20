@@ -1,6 +1,6 @@
 # Keller Solutions Core
 
-The Keller Solutions Way—30 years of development methodology distilled into a Claude Code plugin.
+The Keller Solutions Way—30 years of development methodology distilled into a coding-agent plugin. Works in Claude Code and, since 1.7.0, in OpenAI Codex CLI (skills and guardrail hooks; see [Codex CLI Support](#codex-cli-support)).
 
 ## Key Features
 
@@ -92,13 +92,15 @@ Note: Some skills leverage compound-engineering workflows and will have reduced 
 | **Present** | `/ks-present` | Self-review, create PR, feedback loop |
 | **Publish** | `/ks-publish` | Release, deploy, verify |
 
-### Workflow Commands
+### Workflow Orchestrators
 
-| Command | Description |
-|---------|-------------|
-| `/ks-feature` | Full workflow: Prep → Plan → Produce → Present |
-| `/ks-ticket <number>` | Work on existing ticket: Prep → Produce → Present |
-| `/lg` | Legacy alias for `/ks-feature` |
+| Skill | Command | Description |
+|-------|---------|-------------|
+| **Feature** | `/ks-feature` | Full workflow: Prep → Plan → Produce → Present |
+| **Ticket** | `/ks-ticket <number>` | Work on existing ticket(s): Prep → Produce → Present |
+| — | `/lg` | Legacy alias for `/ks-feature` (Claude Code only) |
+
+The orchestration lives in the `feature` and `ticket` skills; the `/ks-feature` and `/ks-ticket` commands are thin wrappers over them, so every workflow is reachable via skills alone (which is how Codex CLI reaches them).
 
 ## Usage
 
@@ -146,15 +148,21 @@ Each skill can run independently:
 ```text
 keller-solutions-core/
 ├── .claude-plugin/
-│   └── plugin.json
+│   └── plugin.json       # Claude Code manifest
+├── .codex-plugin/
+│   └── plugin.json       # Codex CLI manifest
 ├── skills/
 │   ├── prep/             # Environment preparation
 │   ├── plan/             # Story writing
 │   ├── produce/          # TDD implementation
 │   ├── present/          # PR and feedback
-│   └── publish/          # Release workflow
-├── commands/
+│   ├── publish/          # Release workflow
+│   ├── feature/          # Orchestrator: prep → plan → produce → present
+│   ├── ticket/           # Orchestrator: prep → produce → present
+│   └── managing-tickets/ # Ticket-tool operations
+├── commands/             # Thin wrappers over skills (Claude Code)
 │   └── lg.md             # Legacy command alias
+├── hooks/                # Git guardrails (PreToolUse)
 ├── references/
 │   ├── guiding-principles.md    # The six principles
 │   ├── f5-manifesto.md          # "Clone, setup, run"
@@ -168,6 +176,22 @@ keller-solutions-core/
 │   └── ADR-template.md
 └── README.md
 ```
+
+## Codex CLI Support
+
+Since 1.7.0 the plugin is tool-agnostic. Skills follow the open Agent Skills standard (SKILL.md with `name` + `description` frontmatter), which Codex CLI supports natively; `.codex-plugin/plugin.json` exposes the `skills/` directory and the guardrail hooks. Claude-only frontmatter keys (e.g. `argument-hint`) are ignored by Codex and are harmless.
+
+**What works in Codex:**
+
+- All 8 skills, including the `feature` and `ticket` workflow orchestrators (invoke explicitly with `$feature` / `$ticket`, or let Codex select them from the description).
+- The git guardrail hook: Codex reads the same `hooks/hooks.json` (its PreToolUse event, matcher, and JSON stdin/stdout contract match Claude Code's), and Codex sets `CLAUDE_PLUGIN_ROOT`/`PLUGIN_ROOT` for plugin hook commands, so the `${CLAUDE_PLUGIN_ROOT}` script path resolves. The two hard denies (`gh pr merge`, force pushes) behave identically.
+
+**Known limitations in Codex:**
+
+- **`ask` guardrails degrade**: Codex parses `permissionDecision: "ask"` but does not support it yet, so the two confirm-first rules (CLI remote-branch deletion, direct commits on integration branches) fall through to Codex's normal approval flow instead of a targeted prompt. They harden automatically once Codex ships `ask` support.
+- **No plugin dependencies**: the Codex manifest has no dependency concept, so compound-engineering, ralph-loop, and frontend-design are not pulled in. The skills already treat those as optional helpers — every step works manually when a helper is absent.
+- **Slash commands are Claude Code only**: `commands/` (including `/lg`) doesn't load in Codex; use the skills directly.
+- **Attribution examples**: commit/PR templates show the Claude Code attribution form; under another agent, substitute that agent's own attribution (the skills say so inline).
 
 ## The Keller Solutions Way
 

@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-07-20
+
+### Added
+
+- **OpenAI Codex CLI support** — the plugin is now tool-agnostic.
+  `.codex-plugin/plugin.json` exposes the `skills/` directory and the
+  guardrail hooks per Codex's plugin manifest schema. Skills already
+  follow the open Agent Skills standard, so they load in Codex natively;
+  the git-guardrails PreToolUse hook ships unchanged because Codex reads
+  the same `hooks/hooks.json` shape, accepts the same
+  `permissionDecision` output, and sets `CLAUDE_PLUGIN_ROOT` for plugin
+  hook commands. Known Codex limitations (its `ask` decision is parsed
+  but not yet supported, no plugin-dependency concept, no slash
+  commands) are documented in the README's Codex CLI Support section.
+- **`feature` and `ticket` workflow skills** — the orchestration that
+  lived only in the `/ks-feature` and `/ks-ticket` commands (phase
+  ordering; delivery-shape inference for epics and impromptu epics) now
+  lives in `skills/feature/` and `skills/ticket/`, each with eval cases,
+  so every workflow is reachable via skills alone in any tool. The two
+  commands are now thin wrappers over the new skills, matching the
+  pattern the other six commands already use.
+
+### Changed
+
+- **Portability pass across all six existing skills** — Claude-specific
+  phrasing rewritten as capability language where it costs nothing:
+  slash-command references become workflow/skill references
+  ("`/ks-produce`" → "the ks-produce workflow"), project-guidance reads
+  now name CLAUDE.md *and* AGENTS.md, "Claude does not merge PRs"
+  becomes "the agent does not merge PRs", and attribution templates note
+  that a different coding agent substitutes its own identity. No
+  workflow behavior changed; frontmatter keeps `name` + `description`
+  first per the open standard.
+
 ## [1.6.1] - 2026-07-19
 
 ### Fixed
