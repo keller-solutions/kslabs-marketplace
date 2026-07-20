@@ -219,13 +219,19 @@ If the project has preview deployments, verify the change in staging (`gh pr che
 
 ## Phase 5: Feedback Loop
 
-### Step 5.1: Wait for Copilot Review
+### Step 5.1: Request and Await the Copilot Review
 
-Monitor for automated review:
+Requesting the review is part of presenting — never wait to be asked, and never skip it. Full mechanics (size limits, retry, dedupe, polling): [Copilot Review](../../references/copilot-review.md).
 
 ```bash
-# Check for reviews
-gh pr view $PR_NUMBER --json reviews -q '.reviews[] | select(.author.login == "copilot")'
+# Size guard first (300-file hard limit; huge diffs time out — propose a split instead)
+gh pr view $PR_NUMBER --json changedFiles,additions,deletions -q '"\(.changedFiles) files +\(.additions) -\(.deletions)"'
+
+# Request (gh ≥ 2.88; retry once on the pending-review transient; REST fallback in the reference)
+gh pr edit $PR_NUMBER --add-reviewer @copilot
+
+# Await: poll for the bot's review of the CURRENT head SHA, bounded timeout —
+# report a no-show rather than proceeding silently
 ```
 
 ### Step 5.2: Get All Comments
@@ -300,10 +306,7 @@ For each piece of feedback, determine the appropriate response.
 Addressed with the help of Claude Code in [commit-sha]. [Summary of change].
 ```
 
-Examples:
-
-- "Addressed with the help of Claude Code in a1b2c3d. Added error handling for nil case."
-- "Addressed with the help of Claude Code in e4f5g6h. Extracted validation to a private method."
+Example: "Addressed with the help of Claude Code in a1b2c3d. Added error handling for the nil case."
 
 **For declined feedback:**
 
@@ -311,10 +314,7 @@ Examples:
 This [pattern/approach] follows [guideline/convention]. [Explanation]. [Reference if applicable].
 ```
 
-Examples:
-
-- "This follows the existing pattern in `app/services/`. Changing would create inconsistency."
-- "Per our coding guidelines, we extract methods on the second use. This is currently used only once."
+Example: "This follows the existing pattern in `app/services/`. Changing would create inconsistency."
 
 ### Step 5.5: Verify All Comments Addressed
 
@@ -324,7 +324,11 @@ gh api repos/{owner}/{repo}/pulls/$PR_NUMBER/comments \
   --jq '[.[] | select(.in_reply_to_id == null)] | length'
 ```
 
-If unresolved comments remain, repeat the evaluation.
+If unaddressed comments remain, repeat the evaluation.
+
+**Thread resolution belongs to the reviewer — never mark threads resolved.** The commenter judges whether the response was adequate: a human reviewer resolves or replies again; since Copilot can't resolve, the developer resolves while reviewing (or merges past open threads). If the repo requires resolved threads before merge, say so in the hand-back.
+
+**Re-request economics:** after feedback commits, request a fresh Copilot review only for substantive changes (new logic, changed approach) — reviews are usage-billed; typo-level follow-ups ride to the human review.
 
 ### Step 5.6: Run Final Checks
 
@@ -382,8 +386,8 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 - [x] Linting passes
 - [x] Quality dimensions reviewed and reported in the PR
 - [x] In-depth stack-appropriate review completed before the PR
-- [x] Copilot review feedback addressed
-- [x] All PR comments responded to
+- [x] Copilot review: [N] comments — [M] addressed (commit SHAs), [K] declined with rationale
+- [x] All PR comments replied to in-thread [; repo requires thread resolution — resolve as you review]
 
 ### Files Changed
 
@@ -457,17 +461,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
   --jq '.[] | "\(.id) \(.path):\(.line)"'
 ```
 
-**Resolve a review thread:**
-
-```bash
-gh api graphql -f query='
-  mutation {
-    resolveReviewThread(input: {threadId: "THREAD_ID"}) {
-      thread { isResolved }
-    }
-  }
-'
-```
+**Resolving threads:** not ours — resolution belongs to the reviewer (Step 5.5).
 
 ---
 

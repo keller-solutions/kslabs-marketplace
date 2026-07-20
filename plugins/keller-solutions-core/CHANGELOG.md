@@ -20,6 +20,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mode the next child is blocked while the current child's checks are red;
   stacked children absorb base fixes by merge, never rebase. New reference:
   `references/quality-gate.md`. (#22)
+- **Copilot review loop is autonomous** — present size-guards the diff
+  (300-file limit), requests the review itself (`gh pr edit --add-reviewer
+  @copilot`, REST fallback, dedupe by head SHA), polls to completion with a
+  bounded timeout, addresses every comment with in-thread replies, and
+  reports counts in the hand-back. Thread resolution stays with the
+  reviewer — never marked resolved by the skill; repos requiring resolution
+  are called out in the hand-back. Re-reviews requested only for
+  substantive changes (reviews are usage-billed). New reference:
+  `references/copilot-review.md`. (#21)
 
 ## [1.5.0] - 2026-07-02
 
