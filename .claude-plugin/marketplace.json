@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "keller-solutions-marketplace",
   "version": "1.7.0",
-  "description": "Curated Claude Code skills and plugins from Keller Solutions",
+  "description": "Curated agent skills and plugins from Keller Solutions for Claude Code and Codex CLI",
   "owner": {
     "name": "Keller Solutions",
     "email": "hello@kellersolutions.com",
