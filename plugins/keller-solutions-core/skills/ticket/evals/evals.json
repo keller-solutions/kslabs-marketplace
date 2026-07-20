@@ -23,6 +23,15 @@
       "expected_behavior": [
         "Finishes produce and evidence but leaves the PR unopened"
       ]
+    },
+    {
+      "name": "blocking-question-on-propose-shaped-ask",
+      "prompt": "ks-ticket: describe what's in effect for ticket #12 and propose an updated approach.",
+      "expected_behavior": [
+        "Runs read-only and halts for the developer's selection before any implementation",
+        "Asks via the platform's blocking question tool (AskUserQuestion in Claude Code; request_user_input in Codex) or, failing that, numbered options in chat, and waits for the reply",
+        "Does not silently skip the question or choose a default on the developer's behalf"
+      ]
     }
   ]
 }
