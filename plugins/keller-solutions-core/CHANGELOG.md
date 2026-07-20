@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1] - 2026-07-19
+
+### Fixed
+
+- **Guardrail test suite is now branch-independent** — the suite invoked
+  the hook from its own checkout, so the commit-guard's branch check saw
+  the containing repo: green on feature branches, red when the checkout
+  sat on main (exactly how the installed marketplace copy runs). The hook
+  now executes from throwaway environments (non-git dir plus temp repos
+  on `main` and `feature/*`), with two new explicit cases for the
+  commit-on-integration-branch ask and the feature-branch pass-through —
+  16 deterministic cases. Found by the post-release smoke test minutes
+  after 1.6.0 shipped; the hook itself was behaving correctly. (#42)
+
 ## [1.6.0] - 2026-07-19
 
 ### Added
