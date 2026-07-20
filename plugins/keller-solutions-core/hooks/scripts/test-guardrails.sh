@@ -1,13 +1,22 @@
 #!/usr/bin/env bash
 # Regression tests for git-guardrails.sh — run locally or in CI. Exit 0 = all pass.
 set -uo pipefail
-cd "$(dirname "$0")" || exit 1
+HOOK="$(cd "$(dirname "$0")" && pwd)/git-guardrails.sh"
 command -v jq >/dev/null || { echo "FATAL: jq not available — suite cannot run"; exit 1; }
-[ -x ./git-guardrails.sh ] || { echo "FATAL: git-guardrails.sh missing or not executable"; exit 1; }
+[ -x "$HOOK" ] || { echo "FATAL: git-guardrails.sh missing or not executable"; exit 1; }
+
+# Deterministic environments — results must never depend on where the suite runs
+# (the original suite passed on feature branches and failed when its checkout sat
+# on main, because rule 4's branch check saw the containing repo).
+WORK=$(mktemp -d -t guardrail-tests); trap 'rm -rf "$WORK"' EXIT
+mkdir -p "$WORK/nongit"; NONGIT="$WORK/nongit"
+git init -q -b main "$WORK/mainrepo"; MAINREPO="$WORK/mainrepo"
+git init -q -b feature/test-branch "$WORK/featrepo"; FEATREPO="$WORK/featrepo"
 pass=0; fail=0
 
-check() { # $1 desc, $2 command-json-fragment, $3 expected substring ("" = expect empty output)
-  out=$(printf '{"tool_input":{"command":"%s"}}' "$2" | ./git-guardrails.sh); rc=$?
+check() { # $1 desc, $2 command-json-fragment, $3 expected ("" = pass-through), $4 cwd (default NONGIT)
+  dir="${4:-$NONGIT}"
+  out=$(printf '{"tool_input":{"command":"%s"}}' "$2" | (cd "$dir" && "$HOOK")); rc=$?
   if [ "$rc" -ne 0 ]; then fail=$((fail+1)); echo "FAIL (hook exited $rc): $1"; return; fi
   if [ -z "$3" ]; then
     if [ -z "$out" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "FAIL (expected pass-through): $1 → $out"; fi
@@ -30,6 +39,8 @@ check "pass gh pr view"               "gh pr view 5 --json url"               ""
 check "pass merge in commit msg"      "git commit -m \\\"docs: why gh pr merge is banned\\\""  ""
 check "pass echoed force push"        "echo git push --force"                 ""
 check "pass tag deletion"             "git push origin :refs/tags/v1.0"       ""
+check "ask commit on main"            "git commit -m fix"                     '"ask"'   "$MAINREPO"
+check "pass commit on feature branch" "git commit -m fix"                     ""        "$FEATREPO"
 
 echo "guardrail tests: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]
