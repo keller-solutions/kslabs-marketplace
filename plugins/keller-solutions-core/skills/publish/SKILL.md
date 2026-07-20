@@ -92,6 +92,10 @@ Format as release notes:
 
 ## Phase 2: Create Release
 
+### Step 2.0: Promote the Changelog
+
+Move everything under `## [Unreleased]` into a new `## [X.Y.Z] - YYYY-MM-DD` section (leaving an empty `[Unreleased]` scaffold), and **curate the wording** — entries were written change-by-change during produce; release time is when the developer shapes them for readers. Optional drafting help: `git cliff --unreleased` (keepachangelog template) prefills from conventional commits for hand-curation — the human curates, always. This promoted section is the source for the GitHub release notes below.
+
 ### Step 2.1: Create Release Branch (GitFlow)
 
 For planned releases:

@@ -361,18 +361,19 @@ Document changes in [Keep a Changelog](https://keepachangelog.com) format before
 
 **Categories**: Added, Changed, Deprecated, Removed, Fixed, Security
 
-#### Validate and Commit
+#### The Discipline
+
+**Every change lands in `[Unreleased]`, in the same commit as the story it documents** — the changelog entry is part of the work, not an afterthought commit. In repos that keep a changelog, the self-check fails a story that changed code but not the changelog. Repos without one: say so once in the ready report (adoption is a per-repo decision to surface, never to force) and move on.
 
 ```bash
 # Find changelog file (CHANGELOG.md is most common)
 CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
 
-# Check structure
+# Check structure, then include the edit in the story's commit
 grep -E "^## \[" "$CHANGELOG_FILE" | head -3
-
-# Commit update
-git add "$CHANGELOG_FILE" && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
 ```
+
+At release time, publish promotes `[Unreleased]` into the new version section — entries written now, curated then.
 
 ---
 

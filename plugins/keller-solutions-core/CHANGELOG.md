@@ -130,6 +130,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   deletion closes dependent PRs, verify retarget) with the note that
   mainstream stacking tools all rebase — which is why we don't use them.
   (#34; joins #29's `--first-parent` discipline and WIP convention)
+- **CHANGELOG discipline is part of the work** — the `[Unreleased]` entry
+  rides in the same commit as the story it documents; in repos with a
+  changelog, the self-check fails a story that changed code but not the
+  changelog; repos without one are surfaced once, never forced. publish
+  gains Step 2.0: promote `[Unreleased]` into the versioned section with
+  human curation (optional `git cliff --unreleased` keepachangelog
+  drafting). (#35)
 
 ## [1.5.0] - 2026-07-02
 
