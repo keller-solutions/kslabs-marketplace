@@ -97,7 +97,7 @@ Before opening the PR, run an in-depth review **appropriate to the project's sta
 
 ### Step 2.1: Walk the Story as the User
 
-Before gathering evidence, complete every step of the story yourself using only the tools an average user has—a browser, not the Rails console. Each acceptance criterion should be reachable that way, with preconditions created through the application itself (per the plan skill's Deliver Without Seeding principle).
+Before gathering evidence, complete every step of the story yourself using only the tools an average user has—a browser, not the Rails console. Each acceptance criterion should be reachable that way, with preconditions created through the application itself (per the plan skill's Deliver Without Seeding principle). Use **production-realistic data** — never a lone seeded demo row, never invented external-system IDs — and leave verification data in place until the developer confirms they're done looking.
 
 If a step can't be completed without seeding, check the story's Developer Notes: anticipated seeding should be called out there. If it isn't, flag it before asking a reviewer to accept—either the delivery order needs fixing or the note is missing.
 
@@ -105,9 +105,9 @@ If a step can't be completed without seeding, check the story's Developer Notes:
 
 Use `/compound-engineering:feature-video` to demonstrate the feature working, key user flows, and acceptance criteria being met.
 
-### Step 2.3: Take Screenshots
+### Step 2.3: Capture Evidence Per Criterion
 
-Capture before/after screenshots for UI changes, using browser tools or Playwright.
+For each UI acceptance criterion, capture a screenshot (or short recording) that **visibly demonstrates that criterion** — before/after for changes to existing UI. Save to `evidence/<ticket-id>/` (gitignored — evidence is attached, never committed), echo the file paths in the report, replace stale shots, and attach per the tool's mechanism. Contract and per-tool mechanics: [Evidence](../../references/evidence.md).
 
 ### Step 2.4: Document Test Results
 

@@ -38,6 +38,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   correlation ≠ causation. Coverage fallback recorded: 100% diff coverage
   where total-100 is unreachable. CLAUDE template gains a Troubleshooting
   Discipline section. New reference: `references/verified-fix.md`. (#23)
+- **Evidence is contractual** — per-criterion visible proof captured on
+  production-realistic data (no invented external IDs; unmistakable
+  fixtures), saved to a gitignored `evidence/<ticket>/` with paths echoed,
+  attached to the ticket/PR and never committed. Attach-as-you-go now
+  includes Azure DevOps and Jira alongside ClickUp; GitHub uses the
+  browser-upload `user-attachments` path (CI-artifact fallback;
+  Mermaid/text when a diagram beats a pixel). Verification data survives
+  until the developer confirms done. New reference:
+  `references/evidence.md`. (#24)
 
 ## [1.5.0] - 2026-07-02
 

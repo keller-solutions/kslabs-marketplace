@@ -459,17 +459,10 @@ gh label list | grep -i status
 
 ### Attaching Evidence
 
-Capture evidence (screenshots, recordings, test output) as each ticket is done.
+Evidence is a per-criterion visible proof, captured on production-realistic data, saved to `evidence/<ticket-id>/` (gitignored, paths echoed), attached to the ticket — and **never committed to the repository**. The full contract and per-tool mechanics live in [Evidence](../../references/evidence.md).
 
-- **ClickUp — attach as you go** (API supports file attachment):
-
-  ```bash
-  curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/attachment" \
-    -H "Authorization: ${CLICKUP_API_TOKEN}" \
-    -F "attachment=@./evidence/EADEV-180.png"
-  ```
-
-- **GitHub / Jira / Linear / Azure DevOps — hold and batch.** File upload needs developer involvement (no clean CLI image upload), so collect evidence during the work and attach/link it in a batch at PR time; post links or markdown inline where possible.
+- **Attach as you go** — ClickUp (task attachment API), Azure DevOps (attachment + `AttachedFile` relation), Jira (issue attachments endpoint).
+- **Hold and batch at PR time** — GitHub (browser-upload to a `user-attachments` URL; CI-artifact link as fallback; Mermaid/text when a diagram beats a pixel) and Linear (links).
 
 ### Epic Lifecycle
 
