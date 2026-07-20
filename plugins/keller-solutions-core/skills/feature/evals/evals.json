@@ -16,6 +16,15 @@
         "Engages the plan skill's Investigation Mode: research and report only",
         "Creates no ticket and writes no code until the developer says build"
       ]
+    },
+    {
+      "name": "blocking-question-at-context-pause",
+      "prompt": "Run the full feature workflow: add CSV export to the reports page.",
+      "expected_behavior": [
+        "Pauses at prep's Development Context summary for the developer's confirmation",
+        "Asks via the platform's blocking question tool (AskUserQuestion in Claude Code; request_user_input in Codex) or, failing that, numbered options in chat, and waits for the reply",
+        "Does not silently skip the question or choose a default on the developer's behalf"
+      ]
     }
   ]
 }

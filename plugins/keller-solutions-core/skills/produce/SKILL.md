@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of the ks-feature or ks-ticket workflow.
-version: 1.4.1
+version: 1.4.2
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -43,6 +43,8 @@ gh issue view [TICKET_NUMBER] --json title,body,labels,state
 # If "current" or no argument, check branch name for ticket reference
 # Or ask user for ticket number
 ```
+
+**Blocking questions**: whenever this skill needs the developer's answer — a decision, a confirmation, a choice (a missing ticket number, an ambiguous scope call) — use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply). Never silently skip the question or choose a default on the developer's behalf.
 
 ### Step 1.3: Update Ticket Status
 
