@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, quality-dimension requirements, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "<feature description>"
 ---
 

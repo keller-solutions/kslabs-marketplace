@@ -1,7 +1,7 @@
 ---
 name: present
 description: Self-review, create PR, and handle the feedback loop. Takes implemented code through an in-depth stack review, PR creation (one PR per epic), evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.3.0
+version: 1.4.0
 argument-hint: "[PR number or 'current']"
 ---
 

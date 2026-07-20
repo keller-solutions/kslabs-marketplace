@@ -2,7 +2,7 @@
 
 ## The Pattern
 
-Every ks skill ends by printing its own checklist **with honest verdicts** — ✓ only for items actually done and observed, ✗ (with one line of why) for anything skipped, failed, or not applicable-but-unrecorded. The checklist is the skill's contract; the verdicts are its testimony.
+Every workflow skill (prep, plan, produce, present, publish) ends by printing its own checklist **with honest verdicts** — ✓ only for items actually done and observed, ✗ (with one line of why) for anything skipped, failed, or not applicable-but-unrecorded. The checklist is the skill's contract; the verdicts are its testimony.
 
 **An ✗ forbids completion wording.** A report with any failing item is titled as *status*, not completion — "Implementation Status", not "Implementation Complete"; "PR Status", not "PR Ready" — and its last line names exactly what remains. The words "complete", "done", and "ready" are earned by an all-✓ checklist, never by proximity to the end of the work.
 

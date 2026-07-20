@@ -46,4 +46,4 @@ Security scans belong in the gate as *reporters*, not *blockers*: an overnight C
 
 ## Recording the Gate (optional, KS-owned repos)
 
-`gh-signoff` (Basecamp) posts a passing local `bin/ci` as a commit status that branch protection can require — turning the local run into a *recorded* gate instead of a self-reported claim. See [Repo Baseline](repo-baseline.md) once available.
+`gh-signoff` (Basecamp) posts a passing local `bin/ci` as a commit status that branch protection can require — turning the local run into a *recorded* gate instead of a self-reported claim. See [Repo Baseline](repo-baseline.md).

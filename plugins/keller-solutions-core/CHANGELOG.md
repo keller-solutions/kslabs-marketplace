@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   rules are always-on; pipeline-specific gates belong in skill-scoped
   hooks. Honest limits plus copy-paste user-settings deny rules (plugins
   cannot ship permission rules) documented in the new
-  `references/guardrails.md`. Script verified against seven test cases;
+  `references/guardrails.md`. Script verified against nine test cases;
   `claude plugin validate` passes. (#31)
 
 ### Changed
@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bisect on merge-commit history — the standing answer to "squash for a
   clean log" — plus the agent-era rationale that granular unrewritten
   history doubles as machine-readable memory. (#29)
-- **Every skill self-checks before claiming completion** — all six skills
+- **Every skill self-checks before claiming completion** — the five workflow skills
   end their reports with honest ✓/✗ verdicts; any ✗ retitles the report as
   *status* ("Implementation Status", "PR Status", "Environment Status",
   "Release Status") and names what remains — "complete/done/ready" is

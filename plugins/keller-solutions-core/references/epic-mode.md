@@ -64,7 +64,7 @@ For each child, in order:
 
 1. **Status → the project's "in progress" state.**
 2. **Implement** via the produce TDD cycle → **at least one commit** referencing the child (`Refs <child-id>`) → push after each.
-3. **Capture evidence** and attach it to the child ticket now **if the tool supports automated attachment** (ClickUp); otherwise **hold** it for the batch at PR time.
+3. **Capture evidence** and attach it to the child ticket now **if the tool supports automated attachment** (ClickUp, Azure DevOps, Jira); otherwise **hold** it for the batch at PR time.
 4. **Status → the project's "awaiting review" state.**
 
 The actual state names and the per-tool status/attachment commands are discovered during prep — see [managing-tickets](../skills/managing-tickets/SKILL.md). Evidence buckets per [Evidence](evidence.md): **attach-as-you-go** (ClickUp, Azure DevOps, Jira); **hold-and-batch** at PR time (GitHub via browser-upload, Linear via links).

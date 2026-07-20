@@ -1,7 +1,7 @@
 ---
 name: publish
 description: Release, deploy, and verify. Takes merged code through release preparation, GitHub release creation, deployment, and production verification. Typically run after PR is merged. Triggers on natural phrasing — "cut a release", "prep a production release", "ship it to prod" — no exact command required.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[version or 'auto']"
 ---
 

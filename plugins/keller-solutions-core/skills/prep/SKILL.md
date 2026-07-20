@@ -1,7 +1,7 @@
 ---
 name: prep
 description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of /ks-feature workflow.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "[optional: path to project]"
 ---
 
@@ -26,7 +26,7 @@ Preparation prevents wasted effort, ensures you're working from the latest code,
 Prep's findings persist between sessions — don't re-derive what's already known:
 
 1. **Read the project's Claude memory** (its memory index and any feedback/lesson notes) and the CLAUDE.md `Ticket Workflow` block. A recorded lesson is *applied*, not rediscovered — if a note says "run X before deploy," X is now part of this session's gates.
-2. **Read `.ks/context.json`** (gitignored, written by Step 4 below). If it exists and is fresh — no changes to CI config, CLAUDE.md, or lockfiles since it was written, and less than a week old — print its Development Context table with a "cached, verified fresh" note and skip straight to Phase 2's hygiene steps (pull, stray-state, drift, gate). Stale or absent → full orientation below, then rewrite the cache.
+2. **Read `.ks/context.json`** (gitignored, written by Phase 4's Store Context step below). If it exists and is fresh — no changes to CI config, CLAUDE.md, or lockfiles since it was written, and less than a week old — print its Development Context table with a "cached, verified fresh" note and skip straight to Phase 2's hygiene steps (pull, stray-state, drift, gate). Stale or absent → full orientation below, then rewrite the cache.
 
 ### Step 1.1: Detect Project Type
 

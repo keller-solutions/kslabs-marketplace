@@ -1,7 +1,7 @@
 ---
 name: managing-tickets
 description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "<tool> <operation> [options]"
 ---
 

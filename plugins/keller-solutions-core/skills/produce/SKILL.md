@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of /ks-feature or /ks-ticket workflow.
-version: 1.3.0
+version: 1.4.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
