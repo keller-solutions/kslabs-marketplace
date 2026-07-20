@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "keller-solutions-marketplace",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Curated agent skills and plugins from Keller Solutions for Claude Code and Codex CLI",
   "owner": {
     "name": "Keller Solutions",
@@ -14,7 +14,7 @@
     {
       "name": "keller-solutions-core",
       "description": "The Keller Solutions Way\u201430 years of development methodology. 8 skills, 8 commands for TDD workflow: Prepare, Plan, Produce, Present, Publish. Works in Claude Code and OpenAI Codex CLI.",
-      "version": "1.7.0",
+      "version": "1.7.1",
       "source": "./plugins/keller-solutions-core",
       "category": "development",
       "tags": [

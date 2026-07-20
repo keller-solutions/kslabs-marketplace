@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-07-20
+
+Strategic integrations with Every Inc.'s compound-engineering plugin —
+patterns adapted from it with credit, gluing to its machinery rather than
+duplicating what it already maintains.
+
+### Added
+
+- **Codex tool-map setup script** (`scripts/codex-tool-map.sh`) — one-time,
+  idempotent upsert of a marker-delimited block into `~/.codex/AGENTS.md`
+  translating Claude Code tool names (Read, Edit, Bash, Grep, Glob,
+  AskUserQuestion, Task, TodoWrite, Skill, …) to Codex primitives (shell
+  reads, `apply_patch`, `shell_command`, `rg`, numbered-list questions,
+  `update_plan`, …). Deference rule built in: if compound-engineering's own
+  tool map is already in the file, the script prints a note and adds
+  nothing — we lean on their block instead of racing to keep a copy
+  current. A symlinked `AGENTS.md` is never written through (warn + exit).
+  Documented in the README's Codex CLI Support section. Pattern adapted
+  from compound-engineering's Codex AGENTS.md management.
+
+### Changed
+
+- **Blocking-question convention in interactive skills** — plan, prep,
+  produce, feature, and ticket now state one consistent rule at their
+  decision points (adapted from compound-engineering's pattern): use the
+  platform's blocking question tool (`AskUserQuestion` in Claude Code;
+  `request_user_input` in Codex; otherwise numbered options in chat, then
+  wait) and never silently skip a question or choose a default on the
+  developer's behalf. Each carries a matching eval case. The other three
+  skills (present, publish, managing-tickets) were audited and have no
+  developer-blocking question points — unchanged.
+- **Context-fallback audit** — all skills and commands audited for
+  Claude-only dynamic-context syntax (backtick-`!` pre-populated context,
+  `allowed-tools` assumptions, Claude-only environment variables), per
+  compound-engineering's ce-commit "Context fallback" pattern. None found;
+  no fallback notes were needed. Recorded here so the convention is known
+  when one becomes necessary.
+
 ## [1.7.0] - 2026-07-20
 
 ### Added
