@@ -240,9 +240,9 @@ Run full test suite after refactoring:
 bin/rails test
 ```
 
-#### Step 3.4: Commit (once per story)
+#### Step 3.4: Commit (at least once per story)
 
-A user story is one unit of work → **one commit**. Run Red-Green-Refactor for *every* acceptance criterion in the story first; commit once when they all pass (a story with 6 criteria is still 1 commit, not 6). Additional commits are only for later refactor or review feedback.
+A user story yields **at least one commit — the floor, not the ceiling**. The natural rhythm is one commit when every criterion passes; additional commits are welcome (a checkpoint worth keeping, a refactor, review feedback) so long as **every commit is shippable** — it compiles and its tests pass on its own. The rare non-shippable checkpoint is prefixed `WIP:` — the exception, never the rule. History is never rewritten to tidy this up ([Git Integrity](../../references/git-integrity.md)); story-level history reads with `git log --first-parent`.
 
 ```bash
 git add .
@@ -262,14 +262,15 @@ git push
 
 **Commit rules:**
 
-- **One commit per story, not per criterion** — the story is the unit; the commit is independently functional with all its tests passing
+- **At least one commit per story** — one is the floor, not the ceiling; the story boundary stays traceable via the ticket reference on every commit
+- **Every commit is shippable** — compiles, tests pass; the rare exception carries a `WIP:` prefix
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
 - Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
-- Push after the commit (git integrity — no squashing later)
+- Push after each commit (git integrity — never squash or rewrite later)
 
 ### Repeat the Cycle
 
-Run Red-Green-Refactor across the story's criteria, commit once, done. In **Epic Mode** the next story is the next child ticket on the shared epic branch — see [Epic Mode](../../references/epic-mode.md).
+Run Red-Green-Refactor across the story's criteria, commit (at least once), done. In **Epic Mode** the next story is the next child ticket on the shared epic branch — see [Epic Mode](../../references/epic-mode.md).
 
 ---
 

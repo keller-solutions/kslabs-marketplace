@@ -6,7 +6,7 @@ When `/ks-ticket` (or the produce skill) is invoked with an **epic / parent tick
 
 - An epic/parent ticket **groups** related feature stories. It has no acceptance criteria of its own and produces **no commit of its own**.
 - An **impromptu epic** is the same grouping declared at invocation: several independent tickets passed to `/ks-ticket` together. No parent ticket exists — the passed tickets are the children, delivered in the order given unless dependencies dictate otherwise; everything else in this document applies unchanged.
-- Each child is a normal user story ("In order to… As a… I want") with its own acceptance criteria and its own **single commit** (see the commit rule in [produce](../skills/produce/SKILL.md): one commit per story, not per criterion).
+- Each child is a normal user story ("In order to… As a… I want") with its own acceptance criteria and **at least one commit of its own** (see the commit rule in [produce](../skills/produce/SKILL.md): one per story is the floor, not the ceiling; every commit shippable).
 - An epic with 5 children yields **≥5 commits** (one per child, plus any extras for refactor or review feedback) — none attributed to the epic ticket.
 
 ## Detection
@@ -63,7 +63,7 @@ Work children in **delivery order** (Deliver Without Seeding: each child is inde
 For each child, in order:
 
 1. **Status → the project's "in progress" state.**
-2. **Implement** via the produce TDD cycle → **one commit** referencing the child (`Refs <child-id>`) → push.
+2. **Implement** via the produce TDD cycle → **at least one commit** referencing the child (`Refs <child-id>`) → push after each.
 3. **Capture evidence** and attach it to the child ticket now **if the tool supports automated attachment** (ClickUp); otherwise **hold** it for the batch at PR time.
 4. **Status → the project's "awaiting review" state.**
 

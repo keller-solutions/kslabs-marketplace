@@ -78,6 +78,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   parent epic, sync by merge, delete merged bases via UI/API only — CLI
   branch deletion closes dependent PRs — verify retarget, size-guard the
   delta). Replaces the hand-written overnight brief ritual. (#28)
+- **Commit granularity: one per story is the floor, not the ceiling** —
+  additional commits welcome; every commit shippable (compiles, tests
+  pass) with `WIP:` prefixing the rare exception; never squash or rewrite.
+  Git Integrity gains the `--first-parent` discipline: story-level log and
+  bisect on merge-commit history — the standing answer to "squash for a
+  clean log" — plus the agent-era rationale that granular unrewritten
+  history doubles as machine-readable memory. (#29)
 
 ## [1.5.0] - 2026-07-02
 

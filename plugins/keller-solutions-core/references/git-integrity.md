@@ -216,11 +216,12 @@ git commit -m "refactor: extract shared logic from foo and bar"
 
 ### The Commit Discipline
 
-1. **Commit early, commit often**: Small, frequent commits are easier to understand
+1. **Commit early, commit often**: Small, frequent commits are easier to understand — a story yields at least one commit, never at most
 2. **Push immediately**: Once pushed, you won't be tempted to rewrite
-3. **Each commit should compile and pass tests**: If it doesn't, you're setting traps for future you
+3. **Each commit should compile and pass tests**: If it can't, label the trap — prefix it `WIP:` (rare, deliberate, never the rule)
 4. **Commit what you did, when you did it**: Don't rewrite history to look smarter
 5. **Write meaningful commit messages**: Future you will thank present you
+6. **Read story-level history with `--first-parent`**: `git log --first-parent` and `git bisect --first-parent` (Git ≥ 2.29) walk only the merge commits on an integration branch — story-granularity history and bisect, exactly what squash-merging advertises, without destroying the inner truth. This is the standing answer to "squash for a clean log." (The granular inner history has new value in the agent era: it doubles as machine-readable memory of how the work actually went.)
 
 ---
 
