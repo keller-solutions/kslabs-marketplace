@@ -59,7 +59,7 @@ kslabs-marketplace/
 │       ├── CHANGELOG.md      # Version history (version here!)
 │       └── README.md
 ├── CONTRIBUTING.md           # This file
-├── CLAUDE.md                 # Claude Code instructions
+├── AGENTS.md                 # Agent instructions (CLAUDE.md is an @AGENTS.md import stub)
 └── README.md                 # Marketplace overview
 ```
 
