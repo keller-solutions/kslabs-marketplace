@@ -27,7 +27,7 @@ Skip the request when the current head SHA already has a Copilot review (dedupe)
 
 ## Awaiting Completion
 
-While queued, the bot sits in `requested_reviewers` and drops out when done. Poll for a review of the **current head SHA**, on a sensible interval with a bounded timeout; if it never arrives, say so — never proceed silently:
+While queued, the bot sits in `requested_reviewers` — but **leaving the queue does not mean done**: on repos where Copilot review runs as an Actions workflow, the bot drops out of `requested_reviewers` while a "Copilot Code Review" run is still queued/executing. Check three signals before declaring a no-show: the reviews list (head SHA), `requested_reviewers`, and `gh run list` for a Copilot Code Review workflow in queued/in_progress. Poll on a sensible interval with a bounded timeout; a true no-show (no review, empty queue, no running workflow) gets reported — never proceed silently:
 
 ```bash
 HEAD_SHA=$(git rev-parse HEAD)

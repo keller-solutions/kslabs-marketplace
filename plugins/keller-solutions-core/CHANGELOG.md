@@ -51,7 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (300-file limit), requests the review itself (`gh pr edit --add-reviewer
   @copilot`, REST fallback, dedupe by head SHA), polls to completion with a
   bounded timeout, addresses every comment with in-thread replies, and
-  reports counts in the hand-back. Thread resolution stays with the
+  reports counts in the hand-back — checking three completion signals
+  (reviews list, request queue, and the Copilot Code Review workflow run)
+  before ever declaring a no-show. Thread resolution stays with the
   reviewer — never marked resolved by the skill; repos requiring resolution
   are called out in the hand-back. Re-reviews requested only for
   substantive changes (reviews are usage-billed). New reference:
