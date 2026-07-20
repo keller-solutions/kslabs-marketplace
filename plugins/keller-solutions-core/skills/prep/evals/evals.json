@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "name": "cache-fast-path",
+      "prompt": "Prep this project; a fresh .ks/context.json exists from yesterday and nothing material changed.",
+      "expected_behavior": [
+        "Prints the cached Development Context with a freshness note instead of re-deriving",
+        "Still runs hygiene: pull, stray-state, drift check, gate"
+      ]
+    },
+    {
+      "name": "gate-derived-from-ci",
+      "prompt": "Prep a repo whose CI workflow runs system tests and bundler-audit.",
+      "expected_behavior": [
+        "Reports the derived QUALITY_GATE including system tests",
+        "Lists bundler-audit under advisory AUDIT_CHECKS, not the blocking gate"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "name": "natural-trigger-and-verify",
+      "prompt": "cut a release",
+      "expected_behavior": [
+        "Runs the publish flow without demanding exact syntax",
+        "Watches the deployment to a terminal state and runs the smoke checks before any Release Complete wording",
+        "Promotes [Unreleased] into the new version section with curation"
+      ]
+    }
+  ]
+}

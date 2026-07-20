@@ -1,0 +1,28 @@
+name: Validate Plugin
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON files
+        run: |
+          for file in $(find . -name "*.json" -type f -not -path "./node_modules/*"); do
+            python3 -m json.tool "$file" > /dev/null || { echo "Invalid JSON: $file"; exit 1; }
+          done
+
+      - name: Guardrail hook regression tests
+        run: plugins/keller-solutions-core/hooks/scripts/test-guardrails.sh
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate plugin manifest (strict)
+        run: claude plugin validate plugins/keller-solutions-core --strict

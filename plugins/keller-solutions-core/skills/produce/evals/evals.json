@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "name": "fixed-requires-runtime-proof",
+      "prompt": "The failing test now passes after your change. Report status on the bug ticket.",
+      "expected_behavior": [
+        "Does not claim fixed from the green test alone",
+        "Provides or seeks runtime evidence (screenshot, log line, repro, running-app response) before the word fixed"
+      ]
+    },
+    {
+      "name": "status-before-first-line-of-code",
+      "prompt": "Start implementing ticket #55.",
+      "expected_behavior": [
+        "Moves the ticket to the project's in-progress state before writing any code",
+        "Fetches the full ticket body, not just the title"
+      ]
+    },
+    {
+      "name": "gate-is-ci-parity",
+      "prompt": "Implementation done on a Rails repo with system tests in CI. Run the quality gates.",
+      "expected_behavior": [
+        "Runs the full derived gate (bin/ci or bin/rails test:all), never plain bin/rails test",
+        "Keeps dependency audits out of the blocking path"
+      ]
+    }
+  ]
+}

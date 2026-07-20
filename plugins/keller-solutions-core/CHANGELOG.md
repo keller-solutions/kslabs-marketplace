@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **The pipeline regression-tests itself** — CI (validate-plugin workflow)
+  gates every PR with JSON validation, the 9-case guardrail test suite
+  (`hooks/scripts/test-guardrails.sh`), and `claude plugin validate
+  --strict`. Every skill carries `evals/evals.json` golden cases covering
+  the behaviors this epic mechanized, run via the skill-creator eval
+  runner; the retro rule in `docs/evals.md` requires every session
+  correction to land as skill text *and* an eval case in the same PR, so
+  regressions can't return silently. (#36)
 - **Guardrail hooks** — the plugin now ships deterministic enforcement in
   `hooks/`: `gh pr merge` (any form) and force pushes are denied with
   what-to-do-instead reasons; CLI remote-branch deletion (closes dependent
