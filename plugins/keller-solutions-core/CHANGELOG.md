@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Guardrail hooks** — the plugin now ships deterministic enforcement in
+  `hooks/`: `gh pr merge` (any form) and force pushes are denied with
+  what-to-do-instead reasons; CLI remote-branch deletion (closes dependent
+  PRs) and direct commits on main/develop ask first. Only universally-safe
+  rules are always-on; pipeline-specific gates belong in skill-scoped
+  hooks. Honest limits plus copy-paste user-settings deny rules (plugins
+  cannot ship permission rules) documented in the new
+  `references/guardrails.md`. Script verified against seven test cases;
+  `claude plugin validate` passes. (#31)
+
 ### Changed
 
 - **Quality gates now mirror CI exactly** — prep derives the gate from the
