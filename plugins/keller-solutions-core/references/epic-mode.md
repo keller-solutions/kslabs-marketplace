@@ -27,6 +27,35 @@ If a single ticket has **no children**, it is not an epic — fall back to the n
 - Cut **one branch** for the epic (e.g. `feature/<epic-slug>`) from the default branch, once.
 - Every child commits onto that branch. The PR is opened **only after** the last child is done and the in-depth review has run.
 
+## Externalized Run State (survives compaction and session breaks)
+
+Long runs must not live only in conversation memory. At run start, write two files to a **gitignored** `.ks/` directory in the project (add `.ks/` to `.gitignore` on first use — run state is never committed):
+
+- `.ks/epic-<id>-state.json` — the child list in delivery order, each with `id`, `title`, `status` (`pending` / `in-progress` / `in-review` / `blocked: <reason>`), and `commit` once delivered. JSON on purpose: state stays machine-checkable and is harder to accidentally rewrite than prose.
+- `.ks/epic-<id>-progress.txt` — appended one-line notes: decisions taken, blockers hit, anything the next session needs.
+
+Update both as each child advances. **Resume ritual** (new session, or after compaction): read the state file, then `git log --oneline -20`, reconcile the two (git is the truth for what landed), and continue from the first non-done child — never re-derive the plan from memory.
+
+## Gate Between Children
+
+After each child's commit is pushed, verify the **full quality gate** ([Quality Gate](quality-gate.md)) before touching the next child — and when the epic branch already has an open PR (stacked delivery), also confirm `gh pr checks` is green. **Child N+1 never starts while child N is red.** A red gate is child N's problem to finish, not a note to leave behind.
+
+## Self-Unblock, Then Park
+
+When a child blocks, don't stop the run for an answer the run can produce:
+
+1. Re-read the child's Developer Notes and the project's **decisions register** (where one exists, e.g. `docs/decisions.md`) — most "blockers" are already-settled questions. Never re-litigate a settled decision without new information; when a genuinely new decision gets made mid-run, append it to the register with the date.
+2. Create what's missing when the app can produce it — seeds for dev preconditions, fixtures, config — noting it in progress.txt.
+3. Only then mark the child `blocked: <reason>` (mirror the reason as a ticket comment), and continue with the next child **only if it's independent**; otherwise pause the run with the state file telling the next session exactly why and where.
+
+## Stacked Epics (dependent features, separate PRs)
+
+When epic B depends on epic A but A can't merge first — no history rewriting, ever:
+
+- Cut B's branch **from A's branch**; open B's PR **based on A's branch** so reviewers (and Copilot) see only B's delta.
+- When A changes, sync B by **merging A into B** (never rebase), then re-verify B's gate.
+- When A merges: delete A's branch **via the GitHub UI or API only** — `git push --delete` silently **closes** dependent PRs, while UI/API deletion retargets B's PR to the base branch automatically. Verify the retarget, merge the base branch into B once to absorb the landing, and size-guard B's diff before requesting its Copilot review.
+
 ## Ordered, Live-Lifecycled Delivery
 
 Work children in **delivery order** (Deliver Without Seeding: each child is independently functional given only the children before it). The board must reflect reality **as you go** — a PM watching during the work session should see each child move *unstarted → in progress → awaiting review*, in order.

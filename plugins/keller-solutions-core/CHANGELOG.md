@@ -68,6 +68,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   shape is confirmed in one line before work starts; every shape inherits
   the full process. Epic Mode defines impromptu epics, and its evidence
   buckets now match the evidence reference (ADO/Jira attach-as-you-go). (#27)
+- **Epic Mode is hardened for long and overnight runs** — run state
+  externalized to gitignored `.ks/` files (JSON child list + progress
+  notes) with a git-log-first resume ritual that survives compaction and
+  session breaks; a hard gate between children (N+1 never starts while N
+  is red); self-unblock rules (consult the decisions register, create
+  producible preconditions, only then park `blocked:<reason>` with a
+  ticket comment); and no-rewrite stacked-epic mechanics (branch from the
+  parent epic, sync by merge, delete merged bases via UI/API only — CLI
+  branch deletion closes dependent PRs — verify retarget, size-guard the
+  delta). Replaces the hand-written overnight brief ritual. (#28)
 
 ## [1.5.0] - 2026-07-02
 
