@@ -266,7 +266,7 @@ The first story for a page builds every element the wireframe shows, with siblin
 
 ## Phase 5: Create the Ticket
 
-Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which tool the project uses (GitHub Issues, Jira, ClickUp, Linear), create the ticket with the full story as the body—narrative, acceptance criteria, Content, References, Developer Notes—and link it to its epic if one applies.
+Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which tool the project uses (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps), create the ticket with the full story as the body—narrative, acceptance criteria, Content, References, Developer Notes—and link it to its epic if one applies.
 
 ---
 

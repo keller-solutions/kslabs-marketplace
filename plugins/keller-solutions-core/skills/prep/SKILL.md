@@ -333,7 +333,7 @@ These settings will be used throughout the workflow:
 
 | Setting | Value | Impact |
 |---------|-------|--------|
-| **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / None] | Where tickets are created and updated |
+| **Ticket System** | [GitHub Issues / Jira / ClickUp / Linear / Azure DevOps / None] | Where tickets are created and updated |
 | **Status Workflow** | [the project's actual state names + order, e.g. `To Do → In Progress → In Review → Done`] | Which statuses to set, and when, so the board stays accurate in real time |
 | **Code Review** | [project's in-depth review, e.g. DHH for Rails / frontend review for React / code-review panel] | The stack-appropriate review run before every PR |
 | **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
@@ -363,11 +363,12 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 ([ -f ".jira" ] || grep -q "jira" .env 2>/dev/null) && echo "Jira"
 ([ -f ".clickup" ] || grep -q "clickup" .env 2>/dev/null || [ -n "$CLICKUP_API_TOKEN" ]) && echo "ClickUp"
 [ -f ".linear" ] && echo "Linear"
+([ -f ".azuredevops" ] || grep -q "AZURE_DEVOPS" .env 2>/dev/null || [ -n "$AZURE_DEVOPS_EXT_PAT" ] || git remote -v 2>/dev/null | grep -q "dev\.azure\.com") && echo "Azure DevOps"
 ```
 
 ### Discover the Status Workflow
 
-Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
+Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states; Azure DevOps process-template states / board columns). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
 
 ### Determine the Code Review Approach
 
