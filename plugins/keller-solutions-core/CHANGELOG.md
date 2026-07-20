@@ -47,6 +47,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Mermaid/text when a diagram beats a pixel). Verification data survives
   until the developer confirms done. New reference:
   `references/evidence.md`. (#24)
+- **Stories carry their visual reference; UI verifies against it** — plan
+  attaches the cropped wireframe/comp region to the ticket at carding time
+  (when sources exist; never blocks when they don't), and present gains a
+  Design-Fidelity Pass: side-by-side against the ticket's attachment, a
+  "more like this" sweep when a miss is found, and a sibling-surface sweep
+  when shared partials/patterns change. (#25)
 
 ## [1.5.0] - 2026-07-02
 

@@ -109,9 +109,13 @@ Use `/compound-engineering:feature-video` to demonstrate the feature working, ke
 
 For each UI acceptance criterion, capture a screenshot (or short recording) that **visibly demonstrates that criterion** — before/after for changes to existing UI. Save to `evidence/<ticket-id>/` (gitignored — evidence is attached, never committed), echo the file paths in the report, replace stale shots, and attach per the tool's mechanism. Contract and per-tool mechanics: [Evidence](../../references/evidence.md).
 
-### Step 2.4: Document Test Results
+### Step 2.4: Design-Fidelity Pass (UI stories)
 
-Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
+Compare the implementation **side-by-side against the ticket's attached visual reference** — colors, icons, sizing, spacing — and fix or list every discrepancy. One miss found means a proactive "more like this" sweep across the same screen. When the change touched a shared partial/pattern, sweep the sibling surfaces: find every other render site and verify each matches. No attached reference (the common case)? Verify against the acceptance criteria alone — this pass never blocks.
+
+### Step 2.5: Document Test Results
+
+Capture a test summary for the PR body: `bin/rails test:all 2>&1 | tail -20`
 
 ---
 

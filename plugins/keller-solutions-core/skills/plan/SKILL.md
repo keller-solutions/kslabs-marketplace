@@ -268,6 +268,8 @@ The first story for a page builds every element the wireframe shows, with siblin
 
 Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which tool the project uses (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps), create the ticket with the full story as the body—narrative, acceptance criteria, Content, References, Developer Notes—and link it to its epic if one applies.
 
+**Attach the visual reference when design sources exist** (they often don't — never block on this): crop the wireframe/comp region this story delivers, reading the design just-in-time, and attach the image to the ticket alongside its References citation ("Wireframe B2 p.4") via the tool's attachment mechanism ([Evidence](../../references/evidence.md)). The ticket carries the visual truth, so build and verification never hunt design files — present's fidelity pass compares the implementation against exactly this attachment.
+
 ---
 
 ## Phase 6: Output the Result
@@ -475,7 +477,7 @@ Before creating the ticket, verify:
 - [ ] Entry points (nav links, buttons) are criteria on the story that delivers their destination—no placeholder elements shipped early
 - [ ] No references to non-existent UI elements
 - [ ] Content is limited to copy that a criterion asserts verbatim, marked for externalization
-- [ ] Design references cite the specific artifact and location
+- [ ] Design references cite the specific artifact and location — and when sources exist, the story's cropped visual is attached to the ticket
 - [ ] Developer notes for technical context (not observable behavior)
 - [ ] Applicable quality dimensions reflected in criteria or Developer Notes (the rest noted N/A)
 - [ ] Title is unique and searchable
