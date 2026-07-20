@@ -14,13 +14,14 @@ Neither approach is wrong. What matters is respecting the project's established 
 
 Before committing or responding to PRs, determine the project's AI visibility preference.
 
-### 1. Check CLAUDE.md for Explicit Instructions
+### 1. Check AGENTS.md / CLAUDE.md for Explicit Instructions
 
-Look for AI attribution guidance in the project's CLAUDE.md file:
+Look for AI attribution guidance in the project's instruction file (AGENTS.md,
+falling back to CLAUDE.md where no AGENTS.md exists):
 
 ```bash
 # Search for visibility preferences
-grep -i "co-authored\|attribution\|claude\|ai\|visibility" CLAUDE.md
+grep -i "co-authored\|attribution\|claude\|ai\|visibility" AGENTS.md CLAUDE.md 2>/dev/null
 ```
 
 Explicit statements might include:
