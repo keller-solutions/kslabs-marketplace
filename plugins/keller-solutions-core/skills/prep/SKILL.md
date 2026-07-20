@@ -290,6 +290,8 @@ git log v1.0.0..HEAD --oneline
 
 ## Phase 3: Ready Report
 
+Verdicts are honest ([Self-Check](../../references/self-check.md)): a failing gate or unresolved drift makes this an "Environment Status" report naming what's broken — never "Environment Ready" with a caveat buried below.
+
 Output a brief readiness summary:
 
 ```markdown

@@ -365,7 +365,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 ### Step 6.3: Present Ready Notification
 
-**Claude does not merge PRs.** Output notification for user:
+**Claude does not merge PRs.** The checklist below carries **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)) — any ✗ retitles this "PR Status", names what remains, and defers the words "ready for review". Output notification for user:
 
 ```markdown
 ---

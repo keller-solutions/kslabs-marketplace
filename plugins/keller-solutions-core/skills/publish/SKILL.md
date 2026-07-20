@@ -306,6 +306,8 @@ If issues were found during deployment:
 
 ### Release Report
 
+Verification lines carry honest ✓/✗ verdicts ([Self-Check](../../references/self-check.md)) — a failed or unrun verification makes this a "Release Status" report, not "Release Complete".
+
 ```markdown
 ---
 

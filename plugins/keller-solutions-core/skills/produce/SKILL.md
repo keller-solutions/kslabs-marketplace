@@ -378,6 +378,8 @@ git add "$CHANGELOG_FILE" && git commit -m "docs(changelog): document changes fo
 
 ## Phase 5: Ready Report
 
+Print the checklist below with **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)). Any ✗ retitles this "Implementation Status" — the words "complete"/"done" are earned by an all-✓ list, and the last line names what remains.
+
 Output implementation summary:
 
 ```markdown

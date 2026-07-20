@@ -85,6 +85,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bisect on merge-commit history — the standing answer to "squash for a
   clean log" — plus the agent-era rationale that granular unrewritten
   history doubles as machine-readable memory. (#29)
+- **Every skill self-checks before claiming completion** — all six skills
+  end their reports with honest ✓/✗ verdicts; any ✗ retitles the report as
+  *status* ("Implementation Status", "PR Status", "Environment Status",
+  "Release Status") and names what remains — "complete/done/ready" is
+  earned by an all-✓ list. Plan's Story Checklist blocks ticket creation
+  on an ✗. Verdicts persist to epic run state and re-derive from artifacts
+  after compaction. The enforcement ladder (printed checklist → guardrail
+  hooks → goal condition → fresh-context verification) is documented in
+  the new `references/self-check.md`. (#30)
 
 ## [1.5.0] - 2026-07-02
 

@@ -465,7 +465,7 @@ Cite the specific artifact and location, never a bare link or screen code: "Wire
 
 For a single story, this checklist is the QA. When a session produces a batch of stories, also run the QA Pass (see Story Map Mode) to catch drift across the set.
 
-Before creating the ticket, verify:
+Run this with honest ✓/✗ verdicts before creating the ticket — an ✗ blocks ticket creation until fixed ([Self-Check](../../references/self-check.md)):
 
 - [ ] WHY expresses value (not restated WHAT)
 - [ ] WHO is specific (not generic "user") and on the user's side of the glass (not developer/platform/system)
