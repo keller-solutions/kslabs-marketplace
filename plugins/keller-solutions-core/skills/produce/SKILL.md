@@ -1,7 +1,7 @@
 ---
 name: produce
-description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of /ks-feature or /ks-ticket workflow.
-version: 1.4.0
+description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of the ks-feature or ks-ticket workflow.
+version: 1.4.1
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -27,7 +27,7 @@ Confirm the environment is ready:
 # Check we're on a feature branch (not main/develop)
 CURRENT_BRANCH=$(git branch --show-current)
 if [[ "$CURRENT_BRANCH" == "main" || "$CURRENT_BRANCH" == "develop" ]]; then
-  echo "ERROR: On '$CURRENT_BRANCH' (not a feature branch). Run /ks-prep first."
+  echo "ERROR: On '$CURRENT_BRANCH' (not a feature branch). Run the prep workflow first."
   exit 1
 fi
 ```
@@ -69,14 +69,14 @@ az boards work-item update --id [WORK_ITEM_ID] --state "Active"
 **Note**: Use the project's own status names (discovered during prep) and keep the ticket accurate in real time. The standard milestones:
 
 - **In Progress**: When starting work
-- **In Review / Awaiting Review**: When the PR is created (`/ks-present`) — or, in **Epic Mode**, the moment a child's commit and evidence land, even though the single PR comes later. See [Epic Mode](../../references/epic-mode.md).
+- **In Review / Awaiting Review**: When the PR is created (the present phase) — or, in **Epic Mode**, the moment a child's commit and evidence land, even though the single PR comes later. See [Epic Mode](../../references/epic-mode.md).
 - **Done**: When merged (product owner typically handles this)
 
 ### Step 1.4: Determine AI Visibility
 
 Check project preference (detected during prep) and apply it to **every** commit, PR body, and feedback reply — the examples in this skill show the Visible form:
 
-- **Visible**: Include `Co-Authored-By: Claude <noreply@anthropic.com>` (generic — never a model-version string, which goes stale)
+- **Visible**: Include a generic co-author trailer, e.g. `Co-Authored-By: Claude <noreply@anthropic.com>` — use the coding agent's own identity, never a model-version string, which goes stale
 - **Invisible**: Standard commits and replies with zero AI references — omit the trailer, the PR badge, and "with the help of Claude Code" phrasing entirely
 
 ### Step 1.5: Create/Verify Feature Branch
@@ -126,7 +126,7 @@ If making an architectural decision, create an ADR first (see `templates/ADR-tem
 
 ### Step 2.4: Create Execution Plan
 
-Use `/ce-plan` (compound-engineering) or create manually:
+Use the ce-plan skill (compound-engineering) or create manually:
 
 ```markdown
 ## Execution Plan
@@ -147,7 +147,7 @@ Use `/ce-plan` (compound-engineering) or create manually:
 - [test/file1_test.rb]
 ```
 
-Optionally use `/ce-brainstorm` (compound-engineering) for additional research.
+Optionally use the ce-brainstorm skill (compound-engineering) for additional research.
 
 ---
 
@@ -276,7 +276,7 @@ Run Red-Green-Refactor across the story's criteria, commit (at least once), done
 
 ## UI Implementation: Frontend Design
 
-When implementing user-facing UI components, invoke `/frontend-design`. Use it for new pages, components, or any work where aesthetics matter.
+When implementing user-facing UI components, invoke the frontend-design skill. Use it for new pages, components, or any work where aesthetics matter.
 
 **Integration with TDD**: Write the test for behavior first, then use frontend-design for implementation. The test verifies *what* the UI does; frontend-design ensures it looks exceptional.
 
@@ -341,7 +341,7 @@ Check:
 
 ### Step 4.5: Quality Dimensions Review
 
-"It works" is the start of the quality conversation, not the end — a feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Before the ready report, triage which of the nine [Quality Dimensions](../../references/quality-dimensions.md) this feature touches (most touch 3–6) — **Security, Performance/CWV, Accessibility, SEO, AEO, Reliability, Privacy, Observability, Cost & Efficiency** — verify each, and record the rest as `N/A — <why>`, never skipped silently. The reference defines each and how to check it; some checks run via existing tooling (e.g. `bin/brakeman` for Security, the test suite for Reliability, a contrast/a11y check for Accessibility), and for the rest you reason from the diff. Carry the result forward — `/ks-present` reports which applied and how each was addressed.
+"It works" is the start of the quality conversation, not the end — a feature can pass every test and still be insecure, slow, inaccessible, invisible to search and AI, fragile under failure, careless with data, unobservable in production, or costly at scale. Before the ready report, triage which of the nine [Quality Dimensions](../../references/quality-dimensions.md) this feature touches (most touch 3–6) — **Security, Performance/CWV, Accessibility, SEO, AEO, Reliability, Privacy, Observability, Cost & Efficiency** — verify each, and record the rest as `N/A — <why>`, never skipped silently. The reference defines each and how to check it; some checks run via existing tooling (e.g. `bin/brakeman` for Security, the test suite for Reliability, a contrast/a11y check for Accessibility), and for the rest you reason from the diff. Carry the result forward — the present phase reports which applied and how each was addressed.
 
 ### Step 4.6: Update CHANGELOG
 
@@ -408,14 +408,14 @@ Output implementation summary:
 - [file2.rb] - [brief description]
 - [test/file1_test.rb] - [brief description]
 
-Ready to proceed with `/ks-present` to create PR and handle review.
+Ready to proceed with the ks-present workflow to create PR and handle review.
 ```
 
 ---
 
 ## Standalone Usage
 
-When invoked directly (`/ks-produce <ticket>`):
+When invoked directly (the ks-produce workflow with a ticket number or 'current'):
 
 1. Performs pre-flight checks
 2. Builds execution plan
@@ -426,12 +426,12 @@ When invoked directly (`/ks-produce <ticket>`):
 
 ## Workflow Usage
 
-When invoked as part of `/ks-feature` or `/ks-ticket`:
+When invoked as part of the ks-feature or ks-ticket workflow:
 
 1. Receives ticket from previous skill
 2. Implements using TDD
 3. Runs quality gates
-4. Automatically proceeds to `/ks-present`
+4. Automatically proceeds to the present phase
 
 ---
 
@@ -471,22 +471,22 @@ Every feature should preserve the F5 principle: clone, setup, run. See [The F5 P
 
 ## Leveraging Dependent Plugins
 
-This skill integrates with commands from dependent plugins:
+This skill integrates with skills from dependent plugins:
 
 ### compound-engineering
 
-Verified against compound-engineering **3.19.0** (v3 renamed everything to `ce-*`). If a command is missing in your install, do the step manually — the process stands without the helper.
+Verified against compound-engineering **3.19.0** (v3 renamed everything to `ce-*`). If a helper skill is missing in your install, do the step manually — the process stands without the helper.
 
-- `/ce-plan` - Detailed execution planning
-- `/ce-brainstorm` - Research and idea development
-- `/ce-work` - TDD implementation assistance
-- `/ce-code-review` - Self-review before PR
-- `/ce-resolve-pr-feedback` - Address review findings
-- `/ce-simplify-code` - Simplification pass on the final diff
+- `ce-plan` - Detailed execution planning
+- `ce-brainstorm` - Research and idea development
+- `ce-work` - TDD implementation assistance
+- `ce-code-review` - Self-review before PR
+- `ce-resolve-pr-feedback` - Address review findings
+- `ce-simplify-code` - Simplification pass on the final diff
 
 ### frontend-design
 
-- `/frontend-design` - Create distinctive, production-grade UI components. Use whenever implementing visual interfaces — it prevents generic "AI slop" aesthetics and produces polished designs with intentional typography, color, and motion.
+- `frontend-design` - Create distinctive, production-grade UI components. Use whenever implementing visual interfaces — it prevents generic "AI slop" aesthetics and produces polished designs with intentional typography, color, and motion.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: prep
-description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of /ks-feature workflow.
-version: 1.3.0
+description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of the ks-feature workflow.
+version: 1.3.1
 argument-hint: "[optional: path to project]"
 ---
 
@@ -25,7 +25,7 @@ Preparation prevents wasted effort, ensures you're working from the latest code,
 
 Prep's findings persist between sessions — don't re-derive what's already known:
 
-1. **Read the project's Claude memory** (its memory index and any feedback/lesson notes) and the CLAUDE.md `Ticket Workflow` block. A recorded lesson is *applied*, not rediscovered — if a note says "run X before deploy," X is now part of this session's gates.
+1. **Read the project's agent memory** (its memory index and any feedback/lesson notes) and the `Ticket Workflow` block in CLAUDE.md or AGENTS.md. A recorded lesson is *applied*, not rediscovered — if a note says "run X before deploy," X is now part of this session's gates.
 2. **Read `.ks/context.json`** (gitignored, written by Phase 4's Store Context step below). If it exists and is fresh — no changes to CI config, CLAUDE.md, or lockfiles since it was written, and less than a week old — print its Development Context table with a "cached, verified fresh" note and skip straight to Phase 2's hygiene steps (pull, stray-state, drift, gate). Stale or absent → full orientation below, then rewrite the cache.
 
 ### Step 1.1: Detect Project Type
@@ -57,13 +57,13 @@ Read these files in order (if they exist):
 
 1. **README.md** - Project purpose, setup instructions, tech stack
 2. **CONTRIBUTING.md** - Development workflow and standards
-3. **CLAUDE.md** - AI-specific guidance and commands
+3. **CLAUDE.md / AGENTS.md** - Agent-specific guidance and commands
 4. **docs/coding-guidelines.md** - Coding standards (if referenced)
 5. **docs/domain-model.md** - Domain entities (if referenced)
 
 ```bash
 # Check what documentation exists
-ls README.md CONTRIBUTING.md CLAUDE.md docs/*.md 2>/dev/null
+ls README.md CONTRIBUTING.md CLAUDE.md AGENTS.md docs/*.md 2>/dev/null
 ```
 
 ### Step 1.3: Review Architecture Decisions
@@ -369,7 +369,7 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 
 ### Discover the Status Workflow
 
-**Check the project first**: a `Ticket Workflow` block in CLAUDE.md or project memory means a prior session already discovered it — read it and move on. Only discover fresh when absent, and **write the confirmed workflow back into the project** so this is the last session that has to.
+**Check the project first**: a `Ticket Workflow` block in CLAUDE.md/AGENTS.md or project memory means a prior session already discovered it — read it and move on. Only discover fresh when absent, and **write the confirmed workflow back into the project** so this is the last session that has to.
 
 Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states; Azure DevOps process-template states / board columns). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
 
@@ -410,7 +410,7 @@ These values should be remembered and applied in produce/present:
 
 ## Standalone Usage
 
-When invoked directly (`/ks-prep`), this skill:
+When invoked directly (the ks-prep workflow, or a direct request to prep), this skill:
 
 1. Performs full orientation and preparation
 2. Reports the development context summary
@@ -418,7 +418,7 @@ When invoked directly (`/ks-prep`), this skill:
 
 ## Workflow Usage
 
-When invoked as part of `/ks-feature` or `/ks-ticket`:
+When invoked as part of the ks-feature or ks-ticket workflow:
 
 1. Performs full orientation and preparation
 2. Presents development context summary
