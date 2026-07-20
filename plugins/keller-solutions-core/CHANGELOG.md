@@ -116,6 +116,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   doctrine — merge commit, UI/API branch deletion, no squash (the old
   `gh pr merge --squash --delete-branch` suggestion contradicted Git
   Integrity). (#32)
+- **Dependent-plugin references verified current** — compound-engineering
+  v3 renamed its commands to `ce-*`: produce and present now point at
+  `/ce-plan`, `/ce-brainstorm`, `/ce-work`, `/ce-code-review`,
+  `/ce-resolve-pr-feedback`, `/ce-simplify-code`, `/ce-test-browser`
+  (verified against installed 3.19.0), with a stated rule that a missing
+  helper never blocks — do the step manually. README records tested
+  dependency versions. (#33)
 
 ## [1.5.0] - 2026-07-02
 

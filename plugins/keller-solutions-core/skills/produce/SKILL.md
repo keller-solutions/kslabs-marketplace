@@ -126,7 +126,7 @@ If making an architectural decision, create an ADR first (see `templates/ADR-tem
 
 ### Step 2.4: Create Execution Plan
 
-Use `/workflows:plan` or create manually:
+Use `/ce-plan` (compound-engineering) or create manually:
 
 ```markdown
 ## Execution Plan
@@ -147,7 +147,7 @@ Use `/workflows:plan` or create manually:
 - [test/file1_test.rb]
 ```
 
-Optionally use `/compound-engineering:deepen-plan` for additional research.
+Optionally use `/ce-brainstorm` (compound-engineering) for additional research.
 
 ---
 
@@ -474,12 +474,14 @@ This skill integrates with commands from dependent plugins:
 
 ### compound-engineering
 
-- `/workflows:plan` - Detailed execution planning
-- `/compound-engineering:deepen-plan` - Research and best practices
-- `/workflows:work` - TDD implementation assistance
-- `/workflows:review` - Self-review before PR
-- `/compound-engineering:resolve_todo_parallel` - Address review findings
-- `/compound-engineering:lint` - Run all linters
+Verified against compound-engineering **3.19.0** (v3 renamed everything to `ce-*`). If a command is missing in your install, do the step manually — the process stands without the helper.
+
+- `/ce-plan` - Detailed execution planning
+- `/ce-brainstorm` - Research and idea development
+- `/ce-work` - TDD implementation assistance
+- `/ce-code-review` - Self-review before PR
+- `/ce-resolve-pr-feedback` - Address review findings
+- `/ce-simplify-code` - Simplification pass on the final diff
 
 ### frontend-design
 

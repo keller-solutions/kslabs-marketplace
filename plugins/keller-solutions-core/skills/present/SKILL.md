@@ -103,7 +103,7 @@ If a step can't be completed without seeding, check the story's Developer Notes:
 
 ### Step 2.2: Record Video Walkthrough (Optional)
 
-Use `/compound-engineering:feature-video` to demonstrate the feature working, key user flows, and acceptance criteria being met.
+Record a walkthrough with your screen tooling, or drive the flow with browser automation (`/ce-test-browser` from compound-engineering, or the agent-browser skill) and capture it — demonstrating key user flows and acceptance criteria being met.
 
 ### Step 2.3: Capture Evidence Per Criterion
 
@@ -222,7 +222,7 @@ az boards work-item update --id [WORK_ITEM_ID] \
 
 ## Phase 4: Review Environment (if applicable)
 
-If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/compound-engineering:playwright-test`).
+If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/ce-test-browser`).
 
 ---
 
@@ -479,10 +479,11 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
 
 This skill integrates with compound-engineering commands:
 
-- `/compound-engineering:feature-video` - Record video walkthrough
-- `/compound-engineering:playwright-test` - Run browser tests
-- `/compound-engineering:resolve_todo_parallel` - Address multiple findings
-- `/compound-engineering:resolve_pr_parallel` - Parallel PR comment resolution
+Verified against compound-engineering **3.19.0**; missing helpers never block — do the step manually.
+
+- `/ce-test-browser` - Diff-scoped browser QA of the change
+- `/ce-resolve-pr-feedback` - Address PR review findings
+- `/ce-code-review` - In-depth review pass
 
 ---
 
