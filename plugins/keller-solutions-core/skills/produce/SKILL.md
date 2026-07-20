@@ -34,11 +34,11 @@ fi
 
 ### Step 1.2: Get the Ticket
 
-Retrieve the ticket to implement:
+Retrieve the **full ticket body** — never plan from a title (titles-only analysis has produced materially wrong groupings, including working a ticket that was already Closed):
 
 ```bash
 # If ticket number provided
-gh issue view [TICKET_NUMBER] --json title,body,labels
+gh issue view [TICKET_NUMBER] --json title,body,labels,state
 
 # If "current" or no argument, check branch name for ticket reference
 # Or ask user for ticket number
@@ -46,7 +46,7 @@ gh issue view [TICKET_NUMBER] --json title,body,labels
 
 ### Step 1.3: Update Ticket Status
 
-Move the ticket to "In Progress" to signal work has started. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
+Move the ticket to "In Progress" **before the first line of code** — a watcher of the board should never see code appear ahead of status. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
 
 **Quick reference:**
 

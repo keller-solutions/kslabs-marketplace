@@ -438,7 +438,9 @@ Update status at these milestones:
 | PR created | In Review | `/ks-present` |
 | PR merged | Done | Product owner (manual) |
 
-`To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it).
+`To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it — In Progress lands *before* the first line of code).
+
+**Discover once, document in the project.** The first time a project's status workflow is confirmed, write it into that project — a `Ticket Workflow` block in the project's CLAUDE.md (tool, state names in order, any quirks) or its project memory — so later sessions read it instead of rediscovering it. Rule of the workflow: **fetch full work-item bodies before any planning or grouping** — titles alone mislead.
 
 ### Discovering the Status Workflow
 

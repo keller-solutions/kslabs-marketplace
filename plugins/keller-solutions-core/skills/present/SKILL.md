@@ -372,6 +372,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 ## PR Ready for Final Review
 
+**Ticket**: [TICKET_ID] — [TICKET_TITLE]
 **PR**: [PR_URL]
 **Title**: [PR_TITLE]
 **Branch**: [PR_BRANCH] → develop

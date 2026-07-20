@@ -354,6 +354,8 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 
 ### Discover the Status Workflow
 
+**Check the project first**: a `Ticket Workflow` block in CLAUDE.md or project memory means a prior session already discovered it — read it and move on. Only discover fresh when absent, and **write the confirmed workflow back into the project** so this is the last session that has to.
+
 Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states; Azure DevOps process-template states / board columns). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
 
 ### Determine the Code Review Approach

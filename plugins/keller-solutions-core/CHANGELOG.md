@@ -53,6 +53,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Design-Fidelity Pass: side-by-side against the ticket's attachment, a
   "more like this" sweep when a miss is found, and a sibling-surface sweep
   when shared partials/patterns change. (#25)
+- **Ticket lifecycle is live and remembered** — In Progress lands before
+  the first line of code; full work-item bodies are fetched before any
+  planning or grouping (titles mislead); every hand-back names the ticket
+  ID; and the first confirmed discovery of a project's status workflow is
+  written back into that project (CLAUDE.md `Ticket Workflow` block or
+  project memory) so it is never rediscovered. prep reads the documented
+  workflow first. Applied to this repo's own CLAUDE.md. (#26)
 
 ## [1.5.0] - 2026-07-02
 
