@@ -25,6 +25,24 @@ cp -r plugins/keller-solutions-core/skills/skill-template plugins/keller-solutio
 - Semantic versioning for plugins and skills
 - Keep SKILL.md files under 500 lines
 
+## Pull Request Feedback Loop (every agent, every PR — no exceptions)
+
+Copilot auto-reviews every PR here, and its review lands minutes AFTER
+`gh pr create` returns. Opening a PR is not the end of the work:
+
+1. After opening a PR — or pushing new commits to one — run the Copilot review
+   loop per `plugins/keller-solutions-core/references/copilot-review.md`: poll
+   for a review on the current head SHA (bounded wait); silence is not approval.
+2. Address every comment and reply in-thread to each. Never mark threads
+   resolved — adequacy is the reviewer's call.
+3. Re-request review only after substantive changes (reviews are usage-billed).
+4. Do not report a PR "ready to merge" until the loop has run dry. The hand-back
+   includes: "Copilot review: N comments — M addressed (commit SHAs), K declined
+   with rationale."
+
+This binds every agent and tool that opens or updates a PR in this repo,
+whether or not the ks-present workflow is in use.
+
 ## Ticket Workflow
 
 - Tool: GitHub Issues (this repo)
