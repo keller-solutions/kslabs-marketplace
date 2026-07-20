@@ -192,35 +192,20 @@ bin/rails db:migrate
 php artisan migrate:status
 ```
 
-### Step 2.7: Run Test Suite
+### Step 2.7: Derive the Quality Gate, Then Run It
 
-Verify the codebase is in a known-good state:
-
-**Rails:**
+The local gate is whatever CI actually runs — derived from the repo, never a remembered subset:
 
 ```bash
-bin/rails test
+# Sources, in precedence order — union them when they disagree
+ls bin/ci config/ci.rb 2>/dev/null            # Rails 8.1 CI DSL
+ls .github/workflows/*.yml 2>/dev/null        # GitHub Actions jobs that gate PRs
+ls buildspec*.yml 2>/dev/null                 # CodeBuild (client deploy gates)
 ```
 
-**JavaScript:**
+Split what you find into a **blocking gate** (tests *including system tests*, linters, static analysis — run it now; if anything fails, **stop and fix before proceeding**) and **advisory audits** (`bundle-audit`, `npm audit` — run and report, but failures become proposed fix PRs, not a broken codebase).
 
-```bash
-npm test
-```
-
-**Laravel:**
-
-```bash
-php artisan test
-```
-
-**.NET:**
-
-```bash
-dotnet test
-```
-
-If tests fail, **stop and fix before proceeding**.
+Fallbacks when no CI definition exists: `bin/ci` → `bin/rails test:all` (plain `bin/rails test` **excludes system tests**) → `npm test` → `php artisan test` → `dotnet test`. Full derivation and failure playbooks: [Quality Gate](../../references/quality-gate.md).
 
 ### Step 2.8: Determine AI Visibility Preference
 
@@ -337,7 +322,8 @@ These settings will be used throughout the workflow:
 | **Status Workflow** | [the project's actual state names + order, e.g. `To Do → In Progress → In Review → Done`] | Which statuses to set, and when, so the board stays accurate in real time |
 | **Code Review** | [project's in-depth review, e.g. DHH for Rails / frontend review for React / code-review panel] | The stack-appropriate review run before every PR |
 | **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
-| **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
+| **Quality Gate** | [derived commands, e.g. union of `bin/ci` + workflows] | CI-parity set; green before any done-claim |
+| **Advisory Audits** | [e.g. `bundle-audit` — non-blocking] | Failures become fix PRs, never silent or blocking |
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
 | **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
 | **CHANGELOG** | [Current / Needs update / Not found] | Must update before PR |
@@ -392,6 +378,8 @@ npm test 2>&1 | tee /tmp/test_output.txt
 These values should be remembered and applied in produce/present:
 
 - **AI_VISIBLE**: Include Co-Authored-By in commits
+- **QUALITY_GATE**: The derived CI-parity command set (blocking, system tests included)
+- **AUDIT_CHECKS**: Advisory scans run and reported separately (non-blocking)
 - **TICKET_SYSTEM**: Which tool to use for ticket operations
 - **STATUS_WORKFLOW**: The project's status names + order (esp. in-progress and awaiting-review states)
 - **REVIEW_APPROACH**: The in-depth stack review to run before each PR

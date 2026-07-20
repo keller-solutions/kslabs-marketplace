@@ -285,20 +285,17 @@ When implementing user-facing UI components, invoke `/frontend-design`. Use it f
 
 ## Phase 4: Quality Gates
 
-### Step 4.1: Run All Tests
+### Step 4.1: Run the Full Quality Gate (CI Parity)
+
+Run the **QUALITY_GATE derived during prep** — everything CI runs, never a subset:
 
 ```bash
-# Rails
-bin/rails test
-
-# JavaScript
-npm test
-
-# System tests (if applicable)
-bin/rails test:system
+bin/ci                # when the repo defines it
+bin/rails test:all    # Rails fallback — plain `bin/rails test` excludes system tests
+npm test              # JavaScript, plus the repo's e2e command
 ```
 
-All tests must pass.
+Every gate step must pass. Advisory audits (`bundle-audit`, `npm audit`) stay off the blocking path — a failing advisory becomes a proposed lockfile-bump PR, not a red gate. See [Quality Gate](../../references/quality-gate.md).
 
 ### Step 4.2: Run Linters
 

@@ -50,22 +50,17 @@ For each changed file, verify:
 - [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
 - [ ] In-depth stack-appropriate review run on the final diff (Step 1.5)
 
-### Step 1.3: Run Quality Checks
+### Step 1.3: Run the Full Quality Gate
 
-Final verification before PR:
+Final verification before PR — the same **QUALITY_GATE derived during prep** that produce ran, at full CI parity (system tests included):
 
 ```bash
-# All tests
-bin/rails test
-
-# All linters
+bin/ci || bin/rails test:all   # the derived gate — never plain `bin/rails test`
 bin/lint
-
-# Security scan
 bin/brakeman
 ```
 
-All must pass before creating PR.
+All must pass before creating PR. Advisory audit failures don't block — they become a proposed fix PR ([Quality Gate](../../references/quality-gate.md)).
 
 ### Step 1.4: Verify CHANGELOG Updated
 
@@ -333,10 +328,10 @@ If unresolved comments remain, repeat the evaluation.
 
 ### Step 5.6: Run Final Checks
 
-After making changes:
+After making changes, re-run the full gate — feedback commits don't get a lighter bar:
 
 ```bash
-bin/rails test
+bin/ci || bin/rails test:all
 bin/lint
 ```
 
@@ -344,11 +339,13 @@ bin/lint
 
 ## Phase 6: Ready for Merge
 
-### Step 6.1: Verify All Checks Pass
+### Step 6.1: Verify All Checks Pass — Green Before Done
 
 ```bash
-gh pr checks $PR_NUMBER
+gh pr checks $PR_NUMBER --watch
 ```
+
+**Never report the workflow complete while any check is failing** — pre-existing failures included ("unrelated to this feature" is not an exemption; all PRs end green). For failures that predate the branch, follow the [Quality Gate](../../references/quality-gate.md) playbook: name the check, propose the lockfile-bump PR and merge order, and hold. In Epic Mode the next child does not start while this one's checks are red; stacked children absorb base fixes by merging the base in (never rebasing) and re-verifying.
 
 ### Step 6.2: Get Final PR Status
 

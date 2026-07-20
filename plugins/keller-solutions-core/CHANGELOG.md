@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **Quality gates now mirror CI exactly** — prep derives the gate from the
+  repo's own CI definitions (`bin/ci`/`config/ci.rb`, GitHub workflows,
+  CodeBuild specs; union when they disagree) and records it as
+  `QUALITY_GATE` (blocking, system tests included) plus `AUDIT_CHECKS`
+  (advisory). Produce and present run that derived gate — never plain
+  `bin/rails test`, which excludes system tests. Present never reports the
+  workflow complete while any PR check fails: pre-existing failures get the
+  named-advisory playbook (separate lockfile-bump PR + merge order); in Epic
+  Mode the next child is blocked while the current child's checks are red;
+  stacked children absorb base fixes by merge, never rebase. New reference:
+  `references/quality-gate.md`. (#22)
+
 ## [1.5.0] - 2026-07-02
 
 ### Added
