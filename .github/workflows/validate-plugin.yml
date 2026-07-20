@@ -14,15 +14,17 @@ jobs:
 
       - name: Validate JSON files
         run: |
-          for file in $(find . -name "*.json" -type f -not -path "./node_modules/*"); do
-            python3 -m json.tool "$file" > /dev/null || { echo "Invalid JSON: $file"; exit 1; }
-          done
+          fail=0
+          while IFS= read -r -d '' file; do
+            python3 -m json.tool "$file" > /dev/null || { echo "Invalid JSON: $file"; fail=1; }
+          done < <(find . -name "*.json" -type f -not -path "./node_modules/*" -print0)
+          exit "$fail"
 
       - name: Guardrail hook regression tests
         run: plugins/keller-solutions-core/hooks/scripts/test-guardrails.sh
 
       - name: Install Claude Code CLI
-        run: npm install -g @anthropic-ai/claude-code
+        run: npm install -g @anthropic-ai/claude-code@2.1.215
 
       - name: Validate plugin manifest (strict)
         run: claude plugin validate plugins/keller-solutions-core --strict

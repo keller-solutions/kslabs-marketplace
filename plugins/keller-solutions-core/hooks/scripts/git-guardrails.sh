@@ -8,8 +8,9 @@ input=$(cat)
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // empty' 2>/dev/null) || exit 0
 [ -z "$cmd" ] && exit 0
 
-decide() { # $1 = deny|ask, $2 = reason (no double quotes)
-  printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"%s","permissionDecisionReason":"%s"}}' "$1" "$2"
+decide() { # $1 = deny|ask, $2 = reason (jq guarantees valid JSON whatever the text)
+  jq -cn --arg d "$1" --arg r "$2" \
+    '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":$d,"permissionDecisionReason":$r}}'
   exit 0
 }
 

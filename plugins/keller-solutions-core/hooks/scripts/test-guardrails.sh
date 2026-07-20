@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 # Regression tests for git-guardrails.sh — run locally or in CI. Exit 0 = all pass.
 set -uo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1
+command -v jq >/dev/null || { echo "FATAL: jq not available — suite cannot run"; exit 1; }
+[ -x ./git-guardrails.sh ] || { echo "FATAL: git-guardrails.sh missing or not executable"; exit 1; }
 pass=0; fail=0
 
 check() { # $1 desc, $2 command-json-fragment, $3 expected substring ("" = expect empty output)
-  out=$(printf '{"tool_input":{"command":"%s"}}' "$2" | ./git-guardrails.sh)
+  out=$(printf '{"tool_input":{"command":"%s"}}' "$2" | ./git-guardrails.sh); rc=$?
+  if [ "$rc" -ne 0 ]; then fail=$((fail+1)); echo "FAIL (hook exited $rc): $1"; return; fi
   if [ -z "$3" ]; then
     if [ -z "$out" ]; then pass=$((pass+1)); else fail=$((fail+1)); echo "FAIL (expected pass-through): $1 → $out"; fi
   else

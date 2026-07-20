@@ -55,9 +55,9 @@ For each changed file, verify:
 Final verification before PR — the same **QUALITY_GATE derived during prep** that produce ran, at full CI parity (system tests included):
 
 ```bash
-if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi   # a red bin/ci must never fall through
-bin/lint
-bin/brakeman
+{ if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi; } \
+  && bin/lint \
+  && bin/brakeman   # && chain: a red gate halts here — nothing runs past a failure
 ```
 
 All must pass before creating PR. Advisory audit failures don't block — they become a proposed fix PR ([Quality Gate](../../references/quality-gate.md)).
@@ -344,8 +344,7 @@ If unaddressed comments remain, repeat the evaluation.
 After making changes, re-run the full gate — feedback commits don't get a lighter bar:
 
 ```bash
-if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi
-bin/lint
+{ if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi; } && bin/lint
 ```
 
 ---
