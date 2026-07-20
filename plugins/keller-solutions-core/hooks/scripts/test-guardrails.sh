@@ -15,13 +15,18 @@ check() { # $1 desc, $2 command-json-fragment, $3 expected substring ("" = expec
 
 check "deny gh pr merge"              "gh pr merge 5 --auto --merge"          '"deny"'
 check "deny gh pr merge plain"        "gh pr merge 12"                        '"deny"'
+check "deny merge after &&"           "cd repo && gh pr merge 5"              '"deny"'
 check "deny force push"               "git push --force origin feature/x"     '"deny"'
 check "deny force-with-lease"         "git push --force-with-lease"           '"deny"'
 check "deny -f push"                  "git push -f"                           '"deny"'
+check "deny plus-refspec force"       "git push origin +main"                 '"deny"'
 check "ask remote delete"             "git push origin --delete feature/old"  '"ask"'
 check "pass benign ls"                "ls -la"                                ""
 check "pass normal push"              "git push origin feature/x"             ""
 check "pass gh pr view"               "gh pr view 5 --json url"               ""
+check "pass merge in commit msg"      "git commit -m \\\"docs: why gh pr merge is banned\\\""  ""
+check "pass echoed force push"        "echo git push --force"                 ""
+check "pass tag deletion"             "git push origin :refs/tags/v1.0"       ""
 
 echo "guardrail tests: $pass passed, $fail failed"
 [ "$fail" -eq 0 ]

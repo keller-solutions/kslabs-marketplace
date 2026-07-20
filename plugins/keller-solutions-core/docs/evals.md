@@ -4,7 +4,7 @@ Skill edits break processes the way code edits break features — and deserve th
 
 ## 1. Deterministic tests (run in CI, every PR)
 
-- `hooks/scripts/test-guardrails.sh` — 9 cases against the guardrail hook (deny merge/force-push, ask on branch-delete, pass-through on benign commands).
+- `hooks/scripts/test-guardrails.sh` — 14 cases against the guardrail hook (deny merge/force-push including plus-refspec and compound commands, ask on branch-delete, pass-through on benign commands, quoted mentions, and tag deletions).
 - `claude plugin validate --strict` — manifest and structure linting.
 - JSON validation across the repo.
 

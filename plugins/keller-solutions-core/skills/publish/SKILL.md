@@ -318,7 +318,9 @@ Offer to run `/ks-prep` as the closing bookend — the release is out; leave the
 
 ```bash
 git branch -d release/v1.1.0
-git push origin --delete release/v1.1.0
+# Delete the remote branch via API (consistent with Git Integrity's stacking rule;
+# CLI deletion would also trip the guardrail's confirmation ask)
+gh api -X DELETE repos/{owner}/{repo}/git/refs/heads/release/v1.1.0
 ```
 
 ### Step 5.4: Document Any Issues

@@ -55,7 +55,7 @@ For each changed file, verify:
 Final verification before PR — the same **QUALITY_GATE derived during prep** that produce ran, at full CI parity (system tests included):
 
 ```bash
-bin/ci || bin/rails test:all   # the derived gate — never plain `bin/rails test`
+if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi   # a red bin/ci must never fall through
 bin/lint
 bin/brakeman
 ```
@@ -344,7 +344,7 @@ If unaddressed comments remain, repeat the evaluation.
 After making changes, re-run the full gate — feedback commits don't get a lighter bar:
 
 ```bash
-bin/ci || bin/rails test:all
+if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi
 bin/lint
 ```
 

@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **The pipeline regression-tests itself** — CI (validate-plugin workflow)
-  gates every PR with JSON validation, the 9-case guardrail test suite
+  gates every PR with JSON validation, the guardrail regression suite (14 cases)
   (`hooks/scripts/test-guardrails.sh`), and `claude plugin validate
   --strict`. Every skill carries `evals/evals.json` golden cases covering
   the behaviors this epic mechanized, run via the skill-creator eval
@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   rules are always-on; pipeline-specific gates belong in skill-scoped
   hooks. Honest limits plus copy-paste user-settings deny rules (plugins
   cannot ship permission rules) documented in the new
-  `references/guardrails.md`. Script verified against nine test cases;
+  `references/guardrails.md`. Script verified against a fourteen-case regression suite;
   `claude plugin validate` passes. (#31)
 
 ### Changed

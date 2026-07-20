@@ -17,14 +17,16 @@ Only universally-safe rules live in the always-on set. Pipeline-specific gates (
 
 - Hooks see tool calls, not subprocesses: a script that itself force-pushes won't be caught. The guardrail raises the floor; it isn't a sandbox.
 - Pattern matching can be fooled by exotic quoting or exec wrappers. Treat a bypassed guardrail as a bug to report, never a loophole to use.
+- Patterns anchor to command position, so commit messages *mentioning* guarded commands pass through; accepted false positive: `gh pr merge --help` is denied (the denial text explains itself). Plus-refspec force pushes (`git push origin +main`) are covered; tag deletions (`:refs/tags/…`) are exempt from the branch-deletion ask.
 - Plugins **cannot ship permission rules** — only hooks. For defense in depth, add the equivalents to your user settings once:
 
 ```json
 "permissions": {
   "deny": [
-    "Bash(gh pr merge*)",
-    "Bash(git push --force*)",
-    "Bash(git push -f*)"
+    "Bash(gh pr merge:*)",
+    "Bash(gh pr merge)",
+    "Bash(git push --force:*)",
+    "Bash(git push -f:*)"
   ]
 }
 ```
