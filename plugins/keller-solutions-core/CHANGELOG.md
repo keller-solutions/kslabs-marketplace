@@ -29,6 +29,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   are called out in the hand-back. Re-reviews requested only for
   substantive changes (reviews are usage-billed). New reference:
   `references/copilot-review.md`. (#21)
+- **"Fixed" now requires runtime proof** — produce's gate states that a
+  green suite is necessary, not sufficient: fix claims carry a screenshot,
+  log line, passing repro, or a response from the running app.
+  Troubleshooting mode: no commits until the human confirms (WIP prefix for
+  rare checkpoints); two failed attempts → root-cause, never a third
+  symptom-chase; external-system claims need receipts and
+  correlation ≠ causation. Coverage fallback recorded: 100% diff coverage
+  where total-100 is unreachable. CLAUDE template gains a Troubleshooting
+  Discipline section. New reference: `references/verified-fix.md`. (#23)
 
 ## [1.5.0] - 2026-07-02
 

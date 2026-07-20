@@ -297,6 +297,8 @@ npm test              # JavaScript, plus the repo's e2e command
 
 Every gate step must pass. Advisory audits (`bundle-audit`, `npm audit`) stay off the blocking path — a failing advisory becomes a proposed lockfile-bump PR, not a red gate. See [Quality Gate](../../references/quality-gate.md).
 
+**Green is necessary, not sufficient.** Any "fixed"/"working" claim also needs runtime proof — screenshot, log line, passing repro, or the running app answering — and troubleshooting has its own tighter rules (no commits until confirmed; two failed attempts → root-cause, not a third patch). See [Verified Fixes](../../references/verified-fix.md).
+
 ### Step 4.2: Run Linters
 
 ```bash
@@ -313,12 +315,7 @@ Fix any issues immediately.
 
 ### Step 4.3: Check Coverage
 
-Verify test coverage meets standards (100%):
-
-```bash
-# Coverage report is typically generated with test run
-open coverage/index.html
-```
+Verify test coverage meets standards (100%) — the report generates with the test run (`coverage/index.html`). Where total-100 is unreachable (legacy/client repos), the sanctioned fallback is 100% diff coverage, recorded in the project context.
 
 ### Step 4.4: Self-Review
 

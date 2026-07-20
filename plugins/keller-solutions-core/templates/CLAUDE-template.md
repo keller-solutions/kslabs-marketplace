@@ -119,6 +119,13 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 
 **If you disagree**: Reply explaining why, referencing guidelines or patterns.
 
+### Troubleshooting Discipline
+
+- "Fixed" requires runtime proof (screenshot, log line, passing repro, or the running app answering) — a green suite alone is not evidence
+- No commits while troubleshooting until the fix is confirmed working (`WIP` prefix for the rare mid-hunt checkpoint)
+- Two failed fix attempts → stop and root-cause; never a third symptom-chase
+- External-system claims need receipts: current docs or observed request/response, and correlation ≠ causation
+
 ## Coding Principles
 
 1. **DRY**: Extract on the second use, not the first
