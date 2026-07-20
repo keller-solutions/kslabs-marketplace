@@ -5,6 +5,7 @@ When `/ks-ticket` (or the produce skill) is invoked with an **epic / parent tick
 ## What an Epic Is
 
 - An epic/parent ticket **groups** related feature stories. It has no acceptance criteria of its own and produces **no commit of its own**.
+- An **impromptu epic** is the same grouping declared at invocation: several independent tickets passed to `/ks-ticket` together. No parent ticket exists — the passed tickets are the children, delivered in the order given unless dependencies dictate otherwise; everything else in this document applies unchanged.
 - Each child is a normal user story ("In order to… As a… I want") with its own acceptance criteria and its own **single commit** (see the commit rule in [produce](../skills/produce/SKILL.md): one commit per story, not per criterion).
 - An epic with 5 children yields **≥5 commits** (one per child, plus any extras for refactor or review feedback) — none attributed to the epic ticket.
 
@@ -17,8 +18,9 @@ Determined from the project's ticket system (identified during [prep](../skills/
 - **Jira** — Epic issue type; children via Epic Link / parent.
 - **Linear** — parent issue or project; children are sub-issues.
 - **Azure DevOps** — Epic or Feature work item type; children via parent/child links, in backlog order.
+- **Impromptu** — multiple ticket IDs passed to `/ks-ticket` directly; the children are exactly those tickets.
 
-If the ticket has **no children**, it is not an epic — fall back to the normal single-ticket flow.
+If a single ticket has **no children**, it is not an epic — fall back to the normal single-ticket flow.
 
 ## One Branch, One PR
 
@@ -36,7 +38,7 @@ For each child, in order:
 3. **Capture evidence** and attach it to the child ticket now **if the tool supports automated attachment** (ClickUp); otherwise **hold** it for the batch at PR time.
 4. **Status → the project's "awaiting review" state.**
 
-The actual state names and the per-tool status/attachment commands are discovered during prep — see [managing-tickets](../skills/managing-tickets/SKILL.md). Evidence buckets: **attach-as-you-go** where the tool's API allows it (ClickUp); **hold-and-batch** where attachment needs developer involvement (GitHub, Jira, Linear, Azure DevOps), posting links inline where possible.
+The actual state names and the per-tool status/attachment commands are discovered during prep — see [managing-tickets](../skills/managing-tickets/SKILL.md). Evidence buckets per [Evidence](evidence.md): **attach-as-you-go** (ClickUp, Azure DevOps, Jira); **hold-and-batch** at PR time (GitHub via browser-upload, Linear via links).
 
 ## In-Depth Review Before the PR
 

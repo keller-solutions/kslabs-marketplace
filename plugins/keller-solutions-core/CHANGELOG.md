@@ -60,6 +60,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   written back into that project (CLAUDE.md `Ticket Workflow` block or
   project memory) so it is never rediscovered. prep reads the documented
   workflow first. Applied to this repo's own CLAUDE.md. (#26)
+- **ks-ticket infers the delivery shape** — a parent ticket with children
+  is an epic; multiple ticket IDs in any phrasing are an impromptu epic
+  (same treatment, the given tickets as children); a lone childless ticket
+  runs the single flow. Natural-language modifiers honored, never
+  required ("stack this on #N", "hold the PR until I say"); the inferred
+  shape is confirmed in one line before work starts; every shape inherits
+  the full process. Epic Mode defines impromptu epics, and its evidence
+  buckets now match the evidence reference (ADO/Jira attach-as-you-go). (#27)
 
 ## [1.5.0] - 2026-07-02
 
