@@ -5,6 +5,181 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-07-19
+
+### Added
+
+- **The pipeline regression-tests itself** — CI (validate-plugin workflow)
+  gates every PR with JSON validation, the guardrail regression suite (14 cases)
+  (`hooks/scripts/test-guardrails.sh`), and `claude plugin validate
+  --strict`. Every skill carries `evals/evals.json` golden cases covering
+  the behaviors this epic mechanized, run via the skill-creator eval
+  runner; the retro rule in `docs/evals.md` requires every session
+  correction to land as skill text *and* an eval case in the same PR, so
+  regressions can't return silently. (#36)
+- **KS repo baseline documented** — `references/repo-baseline.md`:
+  branch rulesets (block force pushes, required checks, optional
+  auto-Copilot-review with its cost stated), edited `bin/ci` +
+  gh-signoff recorded local gates, Renovate shared preset (advisories as
+  green bot PRs), tuned `copilot-instructions.md`, and a changelog CI
+  check — each item guidance with enforces/costs, adopted per repo. prep
+  reports which baseline items a repo has in the Development Context. (#37)
+- **Guardrail hooks** — the plugin now ships deterministic enforcement in
+  `hooks/`: `gh pr merge` (any form) and force pushes are denied with
+  what-to-do-instead reasons; CLI remote-branch deletion (closes dependent
+  PRs) and direct commits on main/develop ask first. Only universally-safe
+  rules are always-on; pipeline-specific gates belong in skill-scoped
+  hooks. Honest limits plus copy-paste user-settings deny rules (plugins
+  cannot ship permission rules) documented in the new
+  `references/guardrails.md`. Script verified against a fourteen-case regression suite;
+  `claude plugin validate` passes. (#31)
+
+### Changed
+
+- **Quality gates now mirror CI exactly** — prep derives the gate from the
+  repo's own CI definitions (`bin/ci`/`config/ci.rb`, GitHub workflows,
+  CodeBuild specs; union when they disagree) and records it as
+  `QUALITY_GATE` (blocking, system tests included) plus `AUDIT_CHECKS`
+  (advisory). Produce and present run that derived gate — never plain
+  `bin/rails test`, which excludes system tests. Present never reports the
+  workflow complete while any PR check fails: pre-existing failures get the
+  named-advisory playbook (separate lockfile-bump PR + merge order); in Epic
+  Mode the next child is blocked while the current child's checks are red;
+  stacked children absorb base fixes by merge, never rebase. New reference:
+  `references/quality-gate.md`. (#22)
+- **Copilot review loop is autonomous** — present size-guards the diff
+  (300-file limit), requests the review itself (`gh pr edit --add-reviewer
+  @copilot`, REST fallback, dedupe by head SHA), polls to completion with a
+  bounded timeout, addresses every comment with in-thread replies, and
+  reports counts in the hand-back — checking three completion signals
+  (reviews list, request queue, and the Copilot Code Review workflow run)
+  before ever declaring a no-show. Thread resolution stays with the
+  reviewer — never marked resolved by the skill; repos requiring resolution
+  are called out in the hand-back. Re-reviews requested only for
+  substantive changes (reviews are usage-billed). New reference:
+  `references/copilot-review.md`. (#21)
+- **"Fixed" now requires runtime proof** — produce's gate states that a
+  green suite is necessary, not sufficient: fix claims carry a screenshot,
+  log line, passing repro, or a response from the running app.
+  Troubleshooting mode: no commits until the human confirms (WIP prefix for
+  rare checkpoints); two failed attempts → root-cause, never a third
+  symptom-chase; external-system claims need receipts and
+  correlation ≠ causation. Coverage fallback recorded: 100% diff coverage
+  where total-100 is unreachable. CLAUDE template gains a Troubleshooting
+  Discipline section. New reference: `references/verified-fix.md`. (#23)
+- **Evidence is contractual** — per-criterion visible proof captured on
+  production-realistic data (no invented external IDs; unmistakable
+  fixtures), saved to a gitignored `evidence/<ticket>/` with paths echoed,
+  attached to the ticket/PR and never committed. Attach-as-you-go now
+  includes Azure DevOps and Jira alongside ClickUp; GitHub uses the
+  browser-upload `user-attachments` path (CI-artifact fallback;
+  Mermaid/text when a diagram beats a pixel). Verification data survives
+  until the developer confirms done. New reference:
+  `references/evidence.md`. (#24)
+- **Stories carry their visual reference; UI verifies against it** — plan
+  attaches the cropped wireframe/comp region to the ticket at carding time
+  (when sources exist; never blocks when they don't), and present gains a
+  Design-Fidelity Pass: side-by-side against the ticket's attachment, a
+  "more like this" sweep when a miss is found, and a sibling-surface sweep
+  when shared partials/patterns change. (#25)
+- **Ticket lifecycle is live and remembered** — In Progress lands before
+  the first line of code; full work-item bodies are fetched before any
+  planning or grouping (titles mislead); every hand-back names the ticket
+  ID; and the first confirmed discovery of a project's status workflow is
+  written back into that project (CLAUDE.md `Ticket Workflow` block or
+  project memory) so it is never rediscovered. prep reads the documented
+  workflow first. Applied to this repo's own CLAUDE.md. (#26)
+- **ks-ticket infers the delivery shape** — a parent ticket with children
+  is an epic; multiple ticket IDs in any phrasing are an impromptu epic
+  (same treatment, the given tickets as children); a lone childless ticket
+  runs the single flow. Natural-language modifiers honored, never
+  required ("stack this on #N", "hold the PR until I say"); the inferred
+  shape is confirmed in one line before work starts; every shape inherits
+  the full process. Epic Mode defines impromptu epics, and its evidence
+  buckets now match the evidence reference (ADO/Jira attach-as-you-go). (#27)
+- **Epic Mode is hardened for long and overnight runs** — run state
+  externalized to gitignored `.ks/` files (JSON child list + progress
+  notes) with a git-log-first resume ritual that survives compaction and
+  session breaks; a hard gate between children (N+1 never starts while N
+  is red); self-unblock rules (consult the decisions register, create
+  producible preconditions, only then park `blocked:<reason>` with a
+  ticket comment); and no-rewrite stacked-epic mechanics (branch from the
+  parent epic, sync by merge, delete merged bases via UI/API only — CLI
+  branch deletion closes dependent PRs — verify retarget, size-guard the
+  delta). Replaces the hand-written overnight brief ritual. (#28)
+- **Commit granularity: one per story is the floor, not the ceiling** —
+  additional commits welcome; every commit shippable (compiles, tests
+  pass) with `WIP:` prefixing the rare exception; never squash or rewrite.
+  Git Integrity gains the `--first-parent` discipline: story-level log and
+  bisect on merge-commit history — the standing answer to "squash for a
+  clean log" — plus the agent-era rationale that granular unrewritten
+  history doubles as machine-readable memory. (#29)
+- **Every skill self-checks before claiming completion** — the five workflow skills
+  end their reports with honest ✓/✗ verdicts; any ✗ retitles the report as
+  *status* ("Implementation Status", "PR Status", "Environment Status",
+  "Release Status") and names what remains — "complete/done/ready" is
+  earned by an all-✓ list. Plan's Story Checklist blocks ticket creation
+  on an ✗. Verdicts persist to epic run state and re-derive from artifacts
+  after compaction. The enforcement ladder (printed checklist → guardrail
+  hooks → goal condition → fresh-context verification) is documented in
+  the new `references/self-check.md`. (#30)
+- **Attribution and branch targets resolve from the project, not
+  templates** — attribution is generic (`Co-Authored-By: Claude`, never a
+  model-version string) and fully conditional on the project's visibility
+  preference (Invisible projects get zero AI references anywhere); present
+  detects the target branch (develop when it exists, else the repo's
+  default; hotfixes → main; stacked epics → parent branch) instead of
+  hardcoding develop; and the hand-back's merge guidance now matches
+  doctrine — merge commit, UI/API branch deletion, no squash (the old
+  `gh pr merge --squash --delete-branch` suggestion contradicted Git
+  Integrity). (#32)
+- **Dependent-plugin references verified current** — compound-engineering
+  v3 renamed its commands to `ce-*`: produce and present now point at
+  `/ce-plan`, `/ce-brainstorm`, `/ce-work`, `/ce-code-review`,
+  `/ce-resolve-pr-feedback`, `/ce-simplify-code`, `/ce-test-browser`
+  (verified against installed 3.19.0), with a stated rule that a missing
+  helper never blocks — do the step manually. README records tested
+  dependency versions. (#33)
+- **Git Integrity covers the previously-silent cases** — a client-policy
+  override clause (avoid squash, but the client's repo convention wins,
+  recorded once in project context); a "Stacking Without Lying" recipe
+  (branch from parent, sync by merge, UI/API-only base deletion since CLI
+  deletion closes dependent PRs, verify retarget) with the note that
+  mainstream stacking tools all rebase — which is why we don't use them.
+  (#34; joins #29's `--first-parent` discipline and WIP convention)
+- **CHANGELOG discipline is part of the work** — the `[Unreleased]` entry
+  rides in the same commit as the story it documents; in repos with a
+  changelog, the self-check fails a story that changed code but not the
+  changelog; repos without one are surfaced once, never forced. publish
+  gains Step 2.0: promote `[Unreleased]` into the versioned section with
+  human curation (optional `git cliff --unreleased` keepachangelog
+  drafting). (#35)
+- **prep is reality-checked, cached, and a bookend** — Step 1.0 reads
+  project memory (lessons applied, not rediscovered) and a `.ks/`
+  context cache with a staleness check, fast-pathing repeat sessions;
+  stale-state cleanup now catches uncommitted/unpushed work, orphaned dev
+  servers, and leftover worktrees (rolling back their shared-dev-DB
+  migrations first — an orphaned migration once drifted for 18 days);
+  the database step flags phantom migrations and schema drift at session
+  start. present and publish close by offering the "next thing" prep
+  pass, making prep both ends of the session. (#38)
+- **publish triggers naturally and verifies to completion** — "cut a
+  release"-style phrasing invokes it (no exact command); deployment is
+  watched to a terminal state (Heroku release polling with failure output
+  fetched — a failed release phase means not deployed); smoke includes a
+  health-endpoint check and deployed-version-vs-tag comparison; error
+  monitoring gets concrete Sentry release/deploy marking and a
+  crash-free-rate check after a bake period. The local GitFlow release
+  merge is documented as sanctioned ritual, distinct from PR merges
+  (always the developer's act). (#39)
+- **Question-shaped prompts are read-only** — plan gains Investigation
+  Mode: "how would we / estimate / review this" produces research,
+  options, hour-table estimates, and a recommendation — no edits,
+  commits, or tickets until the developer says build; propose-then-choose
+  halts for selection. The shape of the ask engages it (no guard text
+  required); ambiguity gets one clarifying line, never assumed write
+  intent. Encoded in plan, both commands, and the CLAUDE template. (#40)
+
 ## [1.5.0] - 2026-07-02
 
 ### Added

@@ -216,11 +216,12 @@ git commit -m "refactor: extract shared logic from foo and bar"
 
 ### The Commit Discipline
 
-1. **Commit early, commit often**: Small, frequent commits are easier to understand
+1. **Commit early, commit often**: Small, frequent commits are easier to understand — a story yields at least one commit, never at most
 2. **Push immediately**: Once pushed, you won't be tempted to rewrite
-3. **Each commit should compile and pass tests**: If it doesn't, you're setting traps for future you
+3. **Each commit should compile and pass tests**: If it can't, label the trap — prefix it `WIP:` (rare, deliberate, never the rule)
 4. **Commit what you did, when you did it**: Don't rewrite history to look smarter
 5. **Write meaningful commit messages**: Future you will thank present you
+6. **Read story-level history with `--first-parent`**: `git log --first-parent` and `git bisect --first-parent` (Git ≥ 2.29) walk only the merge commits on an integration branch — story-granularity history and bisect, exactly what squash-merging advertises, without destroying the inner truth. This is the standing answer to "squash for a clean log." (The granular inner history has new value in the agent era: it doubles as machine-readable memory of how the work actually went.)
 
 ---
 
@@ -253,6 +254,23 @@ Integration branches (QA, staging, etc.) have different expectations:
 > **Don't rewrite history for anything that's been pushed to a shared branch.**
 
 If others might have pulled it, don't change it.
+
+### Client Repos: When in Rome
+
+Avoid squash — but **the client's repo policy wins**. When a client org mandates squash-merge (or rebase-merge), follow their convention rather than silently violating it or arguing doctrine on their turf. Record the exception once in the project's context (CLAUDE.md or project memory) so later sessions honor it without re-deciding. Inside the branch, nothing changes: shippable commits, no force pushes, push after each commit — what the *merge button* does to them is the client's call.
+
+---
+
+## Stacking Without Lying
+
+Dependent features on separate PRs, with zero history rewriting (the full mechanics live in [Epic Mode](epic-mode.md)):
+
+1. Cut the dependent branch **from the parent branch**; open its PR **based on the parent** so reviews see only the delta.
+2. Sync by **merging the parent in** when it changes — never rebasing.
+3. When the parent merges, delete its branch **via the GitHub UI or API only** — CLI deletion (`git push --delete`) silently *closes* dependent PRs, while UI/API deletion auto-retargets them to the base.
+4. Verify the retarget, merge the base in once, re-verify checks.
+
+Every mainstream stacking tool (Graphite, ghstack, spr) restacks by rebase + force-push — which is why we do it this way instead.
 
 ---
 

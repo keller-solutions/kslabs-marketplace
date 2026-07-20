@@ -1,7 +1,7 @@
 ---
 name: present
 description: Self-review, create PR, and handle the feedback loop. Takes implemented code through an in-depth stack review, PR creation (one PR per epic), evidence gathering, a quality-dimensions report, and responding to every piece of feedback. Works standalone or as part of /ks-feature or /ks-ticket workflow.
-version: 1.3.0
+version: 1.4.0
 argument-hint: "[PR number or 'current']"
 ---
 
@@ -50,22 +50,17 @@ For each changed file, verify:
 - [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
 - [ ] In-depth stack-appropriate review run on the final diff (Step 1.5)
 
-### Step 1.3: Run Quality Checks
+### Step 1.3: Run the Full Quality Gate
 
-Final verification before PR:
+Final verification before PR — the same **QUALITY_GATE derived during prep** that produce ran, at full CI parity (system tests included):
 
 ```bash
-# All tests
-bin/rails test
-
-# All linters
-bin/lint
-
-# Security scan
-bin/brakeman
+{ if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi; } \
+  && bin/lint \
+  && bin/brakeman   # && chain: a red gate halts here — nothing runs past a failure
 ```
 
-All must pass before creating PR.
+All must pass before creating PR. Advisory audit failures don't block — they become a proposed fix PR ([Quality Gate](../../references/quality-gate.md)).
 
 ### Step 1.4: Verify CHANGELOG Updated
 
@@ -102,21 +97,25 @@ Before opening the PR, run an in-depth review **appropriate to the project's sta
 
 ### Step 2.1: Walk the Story as the User
 
-Before gathering evidence, complete every step of the story yourself using only the tools an average user has—a browser, not the Rails console. Each acceptance criterion should be reachable that way, with preconditions created through the application itself (per the plan skill's Deliver Without Seeding principle).
+Before gathering evidence, complete every step of the story yourself using only the tools an average user has—a browser, not the Rails console. Each acceptance criterion should be reachable that way, with preconditions created through the application itself (per the plan skill's Deliver Without Seeding principle). Use **production-realistic data** — never a lone seeded demo row, never invented external-system IDs — and leave verification data in place until the developer confirms they're done looking.
 
 If a step can't be completed without seeding, check the story's Developer Notes: anticipated seeding should be called out there. If it isn't, flag it before asking a reviewer to accept—either the delivery order needs fixing or the note is missing.
 
 ### Step 2.2: Record Video Walkthrough (Optional)
 
-Use `/compound-engineering:feature-video` to demonstrate the feature working, key user flows, and acceptance criteria being met.
+Record a walkthrough with your screen tooling, or drive the flow with browser automation (`/ce-test-browser` from compound-engineering, or the agent-browser skill) and capture it — demonstrating key user flows and acceptance criteria being met.
 
-### Step 2.3: Take Screenshots
+### Step 2.3: Capture Evidence Per Criterion
 
-Capture before/after screenshots for UI changes, using browser tools or Playwright.
+For each UI acceptance criterion, capture a screenshot (or short recording) that **visibly demonstrates that criterion** — before/after for changes to existing UI. Save to `evidence/<ticket-id>/` (gitignored — evidence is attached, never committed), echo the file paths in the report, replace stale shots, and attach per the tool's mechanism. Contract and per-tool mechanics: [Evidence](../../references/evidence.md).
 
-### Step 2.4: Document Test Results
+### Step 2.4: Design-Fidelity Pass (UI stories)
 
-Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
+Compare the implementation **side-by-side against the ticket's attached visual reference** — colors, icons, sizing, spacing — and fix or list every discrepancy. One miss found means a proactive "more like this" sweep across the same screen. When the change touched a shared partial/pattern, sweep the sibling surfaces: find every other render site and verify each matches. No attached reference (the common case)? Verify against the acceptance criteria alone — this pass never blocks.
+
+### Step 2.5: Document Test Results
+
+Capture a test summary for the PR body: `bin/rails test:all 2>&1 | tail -20`
 
 ---
 
@@ -126,17 +125,22 @@ Capture a test summary for the PR body: `bin/rails test 2>&1 | tail -20`
 
 ### Step 3.1: Determine Target Branch
 
+Detect — never assume `develop` (repos differ; a wrong base has forced retargeting before):
+
 ```bash
-# Feature branches → develop
-# Hotfix branches → main
-TARGET_BRANCH="develop"
+# GitFlow repos target develop when it exists; otherwise the repo's default branch.
+# Hotfixes target main. Stacked epics target the parent epic's branch (see Epic Mode).
+DEFAULT_BRANCH=$(git remote show origin | sed -n 's/.*HEAD branch: //p')
+git show-ref --verify --quiet refs/remotes/origin/develop && TARGET_BRANCH="develop" || TARGET_BRANCH="$DEFAULT_BRANCH"
 ```
 
 ### Step 3.2: Create PR
 
+The AI badge line below appears on **Visible** projects only — omit it entirely when the project's AI-visibility preference (from prep) is Invisible ([AI Visibility](../../references/ai-visibility.md)).
+
 ```bash
 gh pr create \
-  --base develop \
+  --base "$TARGET_BRANCH" \
   --title "feat(scope): brief description" \
   --body "$(cat <<'EOF'
 ## Summary
@@ -218,19 +222,25 @@ az boards work-item update --id [WORK_ITEM_ID] \
 
 ## Phase 4: Review Environment (if applicable)
 
-If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/compound-engineering:playwright-test`).
+If the project has preview deployments, verify the change in staging (`gh pr checks $PR_NUMBER`, then open the project-specific preview URL). Run browser tests where applicable (`/ce-test-browser`).
 
 ---
 
 ## Phase 5: Feedback Loop
 
-### Step 5.1: Wait for Copilot Review
+### Step 5.1: Request and Await the Copilot Review
 
-Monitor for automated review:
+Requesting the review is part of presenting — never wait to be asked, and never skip it. Full mechanics (size limits, retry, dedupe, polling): [Copilot Review](../../references/copilot-review.md).
 
 ```bash
-# Check for reviews
-gh pr view $PR_NUMBER --json reviews -q '.reviews[] | select(.author.login == "copilot")'
+# Size guard first (300-file hard limit; huge diffs time out — propose a split instead)
+gh pr view $PR_NUMBER --json changedFiles,additions,deletions -q '"\(.changedFiles) files +\(.additions) -\(.deletions)"'
+
+# Request (gh ≥ 2.88; retry once on the pending-review transient; REST fallback in the reference)
+gh pr edit $PR_NUMBER --add-reviewer @copilot
+
+# Await: poll for the bot's review of the CURRENT head SHA, bounded timeout —
+# report a no-show rather than proceeding silently
 ```
 
 ### Step 5.2: Get All Comments
@@ -263,7 +273,7 @@ For each piece of feedback, determine the appropriate response.
 
    Refs #[TICKET_NUMBER]
 
-   Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+   Co-Authored-By: Claude <noreply@anthropic.com>
    EOF
    )"
    ```
@@ -305,10 +315,7 @@ For each piece of feedback, determine the appropriate response.
 Addressed with the help of Claude Code in [commit-sha]. [Summary of change].
 ```
 
-Examples:
-
-- "Addressed with the help of Claude Code in a1b2c3d. Added error handling for nil case."
-- "Addressed with the help of Claude Code in e4f5g6h. Extracted validation to a private method."
+Example: "Addressed with the help of Claude Code in a1b2c3d. Added error handling for the nil case."
 
 **For declined feedback:**
 
@@ -316,10 +323,7 @@ Examples:
 This [pattern/approach] follows [guideline/convention]. [Explanation]. [Reference if applicable].
 ```
 
-Examples:
-
-- "This follows the existing pattern in `app/services/`. Changing would create inconsistency."
-- "Per our coding guidelines, we extract methods on the second use. This is currently used only once."
+Example: "This follows the existing pattern in `app/services/`. Changing would create inconsistency."
 
 ### Step 5.5: Verify All Comments Addressed
 
@@ -329,26 +333,31 @@ gh api repos/{owner}/{repo}/pulls/$PR_NUMBER/comments \
   --jq '[.[] | select(.in_reply_to_id == null)] | length'
 ```
 
-If unresolved comments remain, repeat the evaluation.
+If unaddressed comments remain, repeat the evaluation.
+
+**Thread resolution belongs to the reviewer — never mark threads resolved.** The commenter judges whether the response was adequate: a human reviewer resolves or replies again; since Copilot can't resolve, the developer resolves while reviewing (or merges past open threads). If the repo requires resolved threads before merge, say so in the hand-back.
+
+**Re-request economics:** after feedback commits, request a fresh Copilot review only for substantive changes (new logic, changed approach) — reviews are usage-billed; typo-level follow-ups ride to the human review.
 
 ### Step 5.6: Run Final Checks
 
-After making changes:
+After making changes, re-run the full gate — feedback commits don't get a lighter bar:
 
 ```bash
-bin/rails test
-bin/lint
+{ if [ -x bin/ci ]; then bin/ci; else bin/rails test:all; fi; } && bin/lint
 ```
 
 ---
 
 ## Phase 6: Ready for Merge
 
-### Step 6.1: Verify All Checks Pass
+### Step 6.1: Verify All Checks Pass — Green Before Done
 
 ```bash
-gh pr checks $PR_NUMBER
+gh pr checks $PR_NUMBER --watch
 ```
+
+**Never report the workflow complete while any check is failing** — pre-existing failures included ("unrelated to this feature" is not an exemption; all PRs end green). For failures that predate the branch, follow the [Quality Gate](../../references/quality-gate.md) playbook: name the check, propose the lockfile-bump PR and merge order, and hold. In Epic Mode the next child does not start while this one's checks are red; stacked children absorb base fixes by merging the base in (never rebasing) and re-verifying.
 
 ### Step 6.2: Get Final PR Status
 
@@ -360,16 +369,17 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 ### Step 6.3: Present Ready Notification
 
-**Claude does not merge PRs.** Output notification for user:
+**Claude does not merge PRs.** The checklist below carries **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)) — any ✗ retitles this "PR Status", names what remains, and defers the words "ready for review". Output notification for user:
 
 ```markdown
 ---
 
 ## PR Ready for Final Review
 
+**Ticket**: [TICKET_ID] — [TICKET_TITLE]
 **PR**: [PR_URL]
 **Title**: [PR_TITLE]
-**Branch**: [PR_BRANCH] → develop
+**Branch**: [PR_BRANCH] → [TARGET_BRANCH]
 
 ### Summary
 
@@ -385,8 +395,8 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 - [x] Linting passes
 - [x] Quality dimensions reviewed and reported in the PR
 - [x] In-depth stack-appropriate review completed before the PR
-- [x] Copilot review feedback addressed
-- [x] All PR comments responded to
+- [x] Copilot review: [N] comments — [M] addressed (commit SHAs), [K] declined with rationale
+- [x] All PR comments replied to in-thread [; repo requires thread resolution — resolve as you review]
 
 ### Files Changed
 
@@ -396,7 +406,9 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 
 Please review the PR and merge when satisfied.
 
-**To merge:** `gh pr merge [PR_NUMBER] --squash --delete-branch`
+**To merge** (your act — Claude never merges): use the **merge-commit** method, then delete the branch **via the GitHub UI/API** (auto-retargets any dependent PRs; CLI deletion closes them). No squash — history stays honest ([Git Integrity](../../references/git-integrity.md)).
+
+*Bookend*: once handed back, offer to run `/ks-prep` — "getting ready for the next thing" — so stray state, drift, and dependencies are settled before the next session starts.
 
 ---
 ```
@@ -460,17 +472,7 @@ gh api repos/{owner}/{repo}/pulls/{pr_number}/comments \
   --jq '.[] | "\(.id) \(.path):\(.line)"'
 ```
 
-**Resolve a review thread:**
-
-```bash
-gh api graphql -f query='
-  mutation {
-    resolveReviewThread(input: {threadId: "THREAD_ID"}) {
-      thread { isResolved }
-    }
-  }
-'
-```
+**Resolving threads:** not ours — resolution belongs to the reviewer (Step 5.5).
 
 ---
 
@@ -478,10 +480,11 @@ gh api graphql -f query='
 
 This skill integrates with compound-engineering commands:
 
-- `/compound-engineering:feature-video` - Record video walkthrough
-- `/compound-engineering:playwright-test` - Run browser tests
-- `/compound-engineering:resolve_todo_parallel` - Address multiple findings
-- `/compound-engineering:resolve_pr_parallel` - Parallel PR comment resolution
+Verified against compound-engineering **3.19.0**; missing helpers never block — do the step manually.
+
+- `/ce-test-browser` - Diff-scoped browser QA of the change
+- `/ce-resolve-pr-feedback` - Address PR review findings
+- `/ce-code-review` - In-depth review pass
 
 ---
 

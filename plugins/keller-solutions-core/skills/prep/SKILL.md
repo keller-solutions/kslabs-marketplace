@@ -1,7 +1,7 @@
 ---
 name: prep
 description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of /ks-feature workflow.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "[optional: path to project]"
 ---
 
@@ -20,6 +20,13 @@ Preparation prevents wasted effort, ensures you're working from the latest code,
 ---
 
 ## Phase 1: Project Orientation
+
+### Step 1.0: Fast-Path from Cached Context
+
+Prep's findings persist between sessions — don't re-derive what's already known:
+
+1. **Read the project's Claude memory** (its memory index and any feedback/lesson notes) and the CLAUDE.md `Ticket Workflow` block. A recorded lesson is *applied*, not rediscovered — if a note says "run X before deploy," X is now part of this session's gates.
+2. **Read `.ks/context.json`** (gitignored, written by Phase 4's Store Context step below). If it exists and is fresh — no changes to CI config, CLAUDE.md, or lockfiles since it was written, and less than a week old — print its Development Context table with a "cached, verified fresh" note and skip straight to Phase 2's hygiene steps (pull, stray-state, drift, gate). Stale or absent → full orientation below, then rewrite the cache.
 
 ### Step 1.1: Detect Project Type
 
@@ -136,17 +143,20 @@ git checkout develop 2>/dev/null || git checkout main
 git pull --ff-only
 ```
 
-### Step 2.3: Clean Up Stale Branches
+### Step 2.3: Clean Up Stale State
 
-Remove local branches that no longer exist on origin:
+Remove branches that no longer exist on origin — and catch what the last session left behind:
 
 ```bash
-# Prune remote-tracking branches
 git fetch --prune
-
-# Delete merged local branches (except main/develop)
 git branch --merged | grep -v -E '^\*|main|develop|master' | while read branch; do git branch -d "$branch" 2>/dev/null || true; done
+
+git status --short                 # uncommitted work from a prior session? surface it, don't stash it silently
+git log --branches --not --remotes --oneline | head -5   # committed but never pushed?
+git worktree list                  # leftover worktrees?
 ```
+
+**Worktree rule**: before removing a leftover worktree, check whether it ran migrations against the shared dev database (`bin/rails db:migrate:status` — Down entries whose files exist only in the worktree) and roll them back first. An orphaned worktree migration once left schema drift undetected for 18 days. Also check for orphaned dev servers (`lsof -i :3000 -i :3036 2>/dev/null`) and kill ones no session owns.
 
 ### Step 2.4: Check Dependency Freshness
 
@@ -181,10 +191,12 @@ For database-backed applications:
 **Rails:**
 
 ```bash
-bin/rails db:migrate:status
-# Run pending migrations if needed:
+bin/rails db:migrate:status        # pending migrations — and phantom ones (status without a file = drift)
+git diff --stat -- db/schema.rb    # schema drift the last session left behind
 bin/rails db:migrate
 ```
+
+Phantom migrations or unexplained schema.rb changes are **drift** — flag and resolve them now, at session start, not weeks later in an audit.
 
 **Laravel:**
 
@@ -192,35 +204,20 @@ bin/rails db:migrate
 php artisan migrate:status
 ```
 
-### Step 2.7: Run Test Suite
+### Step 2.7: Derive the Quality Gate, Then Run It
 
-Verify the codebase is in a known-good state:
-
-**Rails:**
+The local gate is whatever CI actually runs — derived from the repo, never a remembered subset:
 
 ```bash
-bin/rails test
+# Sources, in precedence order — union them when they disagree
+ls bin/ci config/ci.rb 2>/dev/null            # Rails 8.1 CI DSL
+ls .github/workflows/*.yml 2>/dev/null        # GitHub Actions jobs that gate PRs
+ls buildspec*.yml 2>/dev/null                 # CodeBuild (client deploy gates)
 ```
 
-**JavaScript:**
+Split what you find into a **blocking gate** (tests *including system tests*, linters, static analysis — run it now; if anything fails, **stop and fix before proceeding**) and **advisory audits** (`bundle-audit`, `npm audit` — run and report, but failures become proposed fix PRs, not a broken codebase).
 
-```bash
-npm test
-```
-
-**Laravel:**
-
-```bash
-php artisan test
-```
-
-**.NET:**
-
-```bash
-dotnet test
-```
-
-If tests fail, **stop and fix before proceeding**.
+Fallbacks when no CI definition exists: `bin/ci` → `bin/rails test:all` (plain `bin/rails test` **excludes system tests**) → `npm test` → `php artisan test` → `dotnet test`. Full derivation and failure playbooks: [Quality Gate](../../references/quality-gate.md).
 
 ### Step 2.8: Determine AI Visibility Preference
 
@@ -305,6 +302,8 @@ git log v1.0.0..HEAD --oneline
 
 ## Phase 3: Ready Report
 
+Verdicts are honest ([Self-Check](../../references/self-check.md)): a failing gate or unresolved drift makes this an "Environment Status" report naming what's broken — never "Environment Ready" with a caveat buried below.
+
 Output a brief readiness summary:
 
 ```markdown
@@ -337,10 +336,12 @@ These settings will be used throughout the workflow:
 | **Status Workflow** | [the project's actual state names + order, e.g. `To Do → In Progress → In Review → Done`] | Which statuses to set, and when, so the board stays accurate in real time |
 | **Code Review** | [project's in-depth review, e.g. DHH for Rails / frontend review for React / code-review panel] | The stack-appropriate review run before every PR |
 | **Dependency Updates** | [24-Hour Rule: updated this session / Opted out: install-only per [policy source]] | Whether each session starts with `bundle update`/`npm update` |
-| **Test Suite** | [Passing (N tests) / Failing / None] | Must pass before PR |
+| **Quality Gate** | [derived commands, e.g. union of `bin/ci` + workflows] | CI-parity set; green before any done-claim |
+| **Advisory Audits** | [e.g. `bundle-audit` — non-blocking] | Failures become fix PRs, never silent or blocking |
 | **Coverage** | [X% / Not reported / N/A] | Quality gate threshold |
 | **AI Visibility** | [Visible / Invisible] | Co-authored-by in commits |
 | **CHANGELOG** | [Current / Needs update / Not found] | Must update before PR |
+| **Repo Baseline** | [present items, e.g. ruleset ✓, bin/ci ✓, Renovate ✗] | Server-side reinforcements on owned repos ([Repo Baseline](../../references/repo-baseline.md)) |
 
 ### What This Means
 
@@ -368,6 +369,8 @@ gh issue list --limit 1 2>/dev/null && echo "GitHub Issues"
 
 ### Discover the Status Workflow
 
+**Check the project first**: a `Ticket Workflow` block in CLAUDE.md or project memory means a prior session already discovered it — read it and move on. Only discover fresh when absent, and **write the confirmed workflow back into the project** so this is the last session that has to.
+
 Knowing the tool isn't enough — find the project's **actual status names and their order**, so produce/present (and Epic Mode) can keep tickets accurate as work progresses. See [managing-tickets](../managing-tickets/SKILL.md) for per-tool queries (ClickUp `GET /list/{id}` statuses; GitHub project columns/`status:` labels; `jira issue move` transitions; Linear workflow states; Azure DevOps process-template states / board columns). If the order is ambiguous, confirm it with the user. Record the in-progress and awaiting-review states explicitly.
 
 ### Determine the Code Review Approach
@@ -392,12 +395,16 @@ npm test 2>&1 | tee /tmp/test_output.txt
 These values should be remembered and applied in produce/present:
 
 - **AI_VISIBLE**: Include Co-Authored-By in commits
+- **QUALITY_GATE**: The derived CI-parity command set (blocking, system tests included)
+- **AUDIT_CHECKS**: Advisory scans run and reported separately (non-blocking)
 - **TICKET_SYSTEM**: Which tool to use for ticket operations
 - **STATUS_WORKFLOW**: The project's status names + order (esp. in-progress and awaiting-review states)
 - **REVIEW_APPROACH**: The in-depth stack review to run before each PR
 - **DEPENDENCY_POLICY**: 24-Hour Rule (lockfile changes ride in the work PR) or opted out (and why)
 - **CHANGELOG_STATUS**: Whether to prompt for updates
 - **TESTS_PASSING**: Whether tests were green at start
+
+**Persist the table**: write these values to `.ks/context.json` (gitignored) with a timestamp and the checksums of CI config, CLAUDE.md, and lockfiles — Step 1.0's fast-path reads it next session.
 
 ---
 

@@ -70,7 +70,7 @@ If you can't determine the preference, ask directly and record the answer:
 I noticed this project doesn't have explicit guidance on AI attribution in commits and PRs.
 
 **Options:**
-1. **Visible**: Include "Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>" in commits and mention AI assistance in PR feedback responses
+1. **Visible**: Include "Co-Authored-By: Claude <noreply@anthropic.com>" in commits and mention AI assistance in PR feedback responses
 2. **Invisible**: No AI attribution—commits and PRs appear as standard human work
 3. **Mixed**: AI attribution in commits but not in PR comments (or vice versa)
 
@@ -78,6 +78,10 @@ Which approach fits this project's culture?
 ```
 
 ---
+
+## Attribution String
+
+When attribution is visible, use the **generic** form — `Co-Authored-By: Claude <noreply@anthropic.com>` — never a model-version string ("Claude Opus 4.5" et al.), which goes stale the moment models change and then misattributes every commit after.
 
 ## Visibility Modes
 
@@ -95,7 +99,7 @@ Uses OmniAuth gem for provider abstraction.
 
 Refs #123
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 **In PR feedback responses:**

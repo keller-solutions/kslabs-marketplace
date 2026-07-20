@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of /ks-feature or /ks-ticket workflow.
-version: 1.3.0
+version: 1.4.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -34,11 +34,11 @@ fi
 
 ### Step 1.2: Get the Ticket
 
-Retrieve the ticket to implement:
+Retrieve the **full ticket body** — never plan from a title (titles-only analysis has produced materially wrong groupings, including working a ticket that was already Closed):
 
 ```bash
 # If ticket number provided
-gh issue view [TICKET_NUMBER] --json title,body,labels
+gh issue view [TICKET_NUMBER] --json title,body,labels,state
 
 # If "current" or no argument, check branch name for ticket reference
 # Or ask user for ticket number
@@ -46,7 +46,7 @@ gh issue view [TICKET_NUMBER] --json title,body,labels
 
 ### Step 1.3: Update Ticket Status
 
-Move the ticket to "In Progress" to signal work has started. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
+Move the ticket to "In Progress" **before the first line of code** — a watcher of the board should never see code appear ahead of status. See [managing-tickets](../managing-tickets/SKILL.md) for tool-specific commands.
 
 **Quick reference:**
 
@@ -74,10 +74,10 @@ az boards work-item update --id [WORK_ITEM_ID] --state "Active"
 
 ### Step 1.4: Determine AI Visibility
 
-Check project preference (detected during prep):
+Check project preference (detected during prep) and apply it to **every** commit, PR body, and feedback reply — the examples in this skill show the Visible form:
 
-- **Visible**: Include `Co-Authored-By` in commits
-- **Invisible**: Standard commits without AI attribution
+- **Visible**: Include `Co-Authored-By: Claude <noreply@anthropic.com>` (generic — never a model-version string, which goes stale)
+- **Invisible**: Standard commits and replies with zero AI references — omit the trailer, the PR badge, and "with the help of Claude Code" phrasing entirely
 
 ### Step 1.5: Create/Verify Feature Branch
 
@@ -126,7 +126,7 @@ If making an architectural decision, create an ADR first (see `templates/ADR-tem
 
 ### Step 2.4: Create Execution Plan
 
-Use `/workflows:plan` or create manually:
+Use `/ce-plan` (compound-engineering) or create manually:
 
 ```markdown
 ## Execution Plan
@@ -147,7 +147,7 @@ Use `/workflows:plan` or create manually:
 - [test/file1_test.rb]
 ```
 
-Optionally use `/compound-engineering:deepen-plan` for additional research.
+Optionally use `/ce-brainstorm` (compound-engineering) for additional research.
 
 ---
 
@@ -240,9 +240,9 @@ Run full test suite after refactoring:
 bin/rails test
 ```
 
-#### Step 3.4: Commit (once per story)
+#### Step 3.4: Commit (at least once per story)
 
-A user story is one unit of work → **one commit**. Run Red-Green-Refactor for *every* acceptance criterion in the story first; commit once when they all pass (a story with 6 criteria is still 1 commit, not 6). Additional commits are only for later refactor or review feedback.
+A user story yields **at least one commit — the floor, not the ceiling**. The natural rhythm is one commit when every criterion passes; additional commits are welcome (a checkpoint worth keeping, a refactor, review feedback) so long as **every commit is shippable** — it compiles and its tests pass on its own. The rare non-shippable checkpoint is prefixed `WIP:` — the exception, never the rule. History is never rewritten to tidy this up ([Git Integrity](../../references/git-integrity.md)); story-level history reads with `git log --first-parent`.
 
 ```bash
 git add .
@@ -254,7 +254,7 @@ by_recent_activity scope.
 
 Refs #123
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
 git push
@@ -262,14 +262,15 @@ git push
 
 **Commit rules:**
 
-- **One commit per story, not per criterion** — the story is the unit; the commit is independently functional with all its tests passing
+- **At least one commit per story** — one is the floor, not the ceiling; the story boundary stays traceable via the ticket reference on every commit
+- **Every commit is shippable** — compiles, tests pass; the rare exception carries a `WIP:` prefix
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
 - Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
-- Push after the commit (git integrity — no squashing later)
+- Push after each commit (git integrity — never squash or rewrite later)
 
 ### Repeat the Cycle
 
-Run Red-Green-Refactor across the story's criteria, commit once, done. In **Epic Mode** the next story is the next child ticket on the shared epic branch — see [Epic Mode](../../references/epic-mode.md).
+Run Red-Green-Refactor across the story's criteria, commit (at least once), done. In **Epic Mode** the next story is the next child ticket on the shared epic branch — see [Epic Mode](../../references/epic-mode.md).
 
 ---
 
@@ -285,20 +286,19 @@ When implementing user-facing UI components, invoke `/frontend-design`. Use it f
 
 ## Phase 4: Quality Gates
 
-### Step 4.1: Run All Tests
+### Step 4.1: Run the Full Quality Gate (CI Parity)
+
+Run the **QUALITY_GATE derived during prep** — everything CI runs, never a subset:
 
 ```bash
-# Rails
-bin/rails test
-
-# JavaScript
-npm test
-
-# System tests (if applicable)
-bin/rails test:system
+bin/ci                # when the repo defines it
+bin/rails test:all    # Rails fallback — plain `bin/rails test` excludes system tests
+npm test              # JavaScript, plus the repo's e2e command
 ```
 
-All tests must pass.
+Every gate step must pass. Advisory audits (`bundle-audit`, `npm audit`) stay off the blocking path — a failing advisory becomes a proposed lockfile-bump PR, not a red gate. See [Quality Gate](../../references/quality-gate.md).
+
+**Green is necessary, not sufficient.** Any "fixed"/"working" claim also needs runtime proof — screenshot, log line, passing repro, or the running app answering — and troubleshooting has its own tighter rules (no commits until confirmed; two failed attempts → root-cause, not a third patch). See [Verified Fixes](../../references/verified-fix.md).
 
 ### Step 4.2: Run Linters
 
@@ -316,12 +316,7 @@ Fix any issues immediately.
 
 ### Step 4.3: Check Coverage
 
-Verify test coverage meets standards (100%):
-
-```bash
-# Coverage report is typically generated with test run
-open coverage/index.html
-```
+Verify test coverage meets standards (100%) — the report generates with the test run (`coverage/index.html`). Where total-100 is unreachable (legacy/client repos), the sanctioned fallback is 100% diff coverage, recorded in the project context.
 
 ### Step 4.4: Self-Review
 
@@ -366,22 +361,25 @@ Document changes in [Keep a Changelog](https://keepachangelog.com) format before
 
 **Categories**: Added, Changed, Deprecated, Removed, Fixed, Security
 
-#### Validate and Commit
+#### The Discipline
+
+**Every change lands in `[Unreleased]`, in the same commit as the story it documents** — the changelog entry is part of the work, not an afterthought commit. In repos that keep a changelog, the self-check fails a story that changed code but not the changelog. Repos without one: say so once in the ready report (adoption is a per-repo decision to surface, never to force) and move on.
 
 ```bash
 # Find changelog file (CHANGELOG.md is most common)
 CHANGELOG_FILE=$(ls CHANGELOG.md CHANGELOG HISTORY.md CHANGES.md 2>/dev/null | head -1)
 
-# Check structure
+# Check structure, then include the edit in the story's commit
 grep -E "^## \[" "$CHANGELOG_FILE" | head -3
-
-# Commit update
-git add "$CHANGELOG_FILE" && git commit -m "docs(changelog): document changes for #[TICKET]" && git push
 ```
+
+At release time, publish promotes `[Unreleased]` into the new version section — entries written now, curated then.
 
 ---
 
 ## Phase 5: Ready Report
+
+Print the checklist below with **honest ✓/✗ verdicts** ([Self-Check](../../references/self-check.md)). Any ✗ retitles this "Implementation Status" — the words "complete"/"done" are earned by an all-✓ list, and the last line names what remains.
 
 Output implementation summary:
 
@@ -477,12 +475,14 @@ This skill integrates with commands from dependent plugins:
 
 ### compound-engineering
 
-- `/workflows:plan` - Detailed execution planning
-- `/compound-engineering:deepen-plan` - Research and best practices
-- `/workflows:work` - TDD implementation assistance
-- `/workflows:review` - Self-review before PR
-- `/compound-engineering:resolve_todo_parallel` - Address review findings
-- `/compound-engineering:lint` - Run all linters
+Verified against compound-engineering **3.19.0** (v3 renamed everything to `ce-*`). If a command is missing in your install, do the step manually — the process stands without the helper.
+
+- `/ce-plan` - Detailed execution planning
+- `/ce-brainstorm` - Research and idea development
+- `/ce-work` - TDD implementation assistance
+- `/ce-code-review` - Self-review before PR
+- `/ce-resolve-pr-feedback` - Address review findings
+- `/ce-simplify-code` - Simplification pass on the final diff
 
 ### frontend-design
 

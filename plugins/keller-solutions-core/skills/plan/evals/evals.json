@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "name": "question-shaped-is-read-only",
+      "prompt": "How would we add SSO to the portal? What would it take?",
+      "expected_behavior": [
+        "Produces research, options, and an estimate only",
+        "Creates no tickets, edits no files, writes no code",
+        "Does not require guard text to behave this way"
+      ]
+    },
+    {
+      "name": "story-format-enforced",
+      "prompt": "Write a story for letting users export reports as CSV.",
+      "expected_behavior": [
+        "Uses In order to / As a / I want with a specific persona",
+        "4-8 browser-verifiable acceptance criteria",
+        "Runs the story checklist with verdicts before creating the ticket"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "cases": [
+    {
+      "name": "full-bodies-before-grouping",
+      "prompt": "Group these five ADO tickets into a work plan: 23980-23984.",
+      "expected_behavior": [
+        "Fetches full work-item bodies (and states) before proposing any grouping",
+        "Flags any ticket already closed"
+      ]
+    },
+    {
+      "name": "workflow-documented-once",
+      "prompt": "You just confirmed this project's ClickUp statuses for the first time.",
+      "expected_behavior": [
+        "Writes the discovered workflow into the project (CLAUDE.md Ticket Workflow block or project memory)"
+      ]
+    }
+  ]
+}

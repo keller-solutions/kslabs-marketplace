@@ -25,6 +25,13 @@ cp -r plugins/keller-solutions-core/skills/skill-template plugins/keller-solutio
 - Semantic versioning for plugins and skills
 - Keep SKILL.md files under 500 lines
 
+## Ticket Workflow
+
+- Tool: GitHub Issues (this repo)
+- States via labels, in order: `status:up-next` → `status:in-progress` (before first line of code) → `status:in-review` (commit + evidence landed)
+- Epics: `epic` label on the parent; children listed as a task list in the epic body and each child body carries `Refs #<epic>`
+- Done: human closes on merge (never Claude); comment each child with its delivering commit SHA when moving to in-review
+
 ## Available Marketplace Operations
 
 Agents can:

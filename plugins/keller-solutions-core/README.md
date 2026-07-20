@@ -214,3 +214,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and guidelines.
 ## License
 
 MIT
+
+## Dependent Plugins (tested versions)
+
+KS Core leans on optional helpers; every step works manually when a helper is absent.
+
+| Plugin | Tested version | Used for |
+|--------|----------------|----------|
+| compound-engineering | 3.19.0 (`ce-*` skills, `lfg`) | planning, review, browser QA, PR-feedback helpers |
+| frontend-design | 1.1.0 | distinctive UI implementation during produce |

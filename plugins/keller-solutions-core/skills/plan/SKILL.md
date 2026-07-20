@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Write great stories and create tickets. Transforms feature descriptions into well-structured stories with proper narrative, acceptance criteria, quality-dimension requirements, and ticket creation. Works standalone or as part of /ks-feature workflow.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "<feature description>"
 ---
 
@@ -14,6 +14,14 @@ Write great stories and create tickets that produce clean, reviewable code.
 **Stories are promissory notes for conversations, not specifications.**
 
 The card captures *what* to discuss; the conversation reveals *how* to build it. Well-written stories produce well-scoped, reviewable pull requests.
+
+---
+
+## Investigation Mode (read-only)
+
+A question-shaped request — "how would we…", "review this", "what would it take", "estimate…" — is an **investigation**: research and report only. No file edits, no commits, no tickets, until the developer says build. The shape of the ask is enough to engage this; the developer never has to add guard text ("don't write code yet"), though any such phrasing is honored absolutely. The deliverable is the report: findings, options with trade-offs, an estimate when asked (as a task-by-task hour table), and a recommendation.
+
+**Propose-then-choose**: when the ask is to propose an approach, describe what currently exists, present the options, and **halt for the developer's selection** — implementation starts only after they choose. When intent is genuinely ambiguous, ask one clarifying line rather than assuming write intent.
 
 ---
 
@@ -268,6 +276,8 @@ The first story for a page builds every element the wireframe shows, with siblin
 
 Use the [managing-tickets](../managing-tickets/SKILL.md) skill: detect which tool the project uses (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps), create the ticket with the full story as the body—narrative, acceptance criteria, Content, References, Developer Notes—and link it to its epic if one applies.
 
+**Attach the visual reference when design sources exist** (they often don't — never block on this): crop the wireframe/comp region this story delivers, reading the design just-in-time, and attach the image to the ticket alongside its References citation ("Wireframe B2 p.4") via the tool's attachment mechanism ([Evidence](../../references/evidence.md)). The ticket carries the visual truth, so build and verification never hunt design files — present's fidelity pass compares the implementation against exactly this attachment.
+
 ---
 
 ## Phase 6: Output the Result
@@ -463,7 +473,7 @@ Cite the specific artifact and location, never a bare link or screen code: "Wire
 
 For a single story, this checklist is the QA. When a session produces a batch of stories, also run the QA Pass (see Story Map Mode) to catch drift across the set.
 
-Before creating the ticket, verify:
+Run this with honest ✓/✗ verdicts before creating the ticket — an ✗ blocks ticket creation until fixed ([Self-Check](../../references/self-check.md)):
 
 - [ ] WHY expresses value (not restated WHAT)
 - [ ] WHO is specific (not generic "user") and on the user's side of the glass (not developer/platform/system)
@@ -475,7 +485,7 @@ Before creating the ticket, verify:
 - [ ] Entry points (nav links, buttons) are criteria on the story that delivers their destination—no placeholder elements shipped early
 - [ ] No references to non-existent UI elements
 - [ ] Content is limited to copy that a criterion asserts verbatim, marked for externalization
-- [ ] Design references cite the specific artifact and location
+- [ ] Design references cite the specific artifact and location — and when sources exist, the story's cropped visual is attached to the ticket
 - [ ] Developer notes for technical context (not observable behavior)
 - [ ] Applicable quality dimensions reflected in criteria or Developer Notes (the rest noted N/A)
 - [ ] Title is unique and searchable

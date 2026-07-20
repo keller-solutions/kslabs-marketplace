@@ -10,6 +10,8 @@ Run the plan skill standalone:
 
 `skill: plan $ARGUMENTS`
 
+**Question-shaped input** ("estimate…", "how would we…", "what would it take") runs in the plan skill's Investigation Mode: research and report only — no ticket, no code — until the developer says build.
+
 This will:
 
 1. Parse the feature description

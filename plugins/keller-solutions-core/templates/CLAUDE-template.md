@@ -94,7 +94,7 @@ All must pass before committing.
 
 Refs #123
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
@@ -118,6 +118,19 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 > Addressed with the help of Claude Code in [commit-sha]. [Summary]
 
 **If you disagree**: Reply explaining why, referencing guidelines or patterns.
+
+### Troubleshooting Discipline
+
+- "Fixed" requires runtime proof (screenshot, log line, passing repro, or the running app answering) — a green suite alone is not evidence
+- No commits while troubleshooting until the fix is confirmed working (`WIP` prefix for the rare mid-hunt checkpoint)
+- Two failed fix attempts → stop and root-cause; never a third symptom-chase
+- External-system claims need receipts: current docs or observed request/response, and correlation ≠ causation
+
+### Read-Only Prompts
+
+- Questions, reviews, investigations, and estimates are **read-only**: report findings; change nothing until told
+- "Propose" means options + halt for selection — implementation starts after the choice
+- Genuinely ambiguous intent → one clarifying line, never assumed write intent
 
 ## Coding Principles
 

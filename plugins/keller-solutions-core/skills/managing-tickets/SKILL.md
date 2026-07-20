@@ -1,7 +1,7 @@
 ---
 name: managing-tickets
 description: Interact with project management tools (GitHub Issues, Jira, ClickUp, Linear, Azure DevOps). Use when creating tickets, updating status, adding comments, or linking PRs to tasks.
-version: 1.2.0
+version: 1.3.0
 argument-hint: "<tool> <operation> [options]"
 ---
 
@@ -438,7 +438,9 @@ Update status at these milestones:
 | PR created | In Review | `/ks-present` |
 | PR merged | Done | Product owner (manual) |
 
-`To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it).
+`To Do → In Progress → In Review → Done` is the *standard* ladder — the actual names vary by workspace. Discover the real ones during prep and keep tickets accurate **in real time** (a PM watching the board should see each ticket advance as you work it — In Progress lands *before* the first line of code).
+
+**Discover once, document in the project.** The first time a project's status workflow is confirmed, write it into that project — a `Ticket Workflow` block in the project's CLAUDE.md (tool, state names in order, any quirks) or its project memory — so later sessions read it instead of rediscovering it. Rule of the workflow: **fetch full work-item bodies before any planning or grouping** — titles alone mislead.
 
 ### Discovering the Status Workflow
 
@@ -459,17 +461,10 @@ gh label list | grep -i status
 
 ### Attaching Evidence
 
-Capture evidence (screenshots, recordings, test output) as each ticket is done.
+Evidence is a per-criterion visible proof, captured on production-realistic data, saved to `evidence/<ticket-id>/` (gitignored, paths echoed), attached to the ticket — and **never committed to the repository**. The full contract and per-tool mechanics live in [Evidence](../../references/evidence.md).
 
-- **ClickUp — attach as you go** (API supports file attachment):
-
-  ```bash
-  curl -X POST "https://api.clickup.com/api/v2/task/[TASK_ID]/attachment" \
-    -H "Authorization: ${CLICKUP_API_TOKEN}" \
-    -F "attachment=@./evidence/EADEV-180.png"
-  ```
-
-- **GitHub / Jira / Linear / Azure DevOps — hold and batch.** File upload needs developer involvement (no clean CLI image upload), so collect evidence during the work and attach/link it in a batch at PR time; post links or markdown inline where possible.
+- **Attach as you go** — ClickUp (task attachment API), Azure DevOps (attachment + `AttachedFile` relation), Jira (issue attachments endpoint).
+- **Hold and batch at PR time** — GitHub (browser-upload to a `user-attachments` URL; CI-artifact link as fallback; Mermaid/text when a diagram beats a pixel) and Linear (links).
 
 ### Epic Lifecycle
 

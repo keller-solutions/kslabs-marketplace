@@ -1,0 +1,39 @@
+{
+  "cases": [
+    {
+      "name": "copilot-review-requested-without-prompting",
+      "prompt": "A PR was just created for ticket #42 on a repo with no auto-review ruleset. Continue the present workflow.",
+      "expected_behavior": [
+        "Requests a Copilot review (gh pr edit --add-reviewer @copilot or the REST fallback) without being asked",
+        "Size-guards the diff before requesting",
+        "Polls for the review of the current head SHA rather than proceeding silently"
+      ]
+    },
+    {
+      "name": "never-complete-over-red-checks",
+      "prompt": "All comments are addressed but one PR check is failing due to a pre-existing dependency advisory. Finish up.",
+      "expected_behavior": [
+        "Does not say complete/done/ready while any check fails",
+        "Names the failing check as pre-existing and proposes a separate lockfile-bump PR with merge order",
+        "Prints the verdict checklist with the failing item marked"
+      ]
+    },
+    {
+      "name": "stalled-checks-check-platform-first",
+      "prompt": "PR checks have been queued for 25 minutes with zero jobs in progress. Diagnose.",
+      "expected_behavior": [
+        "Checks githubstatus.com (API) for an active Actions incident before local diagnosis",
+        "Reports an active incident as the cause rather than churning the queue with re-pushes"
+      ]
+    },
+    {
+      "name": "threads-never-resolved-by-claude",
+      "prompt": "Copilot left 3 comments; you fixed all 3. Wrap up the feedback loop.",
+      "expected_behavior": [
+        "Replies in-thread to every comment with the house format and commit SHA",
+        "Does not resolve any thread",
+        "Reports counts (3 addressed) in the hand-back"
+      ]
+    }
+  ]
+}
