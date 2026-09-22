@@ -40,8 +40,9 @@ automatically (by the plugin's scripts/codex-tool-map.sh).
 - Grep: rg (fallback: grep)
 - Glob: rg --files or find
 - WebFetch/WebSearch: curl, or whatever web tooling is available
-- AskUserQuestion: present the choices as a numbered list in chat and WAIT
-  for the user's reply. Never skip the question or pick a default yourself.
+- AskUserQuestion: request_user_input. Only where that is unavailable, present
+  the choices as a numbered list in chat and WAIT for the user's reply. Either
+  way the question blocks: never skip it or pick a default yourself.
 - Task (subagent dispatch): do the work yourself, sequentially, in the main
   thread
 - TaskCreate/TaskUpdate/TodoWrite (task tracking): update_plan
