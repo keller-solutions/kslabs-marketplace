@@ -27,12 +27,13 @@ duplicating what it already maintains.
 
 ### Changed
 
-- **The eight `/ks-*` commands no longer double-list as skills** — each command
-  wrapper now carries `disable-model-invocation: true`, so the model reaches the
-  real skill (`feature`, `plan`, `prep`, `present`, `produce`, `publish`,
-  `ticket`) instead of sometimes loading the thin command wrapper that only
-  points at it. Every `/ks-*` command stays typeable by the developer; nothing
-  about the slash-command experience changes. Measured across 1,520 local
+- **The command wrappers no longer double-list as skills** — the seven `/ks-*`
+  commands and the `/lg` legacy alias each now carry
+  `disable-model-invocation: true`, so the model reaches the real skill
+  (`feature`, `plan`, `prep`, `present`, `produce`, `publish`, `ticket`)
+  instead of sometimes loading the thin command wrapper that only points at it.
+  All eight stay typeable by the developer; nothing about the slash-command
+  experience changes. Measured across 1,520 local
   sessions before the fix: `prep` was invoked 29 times and `ks-prep` 10, `plan`
   27 and `ks-plan` 9, `feature` 15 and `ks-feature` 13 — roughly a quarter of
   invocations went through the wrapper, where the procedure itself was never
