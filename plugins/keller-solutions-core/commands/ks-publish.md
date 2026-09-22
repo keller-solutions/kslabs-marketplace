@@ -2,6 +2,7 @@
 name: ks-publish
 description: Release, deploy, and verify. Takes merged code through release and production verification.
 argument-hint: "[version or 'auto']"
+disable-model-invocation: true
 ---
 
 # Publish Release

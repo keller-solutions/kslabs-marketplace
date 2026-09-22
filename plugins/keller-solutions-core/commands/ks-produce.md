@@ -2,6 +2,7 @@
 name: ks-produce
 description: Implement a ticket using Test-Driven Development. Red-green-refactor for each criterion.
 argument-hint: "<ticket number or 'current'>"
+disable-model-invocation: true
 ---
 
 # Produce Feature

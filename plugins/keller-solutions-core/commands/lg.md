@@ -2,6 +2,7 @@
 name: lg
 description: Legacy alias for /ks-feature. Full feature workflow from idea to PR-ready.
 argument-hint: "<feature description>"
+disable-model-invocation: true
 ---
 
 # Legacy Command

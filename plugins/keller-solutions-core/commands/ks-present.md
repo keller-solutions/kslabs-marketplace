@@ -2,6 +2,7 @@
 name: ks-present
 description: Self-review, create PR, and handle the complete feedback loop.
 argument-hint: "[PR number or 'current']"
+disable-model-invocation: true
 ---
 
 # Present Work
