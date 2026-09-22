@@ -14,14 +14,24 @@ Neither approach is wrong. What matters is respecting the project's established 
 
 Before committing or responding to PRs, determine the project's AI visibility preference.
 
-### 1. Check CLAUDE.md for Explicit Instructions
+### 1. Check AGENTS.md / CLAUDE.md for Explicit Instructions
 
-Look for AI attribution guidance in the project's CLAUDE.md file:
+Look for AI attribution guidance in the project's instruction file (AGENTS.md,
+falling back to CLAUDE.md where no AGENTS.md exists):
 
 ```bash
-# Search for visibility preferences
-grep -i "co-authored\|attribution\|claude\|ai\|visibility" CLAUDE.md
+# Resolve the ONE governing file first — AGENTS.md wins, CLAUDE.md is only the
+# fallback. Grepping both would merge two files' rules when both exist, and a
+# project that has migrated to AGENTS.md may still carry a stale CLAUDE.md with
+# the opposite attribution instruction.
+instructions=$([ -f AGENTS.md ] && echo AGENTS.md || echo CLAUDE.md)
+
+# Search that file for visibility preferences
+[ -f "$instructions" ] && grep -i "co-authored\|attribution\|claude\|ai\|visibility" "$instructions"
 ```
+
+Read only what the resolved file says. If it is silent on attribution, fall
+through to the next detection method rather than consulting the other file.
 
 Explicit statements might include:
 

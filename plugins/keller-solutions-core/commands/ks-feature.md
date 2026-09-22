@@ -2,6 +2,7 @@
 name: ks-feature
 description: Full feature workflow from idea to PR-ready. Runs Prepare → Plan → Produce → Present.
 argument-hint: "<feature description>"
+disable-model-invocation: true
 ---
 
 # Feature Workflow

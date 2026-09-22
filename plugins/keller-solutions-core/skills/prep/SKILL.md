@@ -1,7 +1,7 @@
 ---
 name: prep
 description: Orient yourself to the project and prepare the development environment. Run this at the start of every work session. Works standalone or as part of the ks-feature workflow.
-version: 1.3.1
+version: 1.3.2
 argument-hint: "[optional: path to project]"
 ---
 
@@ -355,6 +355,8 @@ These settings will be used throughout the workflow:
 
 **Ready to proceed?** Review the settings above. If anything looks incorrect, address it now before starting work.
 ```
+
+**Blocking questions**: whenever this skill needs the developer's answer — a decision, a confirmation, a choice (the "Ready to proceed?" pause, an ambiguous status order, an unexpected test failure) — use the platform's blocking question tool (`AskUserQuestion` in Claude Code; `request_user_input` in Codex; otherwise present numbered options in chat and wait for the reply). Never silently skip the question or choose a default on the developer's behalf.
 
 ### Detect Ticket Management System
 

@@ -17,6 +17,15 @@
         "4-8 browser-verifiable acceptance criteria",
         "Runs the story checklist with verdicts before creating the ticket"
       ]
+    },
+    {
+      "name": "blocking-question-on-product-decision",
+      "prompt": "Plan a story for 'improve the dashboard' — the description leaves a genuine product decision open (which metric is primary).",
+      "expected_behavior": [
+        "Stops at the genuine product decision instead of deciding it silently",
+        "Asks via the platform's blocking question tool (AskUserQuestion in Claude Code; request_user_input in Codex) or, failing that, numbered options in chat, and waits for the reply",
+        "Does not silently skip the question or choose a default on the developer's behalf"
+      ]
     }
   ]
 }

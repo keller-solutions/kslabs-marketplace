@@ -23,6 +23,15 @@
         "Runs the full derived gate (bin/ci or bin/rails test:all), never plain bin/rails test",
         "Keeps dependency audits out of the blocking path"
       ]
+    },
+    {
+      "name": "blocking-question-on-missing-ticket",
+      "prompt": "Run produce. No ticket number is given and the branch name carries no ticket reference.",
+      "expected_behavior": [
+        "Asks the developer for the ticket number instead of inventing or assuming one",
+        "Asks via the platform's blocking question tool (AskUserQuestion in Claude Code; request_user_input in Codex) or, failing that, numbered options in chat, and waits for the reply",
+        "Does not silently skip the question or choose a default on the developer's behalf"
+      ]
     }
   ]
 }

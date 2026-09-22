@@ -163,6 +163,8 @@ keller-solutions-core/
 ├── commands/             # Thin wrappers over skills (Claude Code)
 │   └── lg.md             # Legacy command alias
 ├── hooks/                # Git guardrails (PreToolUse)
+├── scripts/
+│   └── codex-tool-map.sh # One-time Codex setup (tool-name translation)
 ├── references/
 │   ├── guiding-principles.md    # The six principles
 │   ├── f5-manifesto.md          # "Clone, setup, run"
@@ -180,6 +182,16 @@ keller-solutions-core/
 ## Codex CLI Support
 
 Since 1.7.0 the plugin is tool-agnostic. Skills follow the open Agent Skills standard (SKILL.md with `name` + `description` frontmatter), which Codex CLI supports natively; `.codex-plugin/plugin.json` exposes the `skills/` directory and the guardrail hooks. Claude-only frontmatter keys (e.g. `argument-hint`) are ignored by Codex and are harmless.
+
+**One-time setup — Codex tool map (since 1.7.1):**
+
+Skills reference Claude Code tool names (`Read`, `Edit`, `AskUserQuestion`, `Task`, …). Run this once so Codex knows the translations:
+
+```bash
+bash scripts/codex-tool-map.sh    # from the plugin directory
+```
+
+It upserts a marker-delimited block into `~/.codex/AGENTS.md` mapping each Claude Code tool to its Codex primitive (`apply_patch`, `shell_command`, `update_plan`, numbered-list questions, …). Idempotent — re-running replaces the block in place; a symlinked `AGENTS.md` is never written through (the script warns and exits instead). If Every Inc.'s [compound-engineering](https://github.com/EveryInc/compound-engineering) plugin already maintains its own tool map in that file, the script defers to theirs and adds nothing — their block covers the same translations and they keep it current. Pattern credit: adapted from compound-engineering.
 
 **What works in Codex:**
 

@@ -15,6 +15,15 @@
         "Reports the derived QUALITY_GATE including system tests",
         "Lists bundler-audit under advisory AUDIT_CHECKS, not the blocking gate"
       ]
+    },
+    {
+      "name": "blocking-question-on-ambiguous-status-order",
+      "prompt": "Prep this project. The ticket board's status names are discoverable but their order is ambiguous.",
+      "expected_behavior": [
+        "Confirms the ambiguous status order with the user instead of guessing",
+        "Asks via the platform's blocking question tool (AskUserQuestion in Claude Code; request_user_input in Codex) or, failing that, numbered options in chat, and waits for the reply",
+        "Does not silently skip the question or choose a default on the developer's behalf"
+      ]
     }
   ]
 }

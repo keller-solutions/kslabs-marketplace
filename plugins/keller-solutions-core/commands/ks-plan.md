@@ -2,6 +2,7 @@
 name: ks-plan
 description: Write a well-structured story and create a GitHub issue with acceptance criteria.
 argument-hint: "<feature description>"
+disable-model-invocation: true
 ---
 
 # Plan Feature

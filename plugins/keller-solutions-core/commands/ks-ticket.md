@@ -2,6 +2,7 @@
 name: ks-ticket
 description: Work on existing tickets. Runs Prepare → Produce → Present (skips Plan). Accepts one ticket, several tickets (impromptu epic), or an epic/parent ticket.
 argument-hint: "<ticket number(s)>"
+disable-model-invocation: true
 ---
 
 # Ticket Workflow

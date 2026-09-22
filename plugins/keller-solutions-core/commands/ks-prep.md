@@ -2,6 +2,7 @@
 name: ks-prep
 description: Prepare the development environment. Orient to project, update dependencies, verify tests.
 argument-hint: "[optional: path to project]"
+disable-model-invocation: true
 ---
 
 # Prepare Environment
