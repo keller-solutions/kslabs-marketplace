@@ -49,7 +49,7 @@ For each changed file, verify:
 - [ ] F5 Principle preserved (new dependencies in package manager, env vars documented)
 - [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
 - [ ] In-depth stack-appropriate review run on the final diff (Step 1.5)
-- [ ] [lean-diff](../lean-diff/SKILL.md) full pass run on the branch and each commit: nothing a reviewer could delete, and no added test passed before the change
+- [ ] [lean-diff](../lean-diff/SKILL.md) run: nothing a reviewer could delete, and no added test passed before the change
 
 ### Step 1.3: Run the Full Quality Gate
 

@@ -165,7 +165,7 @@ keller-solutions-core/
 │   ├── publish/          # Release workflow
 │   ├── feature/          # Orchestrator: prep → plan → produce → present
 │   ├── ticket/           # Orchestrator: prep → produce → present
-│   ├── lean-diff/        # Diff discipline (script + skill)
+│   ├── lean-diff/        # Diff discipline
 │   └── managing-tickets/ # Ticket-tool operations
 ├── commands/             # Thin wrappers over skills (Claude Code)
 │   └── lg.md             # Legacy command alias
