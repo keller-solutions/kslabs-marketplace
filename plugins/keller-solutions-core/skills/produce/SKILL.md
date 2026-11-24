@@ -228,7 +228,7 @@ bin/rails test test/models/project_test.rb
 
 #### Step 3.3: Refactor
 
-Clean up the code while keeping tests green:
+Clean up the code while keeping tests green. In Claude Code, run `/simplify` on the change; elsewhere use `ce-simplify-code` if installed, or do it by hand:
 
 - Remove duplication
 - Improve naming

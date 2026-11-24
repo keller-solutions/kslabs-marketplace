@@ -84,7 +84,7 @@ Then run the suite with coverage. If a cut drops coverage below the project's st
 
 ## Step 6: Simplify and re-measure
 
-Inside the code this ticket touches, take the simpler shape when one exists: inline a one-hop wrapper, reuse what's there, flatten a branch. Cleanup outside the ticket's code goes in its own commit. Run the script again.
+Inside the code this ticket touches, take the simpler shape when one exists: inline a one-hop wrapper, reuse what's there, flatten a branch. In Claude Code, `/simplify` does this pass; run lean-diff again after it, since it can reach past the ticket. Cleanup outside the ticket's code goes in its own commit. Run the script again.
 
 ## Report
 
