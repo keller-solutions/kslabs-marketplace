@@ -27,6 +27,9 @@ jobs:
       - name: Guardrail hook regression tests
         run: plugins/keller-solutions-core/hooks/scripts/test-guardrails.sh
 
+      - name: lean-diff regression test
+        run: plugins/keller-solutions-core/skills/lean-diff/scripts/test-lean-diff.sh
+
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code@2.1.215
 

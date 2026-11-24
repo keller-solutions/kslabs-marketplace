@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-11-23
+
+### Added
+
+- **`lean-diff` skill and `/ks-lean-diff` command.** These strip a commit or PR down to the code, tests and comments it needs. A script measures the diff: the additions-to-deletions ratio, test and comment weight, and whitespace, reorder, lockfile and generated-file noise. It then runs the newly added tests against the pre-change code, because a test that passed before the change wasn't important. The skill follows with relevance, necessity and test-pruning passes.
+
+### Changed
+
+- **produce** runs lean-diff on the staged changes before each commit and on the branch at self-review.
+- **present** runs the full lean-diff pass before the PR, and the ready notification reports the before/after line.
+
 ## [1.7.0] - 2026-07-20
 
 ### Added

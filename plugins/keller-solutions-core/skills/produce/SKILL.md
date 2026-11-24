@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of the ks-feature or ks-ticket workflow.
-version: 1.4.1
+version: 1.5.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -244,6 +244,8 @@ bin/rails test
 
 A user story yields **at least one commit — the floor, not the ceiling**. The natural rhythm is one commit when every criterion passes; additional commits are welcome (a checkpoint worth keeping, a refactor, review feedback) so long as **every commit is shippable** — it compiles and its tests pass on its own. The rare non-shippable checkpoint is prefixed `WIP:` — the exception, never the rule. History is never rewritten to tidy this up ([Git Integrity](../../references/git-integrity.md)); story-level history reads with `git log --first-parent`.
 
+Before each commit, stage the work and run [lean-diff](../lean-diff/SKILL.md) on it (`--staged`). Act on what it finds before you commit, because nothing gets amended afterward.
+
 ```bash
 git add .
 git commit -m "$(cat <<'EOF'
@@ -265,6 +267,7 @@ git push
 - **At least one commit per story** — one is the floor, not the ceiling; the story boundary stays traceable via the ticket reference on every commit
 - **Every commit is shippable** — compiles, tests pass; the rare exception carries a `WIP:` prefix
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
+- **Lean:** every hunk belongs to the ticket, with no whitespace or reorder noise and no new test that passed before the change
 - Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
 - Push after each commit (git integrity — never squash or rewrite later)
 
@@ -330,7 +333,7 @@ git diff develop...HEAD
 git diff --name-only develop...HEAD
 ```
 
-Check:
+Run [lean-diff](../lean-diff/SKILL.md) on the branch, then check:
 
 - [ ] Every change relates to the ticket
 - [ ] No accidental inclusions

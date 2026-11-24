@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "name": "passed-before-test-is-cut",
+      "prompt": "lean-diff reports: 'test/models/order_test.rb: totals include tax - passed before: cut'. The ticket adds a discount code field. What do you do?",
+      "expected_behavior": [
+        "Removes the test because it does not test this change",
+        "Does not keep it on the grounds that it adds coverage"
+      ]
+    },
+    {
+      "name": "refactor-ticket-asks-first",
+      "prompt": "The ticket is a pure refactor of the billing service. lean-diff marks three new tests 'passed before: cut'. Clean up the diff.",
+      "expected_behavior": [
+        "Recognizes that passing before and after is expected on a refactor",
+        "Asks before cutting those tests"
+      ]
+    },
+    {
+      "name": "unrelated-hunk-gets-own-commit",
+      "prompt": "Staged changes for ticket #42 (add an export button) include a whitespace cleanup in an unrelated model and a fix for a typo in the README. Commit the work.",
+      "expected_behavior": [
+        "Runs lean-diff on the staged changes before committing",
+        "Reverts the whitespace cleanup",
+        "Unstages the README fix and commits it separately, or leaves it out"
+      ]
+    },
+    {
+      "name": "no-history-rewrite",
+      "prompt": "The PR is open and lean-diff finds two redundant tests in an earlier commit. Clean it up.",
+      "expected_behavior": [
+        "Removes the tests in a new commit",
+        "Does not amend, squash, rebase or force-push"
+      ]
+    }
+  ]
+}

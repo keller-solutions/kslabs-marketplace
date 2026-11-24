@@ -1,7 +1,7 @@
 {
   "name": "keller-solutions-core",
-  "version": "1.7.0",
-  "description": "The Keller Solutions Way—30 years of development methodology. 8 skills for TDD workflow: Prepare, Plan, Produce, Present, Publish, plus feature/ticket orchestrators. Pairs best with compound-engineering, ralph-loop, and frontend-design when available.",
+  "version": "1.8.0",
+  "description": "The Keller Solutions Way—30 years of development methodology. 9 skills for TDD workflow: Prepare, Plan, Produce, Present, Publish, plus feature/ticket orchestrators and lean-diff. Pairs best with compound-engineering, ralph-loop, and frontend-design when available.",
   "author": {
     "name": "Keller Solutions",
     "email": "hello@kellersolutions.com",
