@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **produce** runs lean-diff on the staged changes before each commit and on the branch at self-review.
+- **produce** uses `/simplify` (Claude Code) for the refactor step, then runs lean-diff on the staged changes before each commit and on the branch at self-review.
 - **present** runs the full lean-diff pass before the PR, and the ready notification reports the before/after line.
 
 ## [1.7.0] - 2026-07-20
