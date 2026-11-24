@@ -141,6 +141,7 @@ Each skill can run independently:
 /ks-produce 45        # Just implement ticket #45
 /ks-present           # Just create PR and handle feedback
 /ks-publish auto      # Just release (auto-detects version)
+/ks-lean-diff         # Just lean the current branch's diff
 ```
 
 ## Directory Structure
@@ -159,6 +160,7 @@ keller-solutions-core/
 │   ├── publish/          # Release workflow
 │   ├── feature/          # Orchestrator: prep → plan → produce → present
 │   ├── ticket/           # Orchestrator: prep → produce → present
+│   ├── lean-diff/        # Diff discipline
 │   └── managing-tickets/ # Ticket-tool operations
 ├── commands/             # Thin wrappers over skills (Claude Code)
 │   └── lg.md             # Legacy command alias
@@ -183,7 +185,7 @@ Since 1.7.0 the plugin is tool-agnostic. Skills follow the open Agent Skills sta
 
 **What works in Codex:**
 
-- All 8 skills, including the `feature` and `ticket` workflow orchestrators (invoke explicitly with `$feature` / `$ticket`, or let Codex select them from the description).
+- All 9 skills, including the `feature` and `ticket` workflow orchestrators (invoke explicitly with `$feature` / `$ticket`, or let Codex select them from the description).
 - The git guardrail hook: Codex reads the same `hooks/hooks.json` (its PreToolUse event, matcher, and JSON stdin/stdout contract match Claude Code's), and Codex sets `CLAUDE_PLUGIN_ROOT`/`PLUGIN_ROOT` for plugin hook commands, so the `${CLAUDE_PLUGIN_ROOT}` script path resolves. The two hard denies (`gh pr merge`, force pushes) behave identically.
 
 **Known limitations in Codex:**

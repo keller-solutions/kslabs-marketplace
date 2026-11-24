@@ -1,7 +1,7 @@
 ---
 name: produce
 description: TDD implementation following Keller Solutions principles. Takes a ticket from story to working code with tests, one commit per story, and quality gates (including a review across the nine quality dimensions). Works standalone, in an epic loop, or as part of the ks-feature or ks-ticket workflow.
-version: 1.4.1
+version: 1.5.0
 argument-hint: "<ticket number or 'current'>"
 ---
 
@@ -228,11 +228,7 @@ bin/rails test test/models/project_test.rb
 
 #### Step 3.3: Refactor
 
-Clean up the code while keeping tests green:
-
-- Remove duplication
-- Improve naming
-- Extract methods if needed (on second use)
+Clean up the code while keeping tests green: remove duplication, improve naming, extract methods on second use. In Claude Code, run `/simplify` on the change; elsewhere use `ce-simplify-code` if installed, or do it by hand.
 
 Run full test suite after refactoring:
 
@@ -265,6 +261,7 @@ git push
 - **At least one commit per story** — one is the floor, not the ceiling; the story boundary stays traceable via the ticket reference on every commit
 - **Every commit is shippable** — compiles, tests pass; the rare exception carries a `WIP:` prefix
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
+- Run [lean-diff](../lean-diff/SKILL.md) on the staged changes
 - Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
 - Push after each commit (git integrity — never squash or rewrite later)
 
