@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **`lean-diff` skill and `/ks-lean-diff` command:** strip a commit or PR to what it needs. A test that passed before the change wasn't important.
+- **`lean-diff` skill and `/ks-lean-diff` command:** strip a commit or PR to what it needs.
 
 ### Changed
 
-- **produce** uses `/simplify` for the refactor step and runs lean-diff before each commit; **present** runs it before the PR.
+- **produce** uses `/simplify` for the refactor step and runs lean-diff on staged changes before each commit; **present** runs it on the branch before the PR.
 
 ## [1.7.0] - 2026-07-20
 

@@ -102,12 +102,6 @@ Note: Some skills leverage compound-engineering workflows and will have reduced 
 
 The orchestration lives in the `feature` and `ticket` skills; the `/ks-feature` and `/ks-ticket` commands are thin wrappers over them, so every workflow is reachable via skills alone (which is how Codex CLI reaches them).
 
-### Diff Discipline
-
-| Skill | Command | Description |
-|-------|---------|-------------|
-| **Lean Diff** | `/ks-lean-diff` | Strip a commit or PR to what it needs; runs inside Produce and Present |
-
 ## Usage
 
 ### Starting a New Feature
@@ -147,6 +141,7 @@ Each skill can run independently:
 /ks-produce 45        # Just implement ticket #45
 /ks-present           # Just create PR and handle feedback
 /ks-publish auto      # Just release (auto-detects version)
+/ks-lean-diff         # Just lean the current branch's diff
 ```
 
 ## Directory Structure

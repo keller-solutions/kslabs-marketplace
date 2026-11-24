@@ -2,8 +2,18 @@
   "cases": [
     {
       "name": "passed-before-test-is-cut",
-      "prompt": "A new test on this branch passes against the pre-change code. The ticket is a feature, not a refactor. Lean the diff.",
+      "prompt": "A new test on this branch passes against the pre-change code. It covers no new lines and the ticket is a feature. Lean the diff.",
       "expected_behavior": ["Cuts the test because it does not test this change"]
+    },
+    {
+      "name": "sole-coverage-is-kept",
+      "prompt": "A new test passes against the pre-change code, but it is the only test covering the new flag-off branch. Lean the diff.",
+      "expected_behavior": ["Keeps the test and notes why in the report"]
+    },
+    {
+      "name": "staged-mode",
+      "prompt": "Run lean-diff on the staged changes before committing.",
+      "expected_behavior": ["Measures with git diff --cached, not a BASE...HEAD range", "Skips the pre-change test run", "Unstages unrelated hunks instead of discarding them"]
     },
     {
       "name": "no-history-rewrite",

@@ -261,7 +261,7 @@ git push
 - **At least one commit per story** — one is the floor, not the ceiling; the story boundary stays traceable via the ticket reference on every commit
 - **Every commit is shippable** — compiles, tests pass; the rare exception carries a `WIP:` prefix
 - No debug code (`console.log`, `binding.pry`, `puts`) or commented-out code
-- **Lean:** run [lean-diff](../lean-diff/SKILL.md) on the staged changes before committing, since nothing is amended afterward. Every hunk belongs to the ticket, with no whitespace or reorder noise and no new test that passed before the change
+- Run [lean-diff](../lean-diff/SKILL.md) on the staged changes
 - Reference the ticket in your tool's linking format — `Refs #123` (GitHub), `Refs <id>` with your tool's ID like `Refs EADEV-180` (Jira/ClickUp/Linear), or `AB#123` (Azure DevOps)
 - Push after each commit (git integrity — never squash or rewrite later)
 
@@ -327,7 +327,7 @@ git diff develop...HEAD
 git diff --name-only develop...HEAD
 ```
 
-Run [lean-diff](../lean-diff/SKILL.md) on the branch, then check:
+Check:
 
 - [ ] Every change relates to the ticket
 - [ ] No accidental inclusions

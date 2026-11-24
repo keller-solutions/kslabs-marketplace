@@ -49,7 +49,7 @@ For each changed file, verify:
 - [ ] F5 Principle preserved (new dependencies in package manager, env vars documented)
 - [ ] Quality dimensions reviewed — see [Quality Dimensions](../../references/quality-dimensions.md); report the result in the PR (Step 3.2)
 - [ ] In-depth stack-appropriate review run on the final diff (Step 1.5)
-- [ ] [lean-diff](../lean-diff/SKILL.md) run: nothing a reviewer could delete, and no added test passed before the change
+- [ ] [lean-diff](../lean-diff/SKILL.md) run on the branch
 
 ### Step 1.3: Run the Full Quality Gate
 
@@ -396,7 +396,7 @@ PR_BRANCH=$(gh pr view --json headRefName -q '.headRefName')
 - [x] Linting passes
 - [x] Quality dimensions reviewed and reported in the PR
 - [x] In-depth stack-appropriate review completed before the PR
-- [x] lean-diff: +[A]/-[B] → +[C]/-[D]; no added test passed before the change
+- [x] lean-diff: +[A]/-[B] → +[C]/-[D]
 - [x] Copilot review: [N] comments — [M] addressed (commit SHAs), [K] declined with rationale
 - [x] All PR comments replied to in-thread [; repo requires thread resolution — resolve as you review]
 
